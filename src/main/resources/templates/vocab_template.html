@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" href="vocab_template.css">
+    <title>Vocab Template</title>
+</head>
+
+<body>
+    <div class="outer-container">
+        <div class="container">
+            <div class="title">
+                <h2>Card Number: <span th:text="${cardNumber}">-</span></h2>
+            </div>
+            <div class="table-container">
+                <h3 th:text="${cardTitle}"></h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Word</td>
+                            <td>Translation</td>
+                            <td>Meaning</td>
+                        </tr>
+                    </thead>
+                    <tdoby>
+                        <tr th:each="vocab : ${vocabList}">
+                            <td th:text="${vocab.word}"></td>
+                            <td th:text="${vocab.translation}"></td>
+                            <td th:text="${vocab.meaning}"></td>
+                        </tr>
+                        <tr th:each="vocab : ${vocalList}">
+                            <td colspan="2">Forms: vocab.forms</td>
+                            <td colspan="1">
+                                Frequency:
+                                <span>
+                                    <span th:classappend="${vocab.frequency >= 1 ? 'color' : ''}">1</span>
+                                    <span>2</span>
+                                    <span>3</span>
+                                    <span>4</span>
+                                    <span>5</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tdoby>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

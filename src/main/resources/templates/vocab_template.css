@@ -1,0 +1,14 @@
+.container {
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.container > .title {
+    color: red;
+}
+
+.title > h2, .table-container > h3 {
+    margin: 0;
+}
