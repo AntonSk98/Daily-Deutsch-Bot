@@ -1,0 +1,13 @@
+package com.ansk.development.learngermanwithansk98;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class LearnGermanWithAnsk98Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(LearnGermanWithAnsk98Application.class, args);
+    }
+
+}
