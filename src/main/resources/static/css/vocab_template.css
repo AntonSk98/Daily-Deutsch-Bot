@@ -97,10 +97,6 @@
     align-items: center;
 }
 
-.frequency-container {
-    align-items: baseline;
-}
-
 .frequency-container span {
     margin-right: 0.2rem;
 }

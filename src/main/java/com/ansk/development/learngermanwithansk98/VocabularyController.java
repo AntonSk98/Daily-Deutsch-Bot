@@ -1,12 +1,12 @@
 package com.ansk.development.learngermanwithansk98;
 
-import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.font.FontProvider;
-import com.itextpdf.styledxmlparser.css.media.MediaDeviceDescription;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.io.*;
-import java.util.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;
 
 @Controller
@@ -39,18 +45,38 @@ public class VocabularyController {
     @GetMapping("pdf")
     public ResponseEntity<Void> asPfd() {
         VocabularyCard testCard = getTestCards();
-        testToPdf(testCard);
+        htmlToPdf(testCard);
+        pdfToImage();
         return ResponseEntity.ok().build();
     }
 
-    private void testToPdf(VocabularyCard card) {
+    private void htmlToPdf(VocabularyCard card) {
         Context ctx = new Context();
         ctx.setVariable("vocabularyCard", card);
         var html = springTemplateEngine.process("vocab_template", ctx);
 
-        try (OutputStream outputStream = new FileOutputStream("/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/test1.pdf")) {
+        try {
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter("/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/test1.pdf"));
             HtmlConverter.convertToPdf(new ByteArrayInputStream(html.getBytes()), pdfDoc);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void pdfToImage() {
+        File pdfFile = new File("/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/test1.pdf");
+
+        try (PDDocument document = Loader.loadPDF(pdfFile);) {
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            int pageCount = document.getNumberOfPages();
+
+            for (int page = 0; page < pageCount; ++page) {
+                BufferedImage image = pdfRenderer.renderImageWithDPI(page, 600, ImageType.RGB);
+
+                String outputPath = "/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/images/page_" + (page + 1) + ".png";
+                ImageIO.write(image, "png", new File(outputPath));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
