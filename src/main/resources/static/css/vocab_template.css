@@ -1,0 +1,136 @@
+.header {
+    display: flex;
+    align-items: end;
+}
+
+.log > img,
+.reference > img {
+    height: auto;
+}
+
+.logo > img {
+    width: 150px;
+}
+
+.reference > img {
+    width: 78px;
+    margin-left: 3rem;
+}
+
+.top-separator {
+    width: 45%;
+    margin: 1.5rem 0;
+    border-top: solid 4px #6D5DFD;
+    border-radius: 3px;
+}
+
+.title {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #6B6B6B;
+}
+
+.table-container {
+    background:  #FAFAFA;
+    box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.table-container th,
+.table-container td {
+    text-align: left;
+}
+
+.table-container th {
+    padding: 0.7rem 1.2rem;
+    background-color: #6D5DFD;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.first-row td {
+    padding-top: 0.7rem;
+}
+
+.second-row td {
+    padding-top: 5px;
+    font-style: italic;
+    color: #555;
+}
+
+.example-top-separator {
+    padding-top: 5px;
+}
+
+.border-bottom {
+    border-bottom: 2px solid #6D5DFD;
+    padding-bottom: 0.7rem;
+}
+
+.example-translation-row td {
+    padding-top: 5px;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #6B6B6B;
+}
+
+.table-container tbody tr td {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+}
+
+.frequency-container,
+.word-frequency,
+.example,
+.example-translation {
+    display: flex;
+    align-items: center;
+}
+
+.frequency-container {
+    align-items: baseline;
+}
+
+.frequency-container span {
+    margin-right: 0.2rem;
+}
+
+.word-frequency img,
+.example img,
+.example-translation img {
+    width: 1rem;
+    height: auto;
+}
+
+.example img,
+.example-translation img {
+    margin-right: 0.2rem;
+}
+
+.metadata-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: end;
+}
+
+.metadata-container span:nth-child(1) {
+    font-weight: bold;
+    color: #6D5DFD;
+    margin-right: 4px;
+}
+
+.metadata-container span:nth-child(2) {
+    color: #6B6B6B;
+}
+
+

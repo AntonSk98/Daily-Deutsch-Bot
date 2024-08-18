@@ -1,1 +1,7 @@
-spring.application.name=learn-german-with-ansk98
+spring.application.name: learn-german-with-ansk98
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/learn-german-with-ansk98-db
+    username: ${db-username}
+    password: ${db-password}
