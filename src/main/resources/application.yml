@@ -5,3 +5,22 @@ spring:
     url: jdbc:postgresql://localhost:5432/learn-german-with-ansk98-db
     username: ${db-username}
     password: ${db-password}
+
+
+state:
+  actions:
+    - action: PROVIDE_CARD_TITLE
+    - action: PROVIDE_WORD
+      required: true
+    - action: PROVIDE_TRANSLATION
+      required: true
+    - action: PROVIDE_MEANING
+      required: true
+    - action: PROVIDE_WORD_FORMS
+    - action: PROVIDE_WORD_FREQUENCY
+      required: true
+    - action: PROVIDE_EXAMPLE
+      required: true
+    - action: PROVIDE_EXAMPLE_TRANSLATION
+      go-to: PROVIDE_WORD
+
