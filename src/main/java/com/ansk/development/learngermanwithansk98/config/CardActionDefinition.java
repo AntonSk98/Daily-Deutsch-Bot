@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.config;
 
-import com.ansk.development.learngermanwithansk98.service.Action;
+import com.ansk.development.learngermanwithansk98.service.CardDefinitionAction;
 
 /**
  * The {@code ActionDefinition} class represents the state of an action within the process of creating a card.
@@ -9,16 +9,16 @@ import com.ansk.development.learngermanwithansk98.service.Action;
  *
  * @author Anton Skripin
  */
-public class ActionDefinition {
-    private Action action;
-    private Action goTo;
+public class CardActionDefinition {
+    private CardDefinitionAction cardDefinitionAction;
+    private CardDefinitionAction goTo;
     private boolean required;
 
-    public Action getAction() {
-        return action;
+    public CardDefinitionAction getAction() {
+        return cardDefinitionAction;
     }
 
-    public Action getGoTo() {
+    public CardDefinitionAction getGoTo() {
         return goTo;
     }
 
@@ -26,11 +26,11 @@ public class ActionDefinition {
         return required;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setAction(CardDefinitionAction cardDefinitionAction) {
+        this.cardDefinitionAction = cardDefinitionAction;
     }
 
-    public void setGoTo(Action goTo) {
+    public void setGoTo(CardDefinitionAction goTo) {
         this.goTo = goTo;
     }
 

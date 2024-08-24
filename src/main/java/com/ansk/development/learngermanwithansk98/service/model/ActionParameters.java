@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.dto;
+package com.ansk.development.learngermanwithansk98.service.model;
 
 /**
  * Represents parameters for an action, encapsulating navigation and payload information.

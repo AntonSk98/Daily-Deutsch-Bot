@@ -7,7 +7,7 @@ spring:
     password: ${db-password}
 
 
-state:
+card-definition:
   actions:
     - action: PROVIDE_CARD_TITLE
     - action: PROVIDE_WORD
@@ -23,4 +23,19 @@ state:
       required: true
     - action: PROVIDE_EXAMPLE_TRANSLATION
       go-to: PROVIDE_WORD
+
+commands:
+  command-definition:
+    - path: /profile
+      parameters:
+        - key: name
+          prompt: please write your name
+        - key: surname
+          prompt: please write your surname
+        - key: age
+          prompt: please write your age
+
+bot:
+  user:
+  token: '6925832793:AAFDt_BI3-3Olw6iqrvuYczCvwKgDk5Qx1w'
 

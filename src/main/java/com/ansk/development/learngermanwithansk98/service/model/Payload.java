@@ -1,9 +1,9 @@
-package com.ansk.development.learngermanwithansk98.service.dto;
+package com.ansk.development.learngermanwithansk98.service.model;
 
-import com.ansk.development.learngermanwithansk98.service.Action;
+import com.ansk.development.learngermanwithansk98.service.CardDefinitionAction;
 
 /**
- * Represents the payload for an {@link Action}
+ * Represents the payload for an {@link CardDefinitionAction}
  *
  * @author Anton Skripin
  */

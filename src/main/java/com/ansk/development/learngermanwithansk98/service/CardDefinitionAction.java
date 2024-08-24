@@ -5,7 +5,7 @@ package com.ansk.development.learngermanwithansk98.service;
  *
  * @author Anton Skripin
  */
-public enum Action {
+public enum CardDefinitionAction {
     PROVIDE_CARD_TITLE,
     PROVIDE_WORD,
     PROVIDE_TRANSLATION,

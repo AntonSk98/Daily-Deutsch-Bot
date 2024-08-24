@@ -1,9 +1,9 @@
-package com.ansk.development.learngermanwithansk98.service.dto;
+package com.ansk.development.learngermanwithansk98.service.model;
 
-import com.ansk.development.learngermanwithansk98.service.Action;
+import com.ansk.development.learngermanwithansk98.service.CardDefinitionAction;
 
 /**
- * Represents navigation options for an {@link Action}.
+ * Represents navigation options for an {@link CardDefinitionAction}.
  */
 public class Navigation {
     private Boolean toNextAction;
