@@ -43,7 +43,6 @@ public abstract class AbstractCommandService implements ICommandService {
             String key = commandState.getCurrentCommandModel().getParamIterator().next();
             String prompt = commandsConfiguration.findPrompt(command.getPath(), key);
             commandState.setAwaitingKey(key);
-            System.out.println("Test is reference updated?");
             outputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
         } else {
             finishExecute(commandParameters);
