@@ -1,6 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * State of a command that is stored in {@link CommandCache}.
@@ -25,5 +26,9 @@ public class CommandState {
 
     public String getAwaitingKey() {
         return awaitingKey;
+    }
+
+    public boolean hasAwaitingKey() {
+        return StringUtils.isNotEmpty(awaitingKey);
     }
 }

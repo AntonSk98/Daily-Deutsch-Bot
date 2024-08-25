@@ -6,7 +6,7 @@ package com.ansk.development.learngermanwithansk98.service.model;
  * @author Anton Skripin
  */
 public enum Command {
-    PROFILE("/profile");
+    ADD_NEW_WORD("/new-word");
 
     private final String path;
 

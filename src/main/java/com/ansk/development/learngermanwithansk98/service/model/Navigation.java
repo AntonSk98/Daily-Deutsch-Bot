@@ -1,31 +1,43 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
-public class Navigation {
-    private boolean next;
-    private boolean previous;
+/**
+ * Represents a navigation direction with associated text and command.
+ *
+ * @author Anton Skripin
+ */
+public enum Navigation {
+    PREVIOUS("<-", "/previous"),
+    NEXT("->", "/next");
 
-    private Navigation() {
+    private final String text;
+    private final String command;
 
+    Navigation(String text, String command) {
+        this.text = text;
+        this.command = command;
     }
 
-    public static Navigation next() {
-        Navigation navigation = new Navigation();
-        navigation.next = true;
-        return navigation;
+    public String getText() {
+        return text;
     }
 
-    public static Navigation previous() {
-        Navigation navigation = new Navigation();
-        navigation.previous = true;
-        return navigation;
+    public String getCommand() {
+        return command;
     }
 
     public boolean isNext() {
-        return next;
+        return this == NEXT;
     }
 
     public boolean isPrevious() {
-        return previous;
+        return this == PREVIOUS;
     }
 
+    public static Navigation next() {
+        return NEXT;
+    }
+
+    public static Navigation previous() {
+        return PREVIOUS;
+    }
 }

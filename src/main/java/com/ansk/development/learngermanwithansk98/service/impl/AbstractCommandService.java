@@ -4,11 +4,12 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
+import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.CommandState;
-import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
-import org.apache.commons.lang3.StringUtils;
+
+import java.util.ListIterator;
 
 /**
  * Abstract implementation of {@link ICommandService}.
@@ -31,23 +32,54 @@ public abstract class AbstractCommandService implements ICommandService {
     }
 
     @Override
-    public void execute(CommandParameters commandParameters) {
+    public void processCommand(CommandParameters commandParameters) {
         Command command = supportedCommand();
         AbstractCommandModel<?> model = supportedCommandModel();
         CommandState commandState = commandCache.getOrInit(command, model);
-        if (StringUtils.isNotEmpty(commandState.getAwaitingKey())) {
+
+        if (commandParameters.navigation() != null) {
+            handleNavigation(commandParameters, commandState);
+        } else if (commandState.hasAwaitingKey()) {
             commandState.getCurrentCommandModel().append(commandState.getAwaitingKey(), commandParameters.input());
         }
 
         if (commandState.getCurrentCommandModel().getParamIterator().hasNext()) {
-            String key = commandState.getCurrentCommandModel().getParamIterator().next();
-            String prompt = commandsConfiguration.findPrompt(command.getPath(), key);
-            commandState.setAwaitingKey(key);
-            outputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
+            promptNextParameter(command, commandState, commandParameters);
         } else {
-            finishExecute(commandParameters);
-            commandCache.clear(command);
+            finalizeCommand(commandState, commandParameters);
         }
     }
+
+    private void handleNavigation(CommandParameters commandParameters, CommandState commandState) {
+        ListIterator<String> modelParamIterator = commandState.getCurrentCommandModel().getParamIterator();
+        if (commandParameters.navigation().isNext() && modelParamIterator.hasNext()) {
+            return;
+        }
+
+        if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
+            commandState.setAwaitingKey(modelParamIterator.previous());
+        }
+        if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
+            commandState.setAwaitingKey(modelParamIterator.previous());
+        }
+    }
+
+    private void promptNextParameter(Command command, CommandState commandState, CommandParameters commandParameters) {
+        String key = commandState.getCurrentCommandModel().getParamIterator().next();
+        String prompt = commandsConfiguration.findPrompt(command.getPath(), key);
+        commandState.setAwaitingKey(key);
+        if (commandsConfiguration.findCommand(command.getPath()).isWithNavigation()) {
+            outputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
+            return;
+        }
+        outputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
+
+    }
+
+    private void finalizeCommand(CommandState commandState, CommandParameters commandParameters) {
+        applyCommandModel(commandState.getCurrentCommandModel(), commandParameters);
+        commandCache.clear(supportedCommand());
+    }
+
 
 }

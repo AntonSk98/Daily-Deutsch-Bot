@@ -12,9 +12,9 @@ import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandM
 public interface ICommandService {
     Command supportedCommand();
 
-    void execute(CommandParameters commandParameters);
+    void processCommand(CommandParameters commandParameters);
 
-    void finishExecute(CommandParameters commandParameters);
+    void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters commandParameters);
 
     AbstractCommandModel<?> supportedCommandModel();
 }

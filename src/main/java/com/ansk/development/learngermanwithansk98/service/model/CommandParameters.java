@@ -3,6 +3,7 @@ package com.ansk.development.learngermanwithansk98.service.model;
 public class CommandParameters {
 
     private String input;
+    private Navigation navigation;
     private Long chatId;
 
     private CommandParameters() {
@@ -11,6 +12,11 @@ public class CommandParameters {
 
     public static CommandParameters create() {
         return new CommandParameters();
+    }
+
+    public CommandParameters addNavigation(Navigation navigation) {
+        this.navigation = navigation;
+        return this;
     }
 
     public CommandParameters withInput(String input) {
@@ -29,6 +35,10 @@ public class CommandParameters {
 
     public Long chatId() {
         return chatId;
+    }
+
+    public Navigation navigation() {
+        return navigation;
     }
 
 }

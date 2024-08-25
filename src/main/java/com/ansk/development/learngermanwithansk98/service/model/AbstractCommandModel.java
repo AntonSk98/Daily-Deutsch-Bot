@@ -1,29 +1,44 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
 import com.ansk.development.learngermanwithansk98.service.impl.AbstractCommandService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.ListIterator;
 import java.util.function.BiConsumer;
 
 /**
  * Abstract command model.
  * It encapsulates common fields and methods that are required by {@link AbstractCommandService}.
+ *
  * @param <T> concrete command model
  */
 public abstract class AbstractCommandModel<T> {
 
-    private Iterator<String> paramIterator;
+    @JsonIgnore
+    private final LinkedHashMap<String, BiConsumer<T, String>> mapping = new LinkedHashMap<>();
 
-    public abstract LinkedHashMap<String, BiConsumer<T, String>> getMapping();
+    @JsonIgnore
+    private ListIterator<String> paramIterator;
 
-    public abstract T addMapping(String key, BiConsumer<T, String> mapping);
+    public LinkedHashMap<String, BiConsumer<T, String>> getMapping() {
+        return mapping;
+    }
 
-    public abstract void append(String awaitingKey, String input);
+    public abstract AbstractCommandModel<T> init();
 
-    public Iterator<String> getParamIterator() {
+    public T addMapping(String key, BiConsumer<T, String> mapping) {
+        this.mapping.put(key, mapping);
+        return (T) this;
+    }
+
+    public void append(String awaitingKey, String input) {
+        getMapping().get(awaitingKey).accept((T) this, input);
+    }
+
+    public ListIterator<String> getParamIterator() {
         if (paramIterator == null) {
-            paramIterator = getMapping().keySet().iterator();
+            paramIterator = getMapping().keySet().stream().toList().listIterator();
         }
 
         return paramIterator;

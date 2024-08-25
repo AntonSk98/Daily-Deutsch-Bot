@@ -25,9 +25,7 @@ public class CommandsConfiguration {
     }
 
     public String findPrompt(String path, String key) {
-        return this.commandDefinition.stream().filter(commandDefinition -> commandDefinition.getPath().equals(path))
-                .findFirst()
-                .orElseThrow()
+        return findCommand(path)
                 .getParameters()
                 .stream()
                 .filter(parameter -> parameter.key.equals(key))
@@ -36,8 +34,15 @@ public class CommandsConfiguration {
                 .prompt;
     }
 
+    public CommandDefinition findCommand(String path) {
+        return this.commandDefinition.stream().filter(commandDefinition -> commandDefinition.getPath().equals(path))
+                .findFirst()
+                .orElseThrow();
+    }
+
     public static class CommandDefinition {
         private String path;
+        private boolean withNavigation;
         private List<Parameter> parameters;
 
         public String getPath() {
@@ -54,6 +59,14 @@ public class CommandsConfiguration {
 
         public void setParameters(List<Parameter> parameters) {
             this.parameters = parameters;
+        }
+
+        public boolean isWithNavigation() {
+            return withNavigation;
+        }
+
+        public void setWithNavigation(boolean withNavigation) {
+            this.withNavigation = withNavigation;
         }
 
         public static class Parameter {

@@ -1,15 +1,18 @@
 package com.ansk.development.learngermanwithansk98.gateway;
 
-import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.Commands;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.ansk.development.learngermanwithansk98.gateway.MapperUtils.map;
 
 
 /**
@@ -34,7 +37,9 @@ public class InputGateway {
     }
 
     public void process(Update update) {
-        final String input = update.getMessage().getText();
+        final String input = Optional.ofNullable(update.getMessage()).map(Message::getText).orElse(null);
+        final long chatId = Optional.ofNullable(update.getMessage()).map(Message::getChatId)
+                .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
 
         Command command = Commands.find(input)
                 .or(() -> Optional.ofNullable(commandCache.getCurrentCommand()))
@@ -46,9 +51,10 @@ public class InputGateway {
                 .findFirst()
                 .orElseThrow();
 
-        commandService.execute(CommandParameters
+        commandService.processCommand(CommandParameters
                 .create()
-                .withChatId(update.getMessage().getChatId())
-                .withInput(update.getMessage().getText()));
+                .withChatId(chatId)
+                .withInput(input)
+                .addNavigation(map(update)));
     }
 }
