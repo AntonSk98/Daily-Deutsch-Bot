@@ -14,7 +14,7 @@ public class Word extends AbstractCommandModel<Word> {
     private String example;
     private String exampleTranslation;
 
-    public static Word toWord(AbstractCommandModel<?> model) {
+    public static Word map(AbstractCommandModel<?> model) {
         if (model instanceof Word word) {
             return word;
         }

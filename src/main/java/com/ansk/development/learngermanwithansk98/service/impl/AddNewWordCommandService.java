@@ -34,7 +34,7 @@ public class AddNewWordCommandService extends AbstractCommandService {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters commandParameters) {
-        wordCache.addWord(Word.toWord(model));
+        wordCache.addWord(Word.map(model));
         outputGateway.sendMessageWithPayload(commandParameters.chatId(), "Word saved to cache!", model);
     }
 

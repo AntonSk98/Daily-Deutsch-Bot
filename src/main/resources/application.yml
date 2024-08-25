@@ -28,6 +28,10 @@ commands:
         - key: example-translation
           prompt: write translation for the example
     - path: /current_words
+    - path: /delete_word
+      parameters:
+        - key: word_reference
+          prompt: please provide a unique word reference
 
 bot:
   user:

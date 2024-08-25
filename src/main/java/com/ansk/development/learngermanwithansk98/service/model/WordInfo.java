@@ -39,4 +39,18 @@ public class WordInfo {
         return root;
     }
 
+    public Optional<WordInfo> findByReference(String reference) {
+        if (reference.equals((Objects.isNull(index) ? "" : index + SEPARATOR) + word)) {
+            return Optional.of(this);
+        }
+        return Optional.empty();
+    }
+
+    public String word() {
+        return word;
+    }
+
+    public String translation() {
+        return translation;
+    }
 }

@@ -7,7 +7,8 @@ package com.ansk.development.learngermanwithansk98.service.model;
  */
 public enum Command {
     ADD_NEW_WORD("/new_word"),
-    GET_WORDS("/current_words");
+    GET_WORDS("/current_words"),
+    DELETE_WORD("/delete_word");
 
     private final String path;
 

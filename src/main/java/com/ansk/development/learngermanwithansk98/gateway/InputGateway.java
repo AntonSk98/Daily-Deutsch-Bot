@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ansk.development.learngermanwithansk98.gateway.MapperUtils.map;
+import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 
 
 /**

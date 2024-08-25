@@ -8,10 +8,13 @@ import com.ansk.development.learngermanwithansk98.service.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 
 /**
  * Service that returns currently cached {@link Word}s.
@@ -40,37 +43,14 @@ public class GetCachedWordsCommandService extends AbstractCommandService {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters commandParameters) {
-        String cachedWordsPrettyPrinted = getCachedWordsPrettyPrinted();
-        String message = StringUtils.isEmpty(cachedWordsPrettyPrinted) ? "No words in cache yet" : cachedWordsPrettyPrinted;
+        Collection<WordInfo> wordInfoCollection = map(wordCache.getWords());
+        String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
+        String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
         outputGateway.sendPlainMessage(commandParameters.chatId(), message);
     }
 
     @Override
     public AbstractCommandModel<?> supportedCommandModel() {
         return new NoParamModel();
-    }
-
-    private String getCachedWordsPrettyPrinted() {
-        Map<String, Long> wordToTotalOccurrences = wordCache.getWords()
-                .stream()
-                .map(Word::getWord)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-        Map<String, Long> wordToCurrentIndex = new HashMap<>();
-
-        return wordCache.getWords()
-                .stream()
-                .map(word -> {
-                    String wordStr = word.getWord();
-                    long currentIndex = wordToCurrentIndex.getOrDefault(wordStr, 0L) + 1;
-                    wordToCurrentIndex.put(wordStr, currentIndex);
-
-                    long totalOccurrences = wordToTotalOccurrences.getOrDefault(wordStr, 0L);
-                    return totalOccurrences > 1
-                            ? WordInfo.of(currentIndex, wordStr, word.getTranslation())
-                            : WordInfo.of(wordStr, word.getTranslation());
-                })
-                .map(WordInfo::prettyPrint)
-                .collect(Collectors.joining("\n"));
     }
 }
