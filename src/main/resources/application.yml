@@ -8,15 +8,7 @@ spring:
 
 commands:
   command-definition:
-    - path: /profile
-      parameters:
-        - key: name
-          prompt: please write your name
-        - key: surname
-          prompt: please write your surname
-        - key: age
-          prompt: please write your age
-    - path: /new-word
+    - path: /new_word
       with-navigation: true
       parameters:
         - key: word
@@ -33,6 +25,7 @@ commands:
           prompt: give me an example
         - key: example-translation
           prompt: write translation for the example
+    - path: /current_words
 
 bot:
   user:
