@@ -6,24 +6,6 @@ spring:
     username: ${db-username}
     password: ${db-password}
 
-
-card-definition:
-  actions:
-    - action: PROVIDE_CARD_TITLE
-    - action: PROVIDE_WORD
-      required: true
-    - action: PROVIDE_TRANSLATION
-      required: true
-    - action: PROVIDE_MEANING
-      required: true
-    - action: PROVIDE_WORD_FORMS
-    - action: PROVIDE_WORD_FREQUENCY
-      required: true
-    - action: PROVIDE_EXAMPLE
-      required: true
-    - action: PROVIDE_EXAMPLE_TRANSLATION
-      go-to: PROVIDE_WORD
-
 commands:
   command-definition:
     - path: /profile
@@ -34,6 +16,23 @@ commands:
           prompt: please write your surname
         - key: age
           prompt: please write your age
+    - path: /new-word
+      with-navigation: true
+      parameters:
+        - key: word
+          prompt: write a new word
+        - key: translation
+          prompt: write a translation
+        - key: meaning
+          prompt: what does this word mean?
+        - key: forms
+          prompt: write any forms of this word separated by |
+        - key: frequency
+          prompt: how frequent is this word
+        - key: example
+          prompt: give me an example
+        - key: example-translation
+          prompt: write translation for the example
 
 bot:
   user:

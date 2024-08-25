@@ -1,39 +1,31 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
-import com.ansk.development.learngermanwithansk98.service.CardDefinitionAction;
-
-/**
- * Represents navigation options for an {@link CardDefinitionAction}.
- */
 public class Navigation {
-    private Boolean toNextAction;
-    private Boolean toPreviousAction;
+    private boolean next;
+    private boolean previous;
 
     private Navigation() {
 
     }
 
-    public static Navigation init() {
-        return new Navigation();
+    public static Navigation next() {
+        Navigation navigation = new Navigation();
+        navigation.next = true;
+        return navigation;
     }
 
-    public Navigation toNextAction() {
-        this.toNextAction = true;
-        this.toPreviousAction = false;
-        return this;
+    public static Navigation previous() {
+        Navigation navigation = new Navigation();
+        navigation.previous = true;
+        return navigation;
     }
 
-    public Navigation toPreviousAction() {
-        this.toPreviousAction = true;
-        this.toNextAction = false;
-        return this;
+    public boolean isNext() {
+        return next;
     }
 
-    public Boolean shouldNavigateToNextAction() {
-        return toNextAction;
+    public boolean isPrevious() {
+        return previous;
     }
 
-    public Boolean shouldNavigateToPreviousAction() {
-        return toPreviousAction;
-    }
 }
