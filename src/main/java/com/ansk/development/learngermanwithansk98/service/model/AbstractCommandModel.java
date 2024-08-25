@@ -2,10 +2,12 @@ package com.ansk.development.learngermanwithansk98.service.model;
 
 import com.ansk.development.learngermanwithansk98.service.impl.AbstractCommandService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.LinkedHashMap;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.BiConsumer;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * Abstract command model.
@@ -42,5 +44,10 @@ public abstract class AbstractCommandModel<T> {
         }
 
         return paramIterator;
+    }
+
+    public boolean isDefined(String key) {
+        Map<?,?> map = new ObjectMapper().setSerializationInclusion(NON_NULL).convertValue(this, Map.class);
+        return map.containsKey(key);
     }
 }

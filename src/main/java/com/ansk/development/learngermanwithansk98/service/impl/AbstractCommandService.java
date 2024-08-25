@@ -8,6 +8,7 @@ import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandM
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.CommandState;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ListIterator;
 
@@ -36,6 +37,16 @@ public abstract class AbstractCommandService implements ICommandService {
         Command command = supportedCommand();
         AbstractCommandModel<?> model = supportedCommandModel();
         CommandState commandState = commandCache.getOrInit(command, model);
+
+        // todo move it to a separate filter ?
+        if (StringUtils.isNotEmpty(commandState.getAwaitingKey())
+                && StringUtils.isEmpty(commandParameters.input())
+                && !commandState.getCurrentCommandModel().isDefined(commandState.getAwaitingKey())
+                && commandsConfiguration.findParameter(command.getPath(), commandState.getAwaitingKey()).isRequired()
+        ) {
+            outputGateway.sendPlainMessage(commandParameters.chatId(), "This is a required parameter");
+            return;
+        }
 
         if (commandParameters.navigation() != null) {
             handleNavigation(commandParameters, commandState);
@@ -66,7 +77,7 @@ public abstract class AbstractCommandService implements ICommandService {
 
     private void promptNextParameter(Command command, CommandState commandState, CommandParameters commandParameters) {
         String key = commandState.getCurrentCommandModel().getParamIterator().next();
-        String prompt = commandsConfiguration.findPrompt(command.getPath(), key);
+        String prompt = commandsConfiguration.findParameter(command.getPath(), key).getPrompt();
         commandState.setAwaitingKey(key);
         if (commandsConfiguration.findCommand(command.getPath()).isWithNavigation()) {
             outputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);

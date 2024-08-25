@@ -24,14 +24,13 @@ public class CommandsConfiguration {
         this.commandDefinition = command;
     }
 
-    public String findPrompt(String path, String key) {
+    public CommandDefinition.Parameter findParameter(String path, String key) {
         return findCommand(path)
                 .getParameters()
                 .stream()
                 .filter(parameter -> parameter.key.equals(key))
                 .findFirst()
-                .orElseThrow()
-                .prompt;
+                .orElseThrow();
     }
 
     public CommandDefinition findCommand(String path) {
@@ -72,6 +71,7 @@ public class CommandsConfiguration {
         public static class Parameter {
             private String key;
             private String prompt;
+            private boolean required;
 
             public String getKey() {
                 return key;
@@ -87,6 +87,14 @@ public class CommandsConfiguration {
 
             public void setPrompt(String prompt) {
                 this.prompt = prompt;
+            }
+
+            public boolean isRequired() {
+                return required;
+            }
+
+            public void setRequired(boolean required) {
+                this.required = required;
             }
         }
     }

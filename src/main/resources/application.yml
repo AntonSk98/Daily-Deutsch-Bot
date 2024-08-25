@@ -12,8 +12,10 @@ commands:
       with-navigation: true
       parameters:
         - key: word
+          required: true
           prompt: write a new word
         - key: translation
+          required: true
           prompt: write a translation
         - key: meaning
           prompt: what does this word mean?
