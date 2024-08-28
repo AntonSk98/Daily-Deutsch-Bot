@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.impl;
+package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;

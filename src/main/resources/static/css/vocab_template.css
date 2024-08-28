@@ -9,27 +9,30 @@
 }
 
 .logo > img {
-    width: 150px;
+    width: 100px;
 }
 
 .reference > img {
-    width: 78px;
-    margin-left: 3rem;
+    width: 50px;
+    margin-left: 1.5rem;
 }
 
 .top-separator {
-    width: 45%;
-    margin: 1.5rem 0;
-    border-top: solid 4px #6D5DFD;
+    width: 33%;
+    margin: 1rem 0;
+    border-top: solid 2px #6D5DFD;
     border-radius: 3px;
 }
 
 .title {
-    margin-top: 1rem;
-    text-align: center;
+    margin-top: 0.5rem;
+    text-align: right;
     font-weight: bold;
     font-size: 1.5rem;
     color: #6B6B6B;
+    border-right: solid 3px #6D5DFD;
+    padding-top: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .table-container {
@@ -115,7 +118,7 @@
 
 .metadata-container {
     margin-top: 1rem;
-    display: flex;
+    display: none;
     justify-content: end;
 }
 

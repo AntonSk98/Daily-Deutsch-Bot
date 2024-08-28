@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Implementation of {@link AbstractCommandModel} for a word.
  *
@@ -10,7 +12,7 @@ public class Word extends AbstractCommandModel<Word> {
     private String translation;
     private String meaning;
     private String forms;
-    private String frequency;
+    private int frequency;
     private String example;
     private String exampleTranslation;
 
@@ -20,6 +22,18 @@ public class Word extends AbstractCommandModel<Word> {
         }
 
         throw new IllegalArgumentException("Model is not an instance of class Word: " + model.getClass().getSimpleName());
+    }
+
+    public static Word of(String word, String translation, String meaning, int frequency, String example, String exampleTranslation, String forms) {
+        Word w = new Word();
+        w.setWord(word);
+        w.setTranslation(translation);
+        w.setMeaning(meaning);
+        w.setFrequency(frequency);
+        w.setExample(example);
+        w.setExampleTranslation(exampleTranslation);
+        w.setForms(forms);
+        return w;
     }
 
     public String getWord() {
@@ -38,7 +52,7 @@ public class Word extends AbstractCommandModel<Word> {
         return forms;
     }
 
-    public String getFrequency() {
+    public int getFrequency() {
         return frequency;
     }
 
@@ -63,10 +77,10 @@ public class Word extends AbstractCommandModel<Word> {
     }
 
     public void setForms(String forms) {
-        this.forms = forms;
+        this.forms = StringUtils.join(forms.split("\\."), " | ");
     }
 
-    public void setFrequency(String frequency) {
+    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 

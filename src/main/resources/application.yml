@@ -20,7 +20,7 @@ commands:
         - key: meaning
           prompt: what does this word mean?
         - key: forms
-          prompt: write any forms of this word separated by |
+          prompt: write any forms of this word separated by . without spaces
         - key: frequency
           prompt: how frequent is this word
         - key: example
@@ -32,6 +32,7 @@ commands:
       parameters:
         - key: word_reference
           prompt: please provide a unique word reference
+    - path: /preview
 
 bot:
   user:

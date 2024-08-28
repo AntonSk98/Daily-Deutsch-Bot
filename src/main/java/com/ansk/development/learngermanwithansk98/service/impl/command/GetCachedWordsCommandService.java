@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.impl;
+package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
@@ -9,9 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;

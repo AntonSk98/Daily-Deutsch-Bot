@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
-import com.ansk.development.learngermanwithansk98.service.impl.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

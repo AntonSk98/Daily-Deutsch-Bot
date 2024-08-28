@@ -21,9 +21,9 @@
 
         <div class="top-separator"></div>
 
-        <section th:if="vocabularyCard.title != null"
+        <section th:if="wordCard.title != null"
                  class="title">
-            <span th:text="${vocabularyCard.title}"></span>
+            <span th:text="${wordCard.title}"></span>
         </section>
 
         <div class="table-container">
@@ -37,18 +37,18 @@
                 </thead>
 
                 <tbody>
-                    <section th:each="wordEntry : ${vocabularyCard.wordEntries}">
+                    <section th:each="word : ${wordCard.words}">
 
                         <tr class="first-row">
-                            <td th:text="${wordEntry.word}"></td>
-                            <td th:text="${wordEntry.translation}"></td>
-                            <td th:text="${wordEntry.meaning}"></td>
+                            <td th:text="${word.word}"></td>
+                            <td th:text="${word.translation}"></td>
+                            <td th:text="${word.meaning}"></td>
                         </tr>
 
                         <tr class="second-row">
                             <td colspan="2"
-                                th:if="${wordEntry.variations != null && !wordEntry.variations.isEmpty()}"
-                                th:text="'Forms: ' + ${wordEntry.variations}">
+                                th:if="${word.forms != null && !word.forms.isEmpty()}"
+                                th:text="'Forms: ' + ${word.forms}">
                             </td>
 
                             <td colspan="1">
@@ -56,7 +56,7 @@
                                     <span>Frequency:</span>
                                     <div class="word-frequency">
                                         <div th:each="i : ${#numbers.sequence(1, 5)}">
-                                            <img th:src="${wordEntry.frequency >= i ?
+                                            <img th:src="${word.frequency >= i ?
                                                 '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/filled-star.png'
                                                 : '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/star.png'}"
                                             />
@@ -68,23 +68,23 @@
 
                         <tr>
                             <td colspan="3"
-                                th:classappend="${wordEntry.exampleTranslation == null || wordEntry.exampleTranslation.isEmpty()} ? 'border-bottom' : ''"
+                                th:classappend="${word.exampleTranslation == null || word.exampleTranslation.isEmpty()} ? 'border-bottom' : ''"
                                 class="example-top-separator">
 
                                 <div class="example">
                                     <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/circle.png">
-                                    <span th:text="${wordEntry.example}"></span>
+                                    <span th:text="${word.example}"></span>
                                 </div>
 
                             </td>
                         </tr>
 
-                        <tr th:if="${wordEntry.exampleTranslation != null && !wordEntry.exampleTranslation.isEmpty()}"
+                        <tr th:if="${word.exampleTranslation != null && !word.exampleTranslation.isEmpty()}"
                             class="example-translation-row">
                             <td colspan="3" class="border-bottom">
                                 <div class="example-translation">
                                     <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/circle-secondary.png">
-                                    <span th:text="${wordEntry.exampleTranslation}"></span>
+                                    <span th:text="${word.exampleTranslation}"></span>
                                 </div>
                             </td>
                         </tr>
@@ -96,7 +96,7 @@
         <footer class="metadata">
             <div class="metadata-container">
                 <span>Card number: </span>
-                <span th:text="${vocabularyCard.id}"></span>
+                <span th:text="${wordCard.id}"></span>
             </div>
             <div class="follow_me">
                 <span>Learn more - follow <span class="channel">@daily_deutsch</span> on Telegram!</span>

@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.impl;
+package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Command.ADD_NEW_WORD;
 
+/**
+ * Service that adds a new {@link Word} to {@link WordCache}.
+ *
+ * @author Anton Skripin
+ */
 @Service
 public class AddNewWordCommandService extends AbstractCommandService {
 
@@ -46,7 +51,7 @@ public class AddNewWordCommandService extends AbstractCommandService {
                 .addMapping("translation", Word::setTranslation)
                 .addMapping("meaning", Word::setMeaning)
                 .addMapping("forms", Word::setForms)
-                .addMapping("frequency", Word::setFrequency)
+                .addMapping("frequency", (word, frequency) -> word.setFrequency(Integer.parseInt(frequency)))
                 .addMapping("example", Word::setExample)
                 .addMapping("example-translation", Word::setExampleTranslation);
     }
