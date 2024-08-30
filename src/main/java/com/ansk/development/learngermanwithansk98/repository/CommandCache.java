@@ -1,8 +1,8 @@
 package com.ansk.development.learngermanwithansk98.repository;
 
-import com.ansk.development.learngermanwithansk98.service.model.CommandState;
 import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
+import com.ansk.development.learngermanwithansk98.service.model.CommandState;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -35,7 +35,7 @@ public class CommandCache {
 
     public void clear(Command command) {
         currentCommand = null;
-        commandToModel.remove(command);
+        commandToModel.clear();
     }
 
     public Command getCurrentCommand() {

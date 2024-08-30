@@ -46,6 +46,7 @@ public class PreviewCardCommandService extends AbstractCommandService {
 
         if (CollectionUtils.isEmpty(wordsInCache)) {
             outputGateway.sendPlainMessage(commandParameters.chatId(), "No words added in cache yet!");
+            return;
         }
 
         WordCard previewWordCard = new WordCard(RandomStringUtils.randomAlphabetic(10), "preview", wordsInCache);
