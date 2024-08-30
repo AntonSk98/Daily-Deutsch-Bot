@@ -8,19 +8,9 @@ import java.util.Optional;
  *
  * @author Anton Skripin
  */
-public class WordInfo {
+public record WordInfo(Long index, String word, String translation) {
     private static final String SEPARATOR = "#";
     private static final String DASH = "-";
-
-    private final Long index;
-    private final String word;
-    private final String translation;
-
-    private WordInfo(Long index, String word, String translation) {
-        this.index = index;
-        this.word = word;
-        this.translation = translation;
-    }
 
     public static WordInfo of(String word, String translation) {
         return new WordInfo(null, word, translation);
@@ -40,17 +30,10 @@ public class WordInfo {
     }
 
     public Optional<WordInfo> findByReference(String reference) {
-        if (reference.equals((Objects.isNull(index) ? "" : index + SEPARATOR) + word)) {
+        String expectedReference = (Objects.isNull(index) ? "" : index + SEPARATOR) + word;
+        if (reference.equals(expectedReference)) {
             return Optional.of(this);
         }
         return Optional.empty();
-    }
-
-    public String word() {
-        return word;
-    }
-
-    public String translation() {
-        return translation;
     }
 }

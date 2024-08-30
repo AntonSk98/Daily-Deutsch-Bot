@@ -34,7 +34,7 @@ public class DailyDeutschBotConsumer implements LongPollingSingleThreadUpdateCon
     public void registerBot() {
         try {
             TelegramBotsLongPollingApplication longPollingApplication = new TelegramBotsLongPollingApplication();
-            longPollingApplication.registerBot(config.getToken(), this);
+            longPollingApplication.registerBot(config.token(), this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

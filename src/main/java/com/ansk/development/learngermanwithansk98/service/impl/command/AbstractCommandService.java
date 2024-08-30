@@ -42,7 +42,7 @@ public abstract class AbstractCommandService implements ICommandService {
         if (StringUtils.isNotEmpty(commandState.getAwaitingKey())
                 && StringUtils.isEmpty(commandParameters.input())
                 && !commandState.getCurrentCommandModel().isDefined(commandState.getAwaitingKey())
-                && commandsConfiguration.findParameter(command.getPath(), commandState.getAwaitingKey()).isRequired()
+                && commandsConfiguration.findParameter(command.getPath(), commandState.getAwaitingKey()).required()
         ) {
             outputGateway.sendPlainMessage(commandParameters.chatId(), "This is a required parameter");
             return;
@@ -77,9 +77,9 @@ public abstract class AbstractCommandService implements ICommandService {
 
     private void promptNextParameter(Command command, CommandState commandState, CommandParameters commandParameters) {
         String key = commandState.getCurrentCommandModel().getParamIterator().next();
-        String prompt = commandsConfiguration.findParameter(command.getPath(), key).getPrompt();
+        String prompt = commandsConfiguration.findParameter(command.getPath(), key).prompt();
         commandState.setAwaitingKey(key);
-        if (commandsConfiguration.findCommand(command.getPath()).isWithNavigation()) {
+        if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
             outputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
             return;
         }

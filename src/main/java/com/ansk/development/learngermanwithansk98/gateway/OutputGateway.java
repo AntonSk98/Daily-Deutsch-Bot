@@ -52,7 +52,7 @@ public class OutputGateway {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build();
 
-        this.telegramClient = new OkHttpTelegramClient(client, config.getToken());
+        this.telegramClient = new OkHttpTelegramClient(client, config.token());
         this.objectMapper = objectMapper;
     }
 

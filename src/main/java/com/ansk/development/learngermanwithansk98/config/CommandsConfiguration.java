@@ -11,91 +11,34 @@ import java.util.List;
  *
  * @author Anton Skripin
  */
-@Configuration
 @ConfigurationProperties(prefix = "commands")
-public class CommandsConfiguration {
-    private List<CommandDefinition> commandDefinition;
-
-    public List<CommandDefinition> getCommandDefinition() {
-        return commandDefinition;
-    }
-
-    public void setCommandDefinition(List<CommandDefinition> command) {
-        this.commandDefinition = command;
-    }
+public record CommandsConfiguration(List<CommandDefinition> commandDefinition) {
 
     public CommandDefinition.Parameter findParameter(String path, String key) {
         return findCommand(path)
-                .getParameters()
+                .parameters()
                 .stream()
-                .filter(parameter -> parameter.key.equals(key))
+                .filter(parameter -> parameter.key().equals(key))
                 .findFirst()
                 .orElseThrow();
     }
 
     public CommandDefinition findCommand(String path) {
-        return this.commandDefinition.stream().filter(commandDefinition -> commandDefinition.getPath().equals(path))
+        return this.commandDefinition.stream()
+                .filter(commandDefinition -> commandDefinition.path().equals(path))
                 .findFirst()
                 .orElseThrow();
     }
 
-    public static class CommandDefinition {
-        private String path;
-        private boolean withNavigation;
-        private List<Parameter> parameters;
+    public static record CommandDefinition(
+            String path,
+            boolean withNavigation,
+            List<Parameter> parameters) {
 
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public List<Parameter> getParameters() {
-            return parameters;
-        }
-
-        public void setParameters(List<Parameter> parameters) {
-            this.parameters = parameters;
-        }
-
-        public boolean isWithNavigation() {
-            return withNavigation;
-        }
-
-        public void setWithNavigation(boolean withNavigation) {
-            this.withNavigation = withNavigation;
-        }
-
-        public static class Parameter {
-            private String key;
-            private String prompt;
-            private boolean required;
-
-            public String getKey() {
-                return key;
-            }
-
-            public void setKey(String key) {
-                this.key = key;
-            }
-
-            public String getPrompt() {
-                return prompt;
-            }
-
-            public void setPrompt(String prompt) {
-                this.prompt = prompt;
-            }
-
-            public boolean isRequired() {
-                return required;
-            }
-
-            public void setRequired(boolean required) {
-                this.required = required;
-            }
+        public static record Parameter(
+                String key,
+                String prompt,
+                boolean required) {
         }
     }
 }
