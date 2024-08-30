@@ -40,6 +40,7 @@ bot:
 
 ai:
   params:
+    token: ${ai-token}
     model: gpt-4o-mini
     role: user
     temperature: 1
