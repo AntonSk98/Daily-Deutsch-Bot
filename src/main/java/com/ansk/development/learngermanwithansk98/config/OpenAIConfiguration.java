@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record OpenAIConfiguration(String token,
                                   String model,
                                   String role,
-                                  float tempearature,
+                                  float temperature,
                                   long maxTokens,
                                   float frequencyPenalty,
                                   float presencePenalty,

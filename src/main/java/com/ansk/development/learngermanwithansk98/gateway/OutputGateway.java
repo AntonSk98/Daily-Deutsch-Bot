@@ -97,7 +97,15 @@ public class OutputGateway {
         } catch (TelegramApiException | JsonProcessingException e) {
             throw new IllegalStateException("Unexpected error occurred while sending a message with payload to telegram", e);
         }
+    }
 
+    public void sendHtmlMessage(Long chatId, String message) {
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(message).parseMode("HTML").build();
+        try {
+            telegramClient.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Error occurred while sending an HTML message to telegram", e);
+        }
     }
 
     public void sendImages(Long chatId, Images images) {
