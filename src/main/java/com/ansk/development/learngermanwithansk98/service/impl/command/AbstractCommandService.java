@@ -89,7 +89,7 @@ public abstract class AbstractCommandService implements ICommandService {
 
     private void finalizeCommand(CommandState commandState, CommandParameters commandParameters) {
         applyCommandModel(commandState.getCurrentCommandModel(), commandParameters);
-        commandCache.clear(supportedCommand());
+        commandCache.clear();
     }
 
 

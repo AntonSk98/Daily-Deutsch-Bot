@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,8 +14,8 @@ public class WordCard {
     protected WordCard() {
     }
 
-    public WordCard(String id, String title, List<Word> words) {
-        this.id = id;
+    public WordCard(String title, List<Word> words) {
+        this.id = RandomStringUtils.randomAlphabetic(10);
         this.title = title;
         this.words = words;
     }

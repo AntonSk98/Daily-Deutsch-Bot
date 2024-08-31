@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vocab Template</title>
+    <title>Vocabulary card</title>
     <link rel="stylesheet"
           type="text/css"
           href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/vocab_template.css"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/common.css"/>
 </head>
 <body>
 <div class="outer-container">
@@ -21,7 +24,7 @@
 
         <div class="top-separator"></div>
 
-        <section th:if="wordCard.title != null"
+        <section th:if="${wordCard.title} != null"
                  class="title">
             <span th:text="${wordCard.title}"></span>
         </section>
@@ -42,10 +45,11 @@
                         <tr class="first-row">
                             <td th:text="${word.word}"></td>
                             <td th:text="${word.translation}"></td>
-                            <td th:text="${word.meaning}"></td>
+                            <td th:if="${word.meaning != null && !word.meaning.isEmpty()}" th:text="${word.meaning}"></td>
+                            <td th:if="${word.meaning == null || word.meaning.isEmpty()}" class="info-lack">&ndash;</td>
                         </tr>
 
-                        <tr class="second-row">
+                        <tr class="second-row" th:if="${(word.forms != null && !word.forms.isEmpty()) || word.frequency > 0}">
                             <td colspan="2"
                                 th:if="${word.forms != null && !word.forms.isEmpty()}"
                                 th:text="'Forms: ' + ${word.forms}">
@@ -55,7 +59,8 @@
                                 <div class="frequency-container">
                                     <span>Frequency:</span>
                                     <div class="word-frequency">
-                                        <div th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <div th:if="${word.frequency > 0}"
+                                                th:each="i : ${#numbers.sequence(1, 5)}">
                                             <img th:src="${word.frequency >= i ?
                                                 '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/filled-star.png'
                                                 : '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/star.png'}"

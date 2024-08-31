@@ -49,7 +49,7 @@ public class PreviewCardCommandService extends AbstractCommandService {
             return;
         }
 
-        WordCard previewWordCard = new WordCard(RandomStringUtils.randomAlphabetic(10), "preview", wordsInCache);
+        WordCard previewWordCard = new WordCard("preview", wordsInCache);
 
         outputGateway.sendPlainMessage(commandParameters.chatId(), "Please wait...I am preparing the preview...");
 

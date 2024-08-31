@@ -33,7 +33,7 @@ public class CommandCache {
         return commandToModel.get(command);
     }
 
-    public void clear(Command command) {
+    public void clear() {
         currentCommand = null;
         commandToModel.clear();
     }

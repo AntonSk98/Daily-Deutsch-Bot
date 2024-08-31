@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 /**
- * Defines what {@link IConverterPipe}s and in which order must be applied to achieve desired transformation result.
+ * Defines what {@link IConverterPipe}s and in which order must be applied to transform a {@link WordCard} to {@link Images}.
  *
  * @author Anton Skripin
  */

@@ -41,7 +41,12 @@ public class InputGateway {
         final long chatId = Optional.ofNullable(update.getMessage()).map(Message::getChatId)
                 .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
 
-        Command command = Commands.find(input)
+        Command command = Commands
+                .find(input)
+                .map(cmd -> {
+                    commandCache.clear();
+                    return cmd;
+                })
                 .or(() -> Optional.ofNullable(commandCache.getCurrentCommand()))
                 .orElseThrow(() -> new IllegalStateException("Unknown command..."));
 
