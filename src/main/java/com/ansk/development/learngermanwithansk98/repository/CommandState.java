@@ -1,6 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import org.apache.commons.lang3.StringUtils;
 
 /**

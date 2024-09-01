@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+
 import java.util.Objects;
 import java.util.Optional;
 

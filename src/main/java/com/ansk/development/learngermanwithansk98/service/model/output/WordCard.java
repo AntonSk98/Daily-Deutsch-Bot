@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
