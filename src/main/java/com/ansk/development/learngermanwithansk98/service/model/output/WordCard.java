@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.output;
 
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.apache.commons.lang3.RandomStringUtils;

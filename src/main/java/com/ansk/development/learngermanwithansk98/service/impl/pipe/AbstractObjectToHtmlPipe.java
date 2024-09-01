@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  *
  * @author Anton Skripin
  */
-public abstract class AbstractObjectToHtmlPipe<T> implements IConverterPipe<T, Document> {
+public abstract class AbstractObjectToHtmlPipe<T> {
 
     public Function<SpringTemplateEngine, Document> abstractPipe(String template, String contextName, T object) {
         Context ctx = new Context();

@@ -1,8 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.impl;
 
 import com.ansk.development.learngermanwithansk98.service.model.Navigation;
-import com.ansk.development.learngermanwithansk98.service.model.Word;
-import com.ansk.development.learngermanwithansk98.service.model.WordInfo;
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

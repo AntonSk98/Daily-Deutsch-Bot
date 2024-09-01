@@ -4,10 +4,10 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
-import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
-import com.ansk.development.learngermanwithansk98.service.model.Word;
+import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Service;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Command.ADD_NEW_WORD;

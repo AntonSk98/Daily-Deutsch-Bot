@@ -1,8 +1,10 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.Images;
-import com.ansk.development.learngermanwithansk98.service.model.WordCard;
+import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
+import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -12,24 +14,18 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
  * @author Anton Skripin
  */
 @Service
-public class CardToImagesConverterPipe implements IConverterPipe<WordCard, Images> {
+public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard> implements IConverterPipe<WordCard, Images> {
 
-    private final CardToHtmlPipe cardToHtmlPipe;
-    private final HtmlToPdfPipe htmlToPdfPipe;
-    private final PdfToImagePipe pdfToImagesPipe;
+    private final SpringTemplateEngine springTemplateEngine;
 
     public CardToImagesConverterPipe(SpringTemplateEngine springTemplateEngine) {
-        cardToHtmlPipe = new CardToHtmlPipe(springTemplateEngine);
-        htmlToPdfPipe = new HtmlToPdfPipe();
-        pdfToImagesPipe = new PdfToImagePipe();
+        this.springTemplateEngine = springTemplateEngine;
     }
 
     @Override
     public Images pipe(WordCard wordCard) {
-        return pdfToImagesPipe.pipe(
-                htmlToPdfPipe.pipe(
-                        cardToHtmlPipe.pipe(wordCard)
-                )
-        );
+        Document html = abstractPipe("vocab_template", "wordCard", wordCard).apply(springTemplateEngine);
+        PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
+        return new PdfToImagePipe().pipe(pdfDocument);
     }
 }

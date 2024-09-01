@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.input;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,15 +24,10 @@ public class Word extends AbstractCommandModel<Word> {
         throw new IllegalArgumentException("Model is not an instance of class Word: " + model.getClass().getSimpleName());
     }
 
-    public static Word of(String word, String translation, String meaning, int frequency, String example, String exampleTranslation, String forms) {
+    public static Word of(String word, String translation) {
         Word w = new Word();
         w.setWord(word);
         w.setTranslation(translation);
-        w.setMeaning(meaning);
-        w.setFrequency(frequency);
-        w.setExample(example);
-        w.setExampleTranslation(exampleTranslation);
-        w.setForms(forms);
         return w;
     }
 

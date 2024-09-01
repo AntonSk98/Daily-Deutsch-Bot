@@ -1,5 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.model;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * Defines all known commands.
  *
@@ -9,7 +12,8 @@ public enum Command {
     ADD_NEW_WORD("/new_word"),
     GET_WORDS("/current_words"),
     DELETE_WORD("/delete_word"),
-    PREVIEW("/preview");
+    PREVIEW("/preview"),
+    READING_EXERCISE("/generate_reading_exercise");
 
     private final String path;
 
@@ -19,5 +23,11 @@ public enum Command {
 
     public String getPath() {
         return path;
+    }
+
+    public static Optional<Command> find(String command) {
+        return Arrays.stream(Command.values())
+                .filter(cmd -> cmd.getPath().equals(command))
+                .findFirst();
     }
 }

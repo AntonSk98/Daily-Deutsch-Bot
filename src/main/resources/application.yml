@@ -45,8 +45,8 @@ ai:
     role: user
     temperature: 1
     max_tokens: 15600
-    frequency_penalty: 0
-    presence_penalty: 0
+    frequency_penalty: 0.5
+    presence_penalty: 0.5
     response_format: json_object
   reading:
     prompts:
@@ -55,15 +55,15 @@ ai:
         Please create a text in German at an {level} language level.
         The text should be interesting, clear, and appropriate for learners at this level.
         The text should be about: {topic}.
-        Ensure that the text (not exercise but text itself) contains approximately 300-350 words, not characters or tokens.
-        his is crucial to ensure adequate content for comprehension practice.
+        The text must contain at least 450 tokens.
         After the text, create an exercise consisting of 10 questions and their corresponding answers based on the content of the text.
-        The questions should vary in type (e.g., multiple choice, fill-in-the-blank, true/false, or short answer) but should all be directly answerable from the text provided.
+        Those questions must make sense and should not be easily answerable by just rephrasing sentences of the text.
+        The questions should vary in type.
         The answer must have the following JSON structure:
         {
           "title": "Dein Titel hier.",
           "text": "Dein Text hier.",
-          "exercise": [
+          "exercises": [
             {
               "question": "Frage 1 hier.",
               "answer": "Antwort 1 hier."
@@ -75,50 +75,63 @@ ai:
             ...
           ]
         }
-        Ensure that the language and content are suitable for {level} level learners
-        and that the text is sufficiently detailed to allow for varied and comprehensive questions.
-      questions-for-text-exercise: |
+        Ensure that the language and content are suitable for {level} level learners.
+        Ensure that the text is sufficiently detailed to allow for varied and comprehensive questions.
+      analyzing-reading-exercise: |
         You are an experienced German tutor with many years of experience teaching students at different levels. 
-        Your task is to analyze the German text I provide and perform the following tasks:
-          1. Assess the CEFR level (e.g., A1, A2, B1, etc.) of the text based on its complexity, vocabulary, and grammar.
-          2. Create 10 questions based on the content of the text, along with their corresponding answers. 
-              The questions should vary in type (e.g., multiple choice, fill-in-the-blank, true/false, or short answer) 
-              and should cover different aspects of the text (e.g., comprehension, vocabulary, grammar).
-        Please return the response as a JSON object in the following structure:
+        I will provide a German text for you to analyze and complete the following tasks:
+          1. Rephrase the text to avoid any plagiarism issues.
+          2. Determine the CEFR level (e.g., A1, A2, B1, etc.) of the text based on its complexity, vocabulary, and grammar.  
+          3. Develop 10 questions related to the content of the rephrased text, along with their corresponding answers. 
+            The questions should be meaningful and not easily answerable by simply rephrasing sentences from the text, 
+            and they should vary in type.
+        Return the response as a JSON object with the following structure:
         {
           "level": "CEFR level here",
+          "text" "Rephrased text here",
           "exercise": [
             {
-              "question": "Frage 1 hier.",
-              "answer": "Antwort 1 hier."
+              "question": "Question 1.",
+              "answer": "Answer 1."
             },
             {
-              "question": "Frage 2 hier.",
-              "answer": "Antwort 2 hier."
+              "question": "Question 2.",
+              "answer": "Answer 2."
             },
             ...
           ]
         }
         Ensure that the questions are directly answerable from the text provided and are appropriate for the assessed CEFR level.
-    auto-formatting: |
-      Please format the given input using only Telegram-supported HTML tags:
-      - Bold: `<b>`, `<strong>`
-      - Italic: `<i>`, `<em>`
-      - Underline: `<u>`, `<ins>`
-      - Strikethrough: `<s>`, `<strike>`, `<del>`
-
-      ### Input:
-      - Title: `{title}`
-      - Text: `{text}`
+      format-text-to-telegram: |
+        Please format the given input using only Telegram-supported HTML tags:
+        - Bold: `<b>`, `<strong>`
+        - Italic: `<i>`, `<em>`
+        - Underline: `<u>`, `<ins>`
   
-      ### Rules:
-      1. The output must be well-readable.
-      2. Use only the supported tags mentioned above.
-      3. Exclude all other tags, including `<br>`, to avoid Telegram parsing errors.
-      
-      ### Output:
-      Formatted text using only the specified tags.
-      The answer must have the following JSON structure:
-      {
-        output: "formatted_output_here"
-      }
+        ### Input:
+        - Title: `{title}`
+        - Text: `{text}`
+    
+        ### Rules:
+        1. The output must be well-readable.
+        2. Use only the supported tags mentioned above.
+        3. Exclude all other tags, including `<br>`, to avoid Telegram parsing errors.
+        
+        ### Output:
+        Formatted text using only the specified tags.
+        The answer must have the following JSON structure:
+        {
+          output: "formatted_output_here"
+        }
+      split-text-by-paragraphs: |
+        I will give you a text.
+        Please split it into paragraphs and return them in this JSON format:
+        {
+          "text": [
+            "paragraph1",
+            "paragraph2",
+            "paragraph3"
+          ]
+        }
+        Replace each paragraph with the actual text. Here's the text:
+        {text}

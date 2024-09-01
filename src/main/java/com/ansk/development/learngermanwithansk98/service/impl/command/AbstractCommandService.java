@@ -4,10 +4,10 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
-import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
-import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
-import com.ansk.development.learngermanwithansk98.service.model.CommandState;
+import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
+import com.ansk.development.learngermanwithansk98.repository.CommandState;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ListIterator;

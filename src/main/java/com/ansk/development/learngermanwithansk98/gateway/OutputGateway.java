@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.gateway;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.service.model.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.Images;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -133,6 +133,7 @@ public class OutputGateway {
             builder.media(inputMedia);
             index++;
         }
+
         telegramClient.execute(builder.build());
     }
 
@@ -142,22 +143,17 @@ public class OutputGateway {
                 .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
                 .build();
 
-//        SendDocument sendDocument = SendDocument.builder()
-//                .chatId(chatId)
-//                .document(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
-//                .build();
-
         telegramClient.execute(sendPhoto);
     }
 
-    private void test(byte[] binaryImage) {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(binaryImage);
-        try {
-            BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
-            File outputFile = new File("/media/ansk98/D/development/learn-german-with-ansk98/src/test/a.png");
-            ImageIO.write(bufferedImage, "PNG", outputFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private void test(byte[] binaryImage) {
+//        SendPhoto sendPhoto = SendPhoto.builder()
+//                .chatId(chatId)
+//                .caption("<b>Here is some text:</b>\n<blockquote expandable><span class=\"tg-spoiler\">Hi!\nMy name is Anton\nSkripin</span></blockquote>")
+//                .parseMode("HTML")
+//                .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
+//                .build();
+//
+//        telegramClient.execute(sendPhoto);
+//    }
 }

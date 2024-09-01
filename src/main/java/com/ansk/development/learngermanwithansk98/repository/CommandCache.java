@@ -1,8 +1,7 @@
 package com.ansk.development.learngermanwithansk98.repository;
 
-import com.ansk.development.learngermanwithansk98.service.model.AbstractCommandModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
-import com.ansk.development.learngermanwithansk98.service.model.CommandState;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

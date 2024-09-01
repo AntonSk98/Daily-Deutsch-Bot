@@ -1,4 +1,6 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.input;
+
+import com.ansk.development.learngermanwithansk98.service.model.Navigation;
 
 public class CommandParameters {
 

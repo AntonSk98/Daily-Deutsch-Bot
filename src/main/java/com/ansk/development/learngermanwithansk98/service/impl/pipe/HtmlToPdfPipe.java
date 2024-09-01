@@ -1,7 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.WordCard;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;

@@ -24,6 +24,12 @@
     border-radius: 3px;
 }
 
+.level {
+    color: #6D5DFD;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
 .title {
     margin-top: 0.5rem;
     text-align: right;

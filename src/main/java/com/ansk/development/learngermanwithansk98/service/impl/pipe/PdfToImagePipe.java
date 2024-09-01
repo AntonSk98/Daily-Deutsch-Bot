@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.Images;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;

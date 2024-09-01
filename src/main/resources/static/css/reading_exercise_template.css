@@ -1,0 +1,40 @@
+.text-container {
+    margin-top: 1.3rem;
+}
+.paragraph {
+    text-align: justify;
+}
+.questions-container {
+    margin-top: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.questions-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #6D5DFD;
+}
+
+.questions {
+    list-style-type: none;
+    text-align: justify;
+}
+
+.question-number {
+    color: #6D5DFD;
+    font-weight: bold;
+}
+
+.questions-separator {
+    display: flex;
+    justify-content: end;
+}
+
+.questions-separator div {
+    width: 25%;
+    border-bottom: solid 3px #6D5DFD;
+}
+
+.questions li {
+    margin-bottom: 0.5rem;
+}

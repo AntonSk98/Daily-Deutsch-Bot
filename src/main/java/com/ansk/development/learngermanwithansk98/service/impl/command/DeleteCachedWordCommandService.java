@@ -5,6 +5,10 @@ import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.model.*;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
+import com.ansk.development.learngermanwithansk98.service.model.input.ToBeDeletedWord;
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

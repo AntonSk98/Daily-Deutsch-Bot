@@ -3,8 +3,7 @@ package com.ansk.development.learngermanwithansk98.gateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
-import com.ansk.development.learngermanwithansk98.service.model.CommandParameters;
-import com.ansk.development.learngermanwithansk98.service.model.Commands;
+import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -41,7 +40,7 @@ public class InputGateway {
         final long chatId = Optional.ofNullable(update.getMessage()).map(Message::getChatId)
                 .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
 
-        Command command = Commands
+        Command command = Command
                 .find(input)
                 .map(cmd -> {
                     commandCache.clear();

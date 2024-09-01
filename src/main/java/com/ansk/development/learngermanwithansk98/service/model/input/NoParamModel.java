@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.input;
 
 /**
  * Common model for all commands that do not require parameters for their execution.

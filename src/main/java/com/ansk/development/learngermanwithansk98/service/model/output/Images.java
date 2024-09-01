@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.output;
 
 import java.util.ArrayList;
 import java.util.Collections;

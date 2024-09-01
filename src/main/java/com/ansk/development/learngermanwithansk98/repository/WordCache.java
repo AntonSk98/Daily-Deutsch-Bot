@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.repository;
 
 import com.ansk.development.learngermanwithansk98.service.impl.command.AddNewWordCommandService;
-import com.ansk.development.learngermanwithansk98.service.model.Word;
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -5,6 +5,11 @@ import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.model.*;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
+import com.ansk.development.learngermanwithansk98.service.model.input.NoParamModel;
+import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

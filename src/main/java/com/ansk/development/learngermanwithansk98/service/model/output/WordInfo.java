@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.model;
+package com.ansk.development.learngermanwithansk98.service.model.output;
 
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 
