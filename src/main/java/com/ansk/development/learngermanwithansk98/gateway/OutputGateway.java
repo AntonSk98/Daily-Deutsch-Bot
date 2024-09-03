@@ -25,6 +25,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -116,12 +117,12 @@ public class OutputGateway {
 
         try {
             if (images.onePage()) {
-                SendPhoto mediaPhoto = toInputMediaPhoto(chatId, images.getBinaryImages().getFirst());
+                SendPhoto mediaPhoto = toInputMediaPhoto(chatId, images.getBinaryImages().getFirst(), Optional.empty());
                 telegramClient.execute(mediaPhoto);
                 return;
             }
 
-            var mediaPhotoGroup = toInputMediaPhotos(chatId, images.getBinaryImages());
+            var mediaPhotoGroup = toInputMediaPhotos(chatId, images.getBinaryImages(), Optional.empty());
             telegramClient.execute(mediaPhotoGroup);
         } catch (TelegramApiException e) {
             throw new IllegalStateException("Failed to send images to the client", e);
@@ -130,16 +131,24 @@ public class OutputGateway {
 
     public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
         final String readingExerciseTemplate = """
-                <b>%s</b>
+                ⭐️ #Reading
+                
+                📚 <b>%s</b>
+                
                 <i>%s</i>
                 \n
-                <b>Questions and answers:</b>
+                💬 <b>Questions and answers:</b>
                 <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
                 """;
 
         final String answersTemplate = """
                 <b>%s</b>
                 <i>%s</i>
+                """;
+
+        final String documentCaption = """
+                🖨️ #ReadingForPrinting
+                📚 Here’s the reading exercise formatted for printing.
                 """;
 
         final AtomicInteger counter = new AtomicInteger(1);
@@ -160,8 +169,13 @@ public class OutputGateway {
                 .parseMode("HTML")
                 .build();
 
-        var document = readingExercise.document().onePage() ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst()) : null;
-        var documents = Objects.isNull(document) ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages()) : null;
+        var imageCaption = new ImageCaption(documentCaption, "HTML");
+        var document = readingExercise.document().onePage()
+                ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst(), Optional.of(imageCaption))
+                : null;
+        var documents = Objects.isNull(document)
+                ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages(), Optional.of(imageCaption))
+                : null;
 
         try {
             telegramClient.execute(sendMessage);
@@ -179,22 +193,27 @@ public class OutputGateway {
         }
     }
 
-    private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages) {
+    private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages, Optional<ImageCaption> caption) {
         var builder = SendMediaGroup.builder().chatId(chatId);
         int index = 0;
         for (byte[] imageData : binaryImages) {
             InputMedia inputMedia = new InputMediaPhoto(new ByteArrayInputStream(imageData), "" + index);
             builder.media(inputMedia);
-
+            if (index == 0 && caption.isPresent()) {
+                inputMedia.setCaption(caption.get().caption);
+                inputMedia.setParseMode(caption.get().parseMode);
+            }
             index++;
         }
         return builder.build();
     }
 
-    private SendPhoto toInputMediaPhoto(Long chatId, byte[] binaryImage) {
+    private SendPhoto toInputMediaPhoto(Long chatId, byte[] binaryImage, Optional<ImageCaption> caption) {
         return SendPhoto.builder()
                 .chatId(chatId)
                 .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
+                .caption(caption.map(ImageCaption::caption).orElse(null))
+                .parseMode(caption.map(ImageCaption::parseMode).orElse(null))
                 .build();
     }
 

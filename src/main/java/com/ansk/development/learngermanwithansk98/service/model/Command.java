@@ -10,10 +10,11 @@ import java.util.Optional;
  */
 public enum Command {
     ADD_NEW_WORD("/new_word"),
-    GET_WORDS("/current_words"),
+    GET_WORDS("/cached_words"),
     DELETE_WORD("/delete_word"),
-    PREVIEW("/preview"),
-    READING_EXERCISE("/generate_reading_exercise");
+    PREVIEW("/preview_word_card"),
+    READING_EXERCISE_GENERATE("/generate_reading_exercise"),
+    READING_EXERCISE_CREATE("/create_reading_exercise");
 
     private final String path;
 

@@ -11,6 +11,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Service;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Command.ADD_NEW_WORD;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
 
 /**
  * Service that adds a new {@link Word} to {@link WordCache}.
@@ -47,12 +48,12 @@ public class AddNewWordCommandService extends AbstractCommandService {
     public AbstractCommandModel<?> supportedCommandModel() {
         return new Word()
                 .init()
-                .addMapping("word", Word::setWord)
-                .addMapping("translation", Word::setTranslation)
-                .addMapping("meaning", Word::setMeaning)
-                .addMapping("forms", Word::setForms)
-                .addMapping("frequency", (word, frequency) -> word.setFrequency(Integer.parseInt(frequency)))
-                .addMapping("example", Word::setExample)
-                .addMapping("example-translation", Word::setExampleTranslation);
+                .addMapping(WORD, Word::setWord)
+                .addMapping(TRANSLATION, Word::setTranslation)
+                .addMapping(MEANING, Word::setMeaning)
+                .addMapping(FORMS, Word::setForms)
+                .addMapping(FREQUENCY, (word, frequency) -> word.setFrequency(Integer.parseInt(frequency)))
+                .addMapping(EXAMPLE, Word::setExample)
+                .addMapping(EXAMPLE_TRANSLATION, Word::setExampleTranslation);
     }
 }

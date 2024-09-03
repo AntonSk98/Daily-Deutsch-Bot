@@ -25,20 +25,24 @@ commands:
           prompt: how frequent is this word
         - key: example
           prompt: give me an example
-        - key: example-translation
+        - key: example_translation
           prompt: write translation for the example
-    - path: /current_words
+    - path: /cached_words
     - path: /delete_word
       parameters:
         - key: word_reference
           prompt: please provide a unique word reference
-    - path: /preview
+    - path: /preview_word_card
     - path: /generate_reading_exercise
       parameters:
         - key: level
           prompt: please enter the level of the text based on the CEFR level
         - key: topic
           prompt: please provide the topic of the text
+    - path: /create_reading_exercise
+      parameters:
+        - key: text
+          prompt: please provide a text to create reading exercise for
 
 bot:
   user:
