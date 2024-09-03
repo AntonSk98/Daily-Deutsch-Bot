@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.model.*;
+import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.ToBeDeletedWord;
@@ -46,7 +46,7 @@ public class DeleteCachedWordCommandService extends AbstractCommandService {
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters commandParameters) {
         map(wordCache.getWords())
                 .stream()
-                .map(wordInfo -> wordInfo.findByReference(ToBeDeletedWord.map(model).getWordReference()))
+                .map(wordInfo -> wordInfo.findByReference(model.map(ToBeDeletedWord.class).getWordReference()))
                 .flatMap(Optional::stream)
                 .map(wordInfo -> wordCache.getWords()
                         .stream()
@@ -58,12 +58,12 @@ public class DeleteCachedWordCommandService extends AbstractCommandService {
                 .ifPresentOrElse(word -> {
                             wordCache.deleteWord(word);
                             String message = "Successfully deleted the word '%s'";
-                            String deletedWord = ToBeDeletedWord.map(model).getWordReference();
+                            String deletedWord = model.map(ToBeDeletedWord.class).getWordReference();
                             outputGateway.sendPlainMessage(commandParameters.chatId(), format(message, deletedWord));
                         },
                         () -> {
                             String message = "Word '%s' not present in cache";
-                            outputGateway.sendPlainMessage(commandParameters.chatId(), format(message, ToBeDeletedWord.map(model).getWordReference()));
+                            outputGateway.sendPlainMessage(commandParameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
                         });
     }
 

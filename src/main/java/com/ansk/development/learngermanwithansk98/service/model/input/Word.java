@@ -16,14 +16,6 @@ public class Word extends AbstractCommandModel<Word> {
     private String example;
     private String exampleTranslation;
 
-    public static Word map(AbstractCommandModel<?> model) {
-        if (model instanceof Word word) {
-            return word;
-        }
-
-        throw new IllegalArgumentException("Model is not an instance of class Word: " + model.getClass().getSimpleName());
-    }
-
     public static Word of(String word, String translation) {
         Word w = new Word();
         w.setWord(word);

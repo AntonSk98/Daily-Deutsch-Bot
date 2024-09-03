@@ -60,7 +60,7 @@ public class PreviewCardCommandService extends AbstractCommandService {
 
         Images images = converterPipe.pipe(previewWordCard);
 
-        outputGateway.sendImages(commandParameters.chatId(), images);
+        outputGateway.sendWordCard(commandParameters.chatId(), images);
     }
 
     @Override

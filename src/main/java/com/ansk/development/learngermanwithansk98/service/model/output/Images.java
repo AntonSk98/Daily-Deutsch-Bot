@@ -23,4 +23,8 @@ public class Images {
     public List<byte[]> getBinaryImages() {
         return Collections.unmodifiableList(binaryImages);
     }
+
+    public boolean onePage() {
+        return binaryImages.size() == 1;
+    }
 }

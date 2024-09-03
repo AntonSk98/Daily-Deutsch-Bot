@@ -4,8 +4,8 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
+import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class AddNewWordCommandService extends AbstractCommandService {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters commandParameters) {
-        wordCache.addWord(Word.map(model));
+        wordCache.addWord(model.map(Word.class));
         outputGateway.sendMessageWithPayload(commandParameters.chatId(), "Word saved to cache!", model);
     }
 

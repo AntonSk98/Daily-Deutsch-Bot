@@ -50,4 +50,8 @@ public abstract class AbstractCommandModel<T> {
         Map<?,?> map = new ObjectMapper().setSerializationInclusion(NON_NULL).convertValue(this, Map.class);
         return map.containsKey(key);
     }
+
+    public <T> T map(Class<T> clazz) {
+        return clazz.cast(this);
+    }
 }

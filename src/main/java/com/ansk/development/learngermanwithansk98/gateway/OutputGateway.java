@@ -2,6 +2,7 @@ package com.ansk.development.learngermanwithansk98.gateway;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -21,13 +22,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Navigation.NEXT;
 import static com.ansk.development.learngermanwithansk98.service.model.Navigation.PREVIOUS;
@@ -108,52 +108,96 @@ public class OutputGateway {
         }
     }
 
-    public void sendImages(Long chatId, Images images) {
+
+    public void sendWordCard(Long chatId, Images images) {
         if (CollectionUtils.isEmpty(images.getBinaryImages())) {
             throw new IllegalStateException("No images passed as a parameter!");
         }
 
         try {
-            if (images.getBinaryImages().size() == 1) {
-                sendImage(chatId, images.getBinaryImages().stream().findFirst().get());
+            if (images.onePage()) {
+                SendPhoto mediaPhoto = toInputMediaPhoto(chatId, images.getBinaryImages().getFirst());
+                telegramClient.execute(mediaPhoto);
                 return;
             }
 
-            sendImageCollections(chatId, images.getBinaryImages());
+            var mediaPhotoGroup = toInputMediaPhotos(chatId, images.getBinaryImages());
+            telegramClient.execute(mediaPhotoGroup);
         } catch (TelegramApiException e) {
             throw new IllegalStateException("Failed to send images to the client", e);
         }
     }
 
-    private void sendImageCollections(Long chatId, List<byte[]> binaryImages) throws TelegramApiException {
+    public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
+        final String readingExerciseTemplate = """
+                <b>%s</b>
+                <i>%s</i>
+                \n
+                <b>Questions and answers:</b>
+                <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
+                """;
+
+        final String answersTemplate = """
+                <b>%s</b>
+                <i>%s</i>
+                """;
+
+        final AtomicInteger counter = new AtomicInteger(1);
+        final String title = readingExercise.title();
+        final String text = String.join("\n\n", readingExercise.paragraphs().paragraphs());
+        final String answers = readingExercise.tasks()
+                .tasks()
+                .stream()
+                .map(task -> String.format(answersTemplate, counter.getAndIncrement() + ". " + task.question(), task.answer()))
+                .collect(Collectors.joining("\n"));
+
+        final String readingExerciseOutput = String.format(readingExerciseTemplate, title, text, answers);
+
+        SendMessage sendMessage = SendMessage
+                .builder()
+                .chatId(chatId)
+                .text(readingExerciseOutput)
+                .parseMode("HTML")
+                .build();
+
+        var document = readingExercise.document().onePage() ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst()) : null;
+        var documents = Objects.isNull(document) ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages()) : null;
+
+        try {
+            telegramClient.execute(sendMessage);
+            if (Objects.nonNull(document)) {
+                telegramClient.execute(document);
+                return;
+            }
+            if (Objects.nonNull(documents)) {
+                telegramClient.execute(documents);
+                return;
+            }
+            throw new IllegalStateException("Unknown state...");
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Error occurred while sending reading exercise", e);
+        }
+    }
+
+    private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages) {
         var builder = SendMediaGroup.builder().chatId(chatId);
         int index = 0;
         for (byte[] imageData : binaryImages) {
             InputMedia inputMedia = new InputMediaPhoto(new ByteArrayInputStream(imageData), "" + index);
             builder.media(inputMedia);
+
             index++;
         }
-
-        telegramClient.execute(builder.build());
+        return builder.build();
     }
 
-    private void sendImage(Long chatId, byte[] binaryImage) throws TelegramApiException {
-        SendPhoto sendPhoto = SendPhoto.builder()
+    private SendPhoto toInputMediaPhoto(Long chatId, byte[] binaryImage) {
+        return SendPhoto.builder()
                 .chatId(chatId)
                 .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
                 .build();
-
-        telegramClient.execute(sendPhoto);
     }
 
-//    private void test(byte[] binaryImage) {
-//        SendPhoto sendPhoto = SendPhoto.builder()
-//                .chatId(chatId)
-//                .caption("<b>Here is some text:</b>\n<blockquote expandable><span class=\"tg-spoiler\">Hi!\nMy name is Anton\nSkripin</span></blockquote>")
-//                .parseMode("HTML")
-//                .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
-//                .build();
-//
-//        telegramClient.execute(sendPhoto);
-//    }
+    private record ImageCaption(String caption, String parseMode) {
+    }
 }

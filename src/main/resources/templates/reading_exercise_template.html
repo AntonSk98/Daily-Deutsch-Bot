@@ -29,12 +29,12 @@
 
         <section th:if="${readingExercise.title} != null"
                  class="title">
-            <div class="level">Niveau: B2</div>
+            <div class="level" th:text="${readingExercise.level}"></div>
             <span th:text="${readingExercise.title}"></span>
         </section>
 
         <div class="text-container">
-            <section th:each="paragraph : ${readingExercise.textParts}">
+            <section th:each="paragraph : ${readingExercise.paragraphs}">
                 <p th:text="${paragraph}" class="paragraph"></p>
             </section>
         </div>
@@ -44,7 +44,7 @@
             <ul class="questions">
                 <li th:each="question, stat : ${readingExercise.questions}">
                     <span th:text="${stat.count} + '. '" class="question-number"></span>
-                    <span th:text="${question.question}"></span>
+                    <span th:text="${question}"></span>
                 </li>
             </ul>
             <div class="questions-separator">

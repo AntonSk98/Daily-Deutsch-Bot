@@ -19,11 +19,4 @@ public class ToBeDeletedWord extends AbstractCommandModel<ToBeDeletedWord> {
     public void setWordReference(String wordReference) {
         this.wordReference = wordReference;
     }
-
-    public static ToBeDeletedWord map(AbstractCommandModel<?> model) {
-        if (model instanceof ToBeDeletedWord toBeDeletedWord) {
-            return toBeDeletedWord;
-        }
-        throw new IllegalArgumentException("Model is not an instance of class Word: " + model.getClass().getSimpleName());
-    }
 }
