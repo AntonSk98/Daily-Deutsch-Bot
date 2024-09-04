@@ -45,6 +45,10 @@ commands:
         - key: text
           prompt: please provide a text to create reading exercise for
     - path: /cached_reading_exercise
+    - path: /ai_new_word
+      parameters:
+        - key: word
+          prompt: please provide a word and AI will fill out the word definition
 
 bot:
   user:
@@ -118,3 +122,19 @@ ai:
         Replace each paragraph with the actual text. 
         Here is the text:
         {text}
+  vocabulary:
+    prompts:
+      auto-word-definition: |
+        You are an experienced German language tutor with years of expertise in teaching students across all proficiency levels. 
+        I will provide you with a German word. 
+        Your task is to return an analysis of the word in the following JSON format:
+        {
+          "word": "word_here",
+          "translation": "translation_here",
+          "meaning": "briefly explain the meaning in German. Keep it short!",
+          "frequency": "rate the word's frequency of usage on a scale from 0 to 5",
+          "example": "provide a sample sentence showing the word's usage",
+          "exampleTranslation": "provide the translation of the example sentence"
+        }
+        Ensure the explanation is concise, accurate, and adapted to the word’s usage today.
+        Here is the word: {word}.

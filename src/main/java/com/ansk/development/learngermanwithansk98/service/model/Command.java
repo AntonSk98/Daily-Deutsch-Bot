@@ -10,6 +10,7 @@ import java.util.Optional;
  */
 public enum Command {
     ADD_NEW_WORD("/new_word"),
+    AI_NEW_WORD("/ai_new_word"),
     GET_WORDS("/cached_words"),
     DELETE_WORD("/delete_word"),
     CLEAR_WORD_CACHE("/clear_word_card"),
