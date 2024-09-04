@@ -23,12 +23,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Navigation.NEXT;
 import static com.ansk.development.learngermanwithansk98.service.model.Navigation.PREVIOUS;
@@ -40,6 +43,8 @@ import static com.ansk.development.learngermanwithansk98.service.model.Navigatio
  */
 @Component
 public class OutputGateway {
+
+    private static final int MAX_MESSAGE_LENGTH = 4096;
 
     private final TelegramClient telegramClient;
     private final ObjectMapper objectMapper;
@@ -130,25 +135,74 @@ public class OutputGateway {
     }
 
     public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
-        final String readingExerciseTemplate = """
+        List<SendMessage> readingExerciseMessages = toReadingExercise(chatId, readingExercise);
+        Runnable sendMediaGroup = sendMediaGroup(chatId, readingExercise);
+        try {
+            for (SendMessage readingExerciseMessage : readingExerciseMessages) {
+                telegramClient.execute(readingExerciseMessage);
+            }
+            sendMediaGroup.run();
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Error occurred while sending reading exercise", e);
+        }
+    }
+
+    private Runnable sendMediaGroup(Long chatId, ReadingExercise readingExercise) {
+        final String documentCaption = """
+                🖨️ #ReadingForPrinting
+                📚 Here’s the reading exercise formatted for printing.
+                """;
+
+        var caption = new ImageCaption(documentCaption, "HTML");
+
+        return () -> {
+            var document = readingExercise.document().onePage()
+                    ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst(), Optional.of(caption))
+                    : null;
+            var documents = Objects.isNull(document)
+                    ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages(), Optional.of(caption))
+                    : null;
+
+            try {
+                if (Objects.nonNull(document)) {
+                    telegramClient.execute(document);
+                    return;
+                }
+
+                if (Objects.nonNull(documents)) {
+                    telegramClient.execute(documents);
+                    return;
+                }
+
+                throw new IllegalStateException("Unknown state...");
+            } catch (TelegramApiException e) {
+                throw new IllegalStateException("Error occurred while sending reading exercise", e);
+            }
+
+        };
+    }
+
+    private Optional<SendPhoto> sendPhoto(Long chatId, ReadingExercise readingExercise) {
+        return null;
+    }
+
+    private List<SendMessage> toReadingExercise(Long chatId, ReadingExercise readingExercise) {
+        final String textTemplate = """
                 ⭐️ #Reading
                 
                 📚 <b>%s</b>
                 
                 <i>%s</i>
-                \n
+                """;
+
+        final String readingExerciseTemplate = """
                 💬 <b>Questions and answers:</b>
                 <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
                 """;
 
-        final String answersTemplate = """
+        final String questionsAndAnswersTemplate = """
                 <b>%s</b>
                 <i>%s</i>
-                """;
-
-        final String documentCaption = """
-                🖨️ #ReadingForPrinting
-                📚 Here’s the reading exercise formatted for printing.
                 """;
 
         final AtomicInteger counter = new AtomicInteger(1);
@@ -157,40 +211,19 @@ public class OutputGateway {
         final String answers = readingExercise.tasks()
                 .tasks()
                 .stream()
-                .map(task -> String.format(answersTemplate, counter.getAndIncrement() + ". " + task.question(), task.answer()))
+                .map(task -> String.format(questionsAndAnswersTemplate, counter.getAndIncrement() + ". " + task.question(), task.answer()))
                 .collect(Collectors.joining("\n"));
 
-        final String readingExerciseOutput = String.format(readingExerciseTemplate, title, text, answers);
+        final String readingText = String.format(textTemplate, title, text);
+        final String exercisePart = String.format(readingExerciseTemplate, answers);
+        final String readingExerciseMessage = String.join("\n", readingText, exercisePart);
 
-        SendMessage sendMessage = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(readingExerciseOutput)
-                .parseMode("HTML")
-                .build();
-
-        var imageCaption = new ImageCaption(documentCaption, "HTML");
-        var document = readingExercise.document().onePage()
-                ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst(), Optional.of(imageCaption))
-                : null;
-        var documents = Objects.isNull(document)
-                ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages(), Optional.of(imageCaption))
-                : null;
-
-        try {
-            telegramClient.execute(sendMessage);
-            if (Objects.nonNull(document)) {
-                telegramClient.execute(document);
-                return;
-            }
-            if (Objects.nonNull(documents)) {
-                telegramClient.execute(documents);
-                return;
-            }
-            throw new IllegalStateException("Unknown state...");
-        } catch (TelegramApiException e) {
-            throw new IllegalStateException("Error occurred while sending reading exercise", e);
+        if (readingExerciseMessage.getBytes().length >= MAX_MESSAGE_LENGTH) {
+            Function<String, SendMessage> toSendMessage = txt -> SendMessage.builder().chatId(chatId).text(txt).parseMode("HTML").build();
+            return Stream.of(readingText, exercisePart).map(toSendMessage).toList();
         }
+
+        return Collections.singletonList(SendMessage.builder().chatId(chatId).text(readingExerciseMessage).parseMode("HTML").build());
     }
 
     private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages, Optional<ImageCaption> caption) {

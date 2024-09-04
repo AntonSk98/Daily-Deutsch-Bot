@@ -5,6 +5,7 @@ import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfigura
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ReadingExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
@@ -34,13 +35,15 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
                                     CommandCache commandCache,
                                     OpenAiGateway aiGateway,
                                     ReadingPromptsConfiguration promptsConfiguration,
-                                    ReadingExerciseDocumentPipe readingExerciseDocumentPipe) {
+                                    ReadingExerciseDocumentPipe readingExerciseDocumentPipe,
+                                    ReadingExerciseCache readingExerciseCache) {
         super(commandsConfiguration,
                 outputGateway,
                 commandCache,
                 aiGateway,
                 promptsConfiguration,
-                readingExerciseDocumentPipe);
+                readingExerciseDocumentPipe,
+                readingExerciseCache);
 
         this.aiGateway = aiGateway;
         this.outputGateway = outputGateway;
