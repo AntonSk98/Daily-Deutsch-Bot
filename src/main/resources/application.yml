@@ -28,6 +28,7 @@ commands:
         - key: example_translation
           prompt: write translation for the example
     - path: /cached_words
+    - path: /clear_word_card
     - path: /delete_word
       parameters:
         - key: word_reference
