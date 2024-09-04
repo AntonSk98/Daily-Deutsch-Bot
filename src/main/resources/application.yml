@@ -43,6 +43,7 @@ commands:
       parameters:
         - key: text
           prompt: please provide a text to create reading exercise for
+    - path: /cached_reading_exercise
 
 bot:
   user:

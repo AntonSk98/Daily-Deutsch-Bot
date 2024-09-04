@@ -14,7 +14,8 @@ public enum Command {
     DELETE_WORD("/delete_word"),
     PREVIEW("/preview_word_card"),
     READING_EXERCISE_GENERATE("/generate_reading_exercise"),
-    READING_EXERCISE_CREATE("/create_reading_exercise");
+    READING_EXERCISE_CREATE("/create_reading_exercise"),
+    READING_EXERCISE_PREVIEW("/cached_reading_exercise");
 
     private final String path;
 

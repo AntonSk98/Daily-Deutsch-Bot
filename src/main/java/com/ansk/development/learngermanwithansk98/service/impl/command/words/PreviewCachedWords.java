@@ -1,9 +1,10 @@
-package com.ansk.development.learngermanwithansk98.service.impl.command;
+package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CardToImagesConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.*;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
@@ -23,17 +24,17 @@ import java.util.List;
  * @author Anton Skripin
  */
 @Service
-public class PreviewCardCommandService extends AbstractCommandService {
+public class PreviewCachedWords extends AbstractCommandService {
 
     private final OutputGateway outputGateway;
     private final WordCache wordCache;
     private final CardToImagesConverterPipe converterPipe;
 
-    protected PreviewCardCommandService(CommandsConfiguration commandsConfiguration,
-                                        OutputGateway outputGateway,
-                                        CommandCache commandCache,
-                                        WordCache wordCache,
-                                        CardToImagesConverterPipe converterPipe) {
+    protected PreviewCachedWords(CommandsConfiguration commandsConfiguration,
+                                 OutputGateway outputGateway,
+                                 CommandCache commandCache,
+                                 WordCache wordCache,
+                                 CardToImagesConverterPipe converterPipe) {
         super(commandsConfiguration, outputGateway, commandCache);
         this.outputGateway = outputGateway;
         this.wordCache = wordCache;

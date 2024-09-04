@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.repository;
 
-import com.ansk.development.learngermanwithansk98.service.impl.command.AddNewWordCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.words.AddNewWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cache to store {@link Word}s in the service of {@link AddNewWordCommandService}.
+ * Cache to store {@link Word}s in the service of {@link AddNewWord}.
  *
  * @author Anton Skripin
  */

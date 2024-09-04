@@ -1,9 +1,10 @@
-package com.ansk.development.learngermanwithansk98.service.impl.command;
+package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
 import com.ansk.development.learngermanwithansk98.service.model.*;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -24,15 +25,15 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
  * @author Anton Skripin
  */
 @Service
-public class GetCachedWordsCommandService extends AbstractCommandService {
+public class GetCachedWords extends AbstractCommandService {
 
     private final WordCache wordCache;
     private final OutputGateway outputGateway;
 
-    protected GetCachedWordsCommandService(CommandsConfiguration commandsConfiguration,
-                                           OutputGateway outputGateway,
-                                           CommandCache commandCache,
-                                           WordCache wordCache) {
+    protected GetCachedWords(CommandsConfiguration commandsConfiguration,
+                             OutputGateway outputGateway,
+                             CommandCache commandCache,
+                             WordCache wordCache) {
         super(commandsConfiguration, outputGateway, commandCache);
         this.wordCache = wordCache;
         this.outputGateway = outputGateway;

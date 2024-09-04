@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.impl.command;
+package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfiguration;
@@ -23,30 +23,29 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  * @author Anton Skripin
  */
 @Service
-public class GenerateReadingExerciseCommand extends AbstractCommandService {
+public class GenerateReadingExercise extends ReadingExerciseSupport {
 
-
-    private final OpenAiGateway aiGateway;
     private final OutputGateway outputGateway;
-    private final ReadingPromptsConfiguration readingPromptsConfiguration;
-    private final ReadingExerciseSupport readingExerciseSupport;
+    private final OpenAiGateway aiGateway;
+    private final ReadingPromptsConfiguration promptsConfiguration;
 
-    protected GenerateReadingExerciseCommand(CommandsConfiguration commandsConfiguration,
-                                             OutputGateway outputGateway,
-                                             OpenAiGateway aiGateway,
-                                             CommandCache commandCache,
-                                             ReadingPromptsConfiguration readingPromptsConfiguration,
-                                             ReadingExerciseDocumentPipe readingExercisePipe) {
-        super(commandsConfiguration, outputGateway, commandCache);
+
+    protected GenerateReadingExercise(CommandsConfiguration commandsConfiguration,
+                                      OutputGateway outputGateway,
+                                      CommandCache commandCache,
+                                      OpenAiGateway aiGateway,
+                                      ReadingPromptsConfiguration promptsConfiguration,
+                                      ReadingExerciseDocumentPipe readingExerciseDocumentPipe) {
+        super(commandsConfiguration,
+                outputGateway,
+                commandCache,
+                aiGateway,
+                promptsConfiguration,
+                readingExerciseDocumentPipe);
+
         this.aiGateway = aiGateway;
         this.outputGateway = outputGateway;
-        this.readingPromptsConfiguration = readingPromptsConfiguration;
-        this.readingExerciseSupport = new ReadingExerciseSupport(
-                outputGateway,
-                aiGateway,
-                readingExercisePipe,
-                readingPromptsConfiguration
-        );
+        this.promptsConfiguration = promptsConfiguration;
     }
 
     @Override
@@ -55,23 +54,9 @@ public class GenerateReadingExerciseCommand extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+    public ReadingExercise.TextOutput getInputText(AbstractCommandModel<?> model, CommandParameters parameters) {
         ReadingExerciseModel readingExerciseModel = model.map(ReadingExerciseModel.class);
-        var generatedText = generateText(parameters, readingExerciseModel);
-        var tasks = readingExerciseSupport.generateTasks(parameters, generatedText);
-        var paragraphs = readingExerciseSupport.mapToParagraphs(parameters, generatedText);
-        var documentObject = readingExerciseSupport.generateDocument(parameters, generatedText, paragraphs, tasks);
-        var document = readingExerciseSupport.pipeDocument(parameters, documentObject);
-
-        var readingExercise = new ReadingExercise(
-                generatedText.title(),
-                paragraphs,
-                tasks,
-                document
-        );
-
-        outputGateway.sendReadingExercise(parameters.chatId(), readingExercise);
-
+        return generateText(parameters, readingExerciseModel);
     }
 
     private ReadingExercise.TextOutput generateText(CommandParameters parameters, ReadingExerciseModel readingExerciseModel) {
@@ -83,7 +68,7 @@ public class GenerateReadingExerciseCommand extends AbstractCommandService {
                         readingExerciseModel.getTopic()
                 )
         );
-        GenericPromptTemplate generateText = new GenericPromptTemplate(readingPromptsConfiguration.generateText())
+        GenericPromptTemplate generateText = new GenericPromptTemplate(promptsConfiguration.generateText())
                 .resolveVariable(LEVEL, readingExerciseModel.getLevel())
                 .resolveVariable(TOPIC, readingExerciseModel.getTopic());
 

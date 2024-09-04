@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.service.impl.command;
+package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfiguration;
@@ -16,30 +16,35 @@ import org.springframework.stereotype.Service;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
+/**
+ * Service to create reading exercise based on the given text.
+ *
+ * @author Anton Skripin
+ */
 @Service
-public class CreateReadingExercise extends AbstractCommandService {
+public class CreateReadingExercise extends ReadingExerciseSupport {
 
-    private final OpenAiGateway aiGateway;
     private final OutputGateway outputGateway;
-    private final ReadingPromptsConfiguration readingPromptsConfiguration;
-    private final ReadingExerciseSupport readingExerciseSupport;
+    private final OpenAiGateway aiGateway;
+    private final ReadingPromptsConfiguration promptsConfiguration;
+
 
     protected CreateReadingExercise(CommandsConfiguration commandsConfiguration,
                                     OutputGateway outputGateway,
                                     CommandCache commandCache,
                                     OpenAiGateway aiGateway,
-                                    ReadingExerciseDocumentPipe readingExercisePipe,
-                                    ReadingPromptsConfiguration readingPromptsConfiguration) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
-        this.aiGateway = aiGateway;
-        this.readingPromptsConfiguration = readingPromptsConfiguration;
-        this.readingExerciseSupport = new ReadingExerciseSupport(
+                                    ReadingPromptsConfiguration promptsConfiguration,
+                                    ReadingExerciseDocumentPipe readingExerciseDocumentPipe) {
+        super(commandsConfiguration,
                 outputGateway,
+                commandCache,
                 aiGateway,
-                readingExercisePipe,
-                readingPromptsConfiguration
-        );
+                promptsConfiguration,
+                readingExerciseDocumentPipe);
+
+        this.aiGateway = aiGateway;
+        this.outputGateway = outputGateway;
+        this.promptsConfiguration = promptsConfiguration;
     }
 
     @Override
@@ -48,27 +53,14 @@ public class CreateReadingExercise extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> abstractModel, CommandParameters parameters) {
-        ReadingExerciseWithTextModel model = abstractModel.map(ReadingExerciseWithTextModel.class);
-        var analyzedText = analyzeText(parameters, model);
-        var tasks = readingExerciseSupport.generateTasks(parameters, analyzedText);
-        var paragraphs = readingExerciseSupport.mapToParagraphs(parameters, analyzedText);
-        var documentObject = readingExerciseSupport.generateDocument(parameters, analyzedText, paragraphs, tasks);
-        var document = readingExerciseSupport.pipeDocument(parameters, documentObject);
-
-        var readingExercise = new ReadingExercise(
-                analyzedText.title(),
-                paragraphs,
-                tasks,
-                document
-        );
-
-        outputGateway.sendReadingExercise(parameters.chatId(), readingExercise);
+    public ReadingExercise.TextOutput getInputText(AbstractCommandModel<?> model, CommandParameters parameters) {
+        ReadingExerciseWithTextModel readingExerciseModel = model.map(ReadingExerciseWithTextModel.class);
+        return analyzeText(parameters, readingExerciseModel);
     }
 
     private ReadingExercise.TextOutput analyzeText(CommandParameters parameters, ReadingExerciseWithTextModel model) {
         outputGateway.sendPlainMessage(parameters.chatId(), "Analyzing and rephrasing the text...");
-        GenericPromptTemplate analyzeText = new GenericPromptTemplate(readingPromptsConfiguration.rephraseText())
+        GenericPromptTemplate analyzeText = new GenericPromptTemplate(promptsConfiguration.rephraseText())
                 .resolveVariable(TEXT, model.getText());
         var analyzedText = aiGateway.sendRequest(analyzeText.getPrompt(), ReadingExercise.TextOutput.class);
         outputGateway.sendPlainMessage(parameters.chatId(), "The text is successfully analyzed.");
