@@ -49,6 +49,14 @@ commands:
       parameters:
         - key: word
           prompt: please provide a word and AI will fill out the word definition
+    - path: /writing_with_example
+      with-navigation: true
+      parameters:
+        - key: level
+          prompt: please provide the level of writing exercise
+        - key: topic
+          required: true
+          prompt: please provide the topic for writing exercise
 
 bot:
   user:
@@ -71,7 +79,7 @@ ai:
         Please create a text in German at an {level} language level.
         The text should be interesting, clear, and appropriate for learners at this level.
         The text should be about: {topic}.
-        The text must contain at least 100 tokens.
+        The text must contain at least 350 tokens.
         The response must have the following JSON structure:
         {
           "level": "CEFR level here",
@@ -138,3 +146,51 @@ ai:
         }
         Ensure the explanation is concise, accurate, and adapted to the word’s usage today.
         Here is the word: {word}.
+  writing:
+    prompts:
+      writing_example: |
+        You are an expert AI language model specializing in teaching German to learners. 
+        You have extensive experience in creating educational material tailored to various proficiency levels.
+        Task:
+          Generate a clear and coherent German writing sample based on the following parameters:
+          Topic: {topic}
+          Language Level (optional input): {level}
+        Requirements:
+          1. The writing sample should be contextually relevant, well-structured, and appropriate for learners at the specified language level.
+          2. Ensure the text is divided into well-organized paragraphs.
+          3. The response must include at least 200 tokens but can also be longer.
+        Provide result in the following JSON:
+        {
+          "level": "{level - if missing, identify it yourself}",
+          "topic": "{topic - always in german}",
+          "writing": [
+            "{paragraph1}",
+            "{paragraph2}",
+            "{paragraph3}"
+          ]
+        }
+      writing_corrections: |
+        You are an AI language model designed to help with writing corrections. 
+        I have an essay that I wrote myself that needs to be corrected. 
+        
+        Here is the topic: {topic}
+        
+        Here is the essay: 
+        {text}
+        
+        Please make corrections and highlight the changes in underline.
+        Please provide the corrected text with the changes clearly highlighted in bold. 
+        The corrections should be accurate and contextually appropriate. 
+        Provide result in the following JSON:
+        {
+          "topic": "here you pass the question of the essay",
+          "writing": [
+            "paragraph1",
+            "paragraph2",
+            "etc."
+          ]
+        }
+        Please correct the text and highlight the changes in underline.
+
+
+

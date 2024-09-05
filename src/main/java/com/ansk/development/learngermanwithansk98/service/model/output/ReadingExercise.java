@@ -17,11 +17,9 @@ public record ReadingExercise(String title, Paragraphs paragraphs, ReadingTasks 
     public record Task(String question, String answer) {
     }
 
-    public record FormattedText(String text) {
-    }
-
     public record Paragraphs(List<String> paragraphs) {
     }
 
-    public record Document(String level, String title, List<String> paragraphs, List<String> questions) {}
+    public record Document(String level, String title, List<String> paragraphs, List<String> questions) {
+    }
 }

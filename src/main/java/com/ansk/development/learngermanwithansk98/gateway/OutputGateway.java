@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -105,38 +104,19 @@ public class OutputGateway {
         }
     }
 
-    public void sendHtmlMessage(Long chatId, String message) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(message).parseMode("HTML").build();
-        try {
-            telegramClient.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new IllegalStateException("Error occurred while sending an HTML message to telegram", e);
-        }
-    }
-
 
     public void sendWordCard(Long chatId, Images images) {
         if (CollectionUtils.isEmpty(images.getBinaryImages())) {
             throw new IllegalStateException("No images passed as a parameter!");
         }
-
-        try {
-            if (images.onePage()) {
-                SendPhoto mediaPhoto = toInputMediaPhoto(chatId, images.getBinaryImages().getFirst(), Optional.empty());
-                telegramClient.execute(mediaPhoto);
-                return;
-            }
-
-            var mediaPhotoGroup = toInputMediaPhotos(chatId, images.getBinaryImages(), Optional.empty());
-            telegramClient.execute(mediaPhotoGroup);
-        } catch (TelegramApiException e) {
-            throw new IllegalStateException("Failed to send images to the client", e);
-        }
+        Runnable sendMediaGroup = sendMediaGroup(chatId, images, MediaParameters.NO_MEDIA_PARAMS);
+        sendMediaGroup.run();
     }
 
     public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
+        MediaParameters mediaParameters = readingMediaParameters();
         List<SendMessage> readingExerciseMessages = toReadingExercise(chatId, readingExercise);
-        Runnable sendMediaGroup = sendMediaGroup(chatId, readingExercise);
+        Runnable sendMediaGroup = sendMediaGroup(chatId, readingExercise.document(), mediaParameters);
         try {
             for (SendMessage readingExerciseMessage : readingExerciseMessages) {
                 telegramClient.execute(readingExerciseMessage);
@@ -147,20 +127,36 @@ public class OutputGateway {
         }
     }
 
-    private Runnable sendMediaGroup(Long chatId, ReadingExercise readingExercise) {
-        final String documentCaption = """
-                🖨️ #ReadingForPrinting
-                📚 Here’s the reading exercise formatted for printing.
+    public void sendWritingExercise(Long chatId, String topic, Images writingExerciseDocument) {
+        final String writingExerciseTemplate = """
+                ⭐️ #Writing
+                
+                🗒️ Please write your opinion on the following topic:
+                
+                <b>%s</b>
+                
+                Also feel free to check out our sample text ⬆️
                 """;
 
-        var caption = new ImageCaption(documentCaption, "HTML");
+        final String writingExercise = String.format(writingExerciseTemplate, topic);
+
+        MediaParameters mediaParameters = new MediaParameters(
+                Optional.of(new ImageCaption(writingExercise, "HTML")),
+                true
+        );
+
+        Runnable sendMediaGroup = sendMediaGroup(chatId, writingExerciseDocument, mediaParameters);
+        sendMediaGroup.run();
+    }
+
+    private Runnable sendMediaGroup(Long chatId, Images images, MediaParameters mediaParameters) {
 
         return () -> {
-            var document = readingExercise.document().onePage()
-                    ? toInputMediaPhoto(chatId, readingExercise.document().getBinaryImages().getFirst(), Optional.of(caption))
+            var document = images.onePage()
+                    ? toInputMediaPhoto(chatId, images.getBinaryImages().getFirst(), mediaParameters)
                     : null;
             var documents = Objects.isNull(document)
-                    ? toInputMediaPhotos(chatId, readingExercise.document().getBinaryImages(), Optional.of(caption))
+                    ? toInputMediaPhotos(chatId, images.getBinaryImages(), mediaParameters)
                     : null;
 
             try {
@@ -182,8 +178,15 @@ public class OutputGateway {
         };
     }
 
-    private Optional<SendPhoto> sendPhoto(Long chatId, ReadingExercise readingExercise) {
-        return null;
+    private MediaParameters readingMediaParameters() {
+        final String documentCaption = """
+                🖨️ #ReadingForPrinting
+                📚 Here’s the reading exercise formatted for printing.
+                """;
+
+        var caption = new ImageCaption(documentCaption, "HTML");
+
+        return new MediaParameters(Optional.of(caption), false);
     }
 
     private List<SendMessage> toReadingExercise(Long chatId, ReadingExercise readingExercise) {
@@ -226,30 +229,37 @@ public class OutputGateway {
         return Collections.singletonList(SendMessage.builder().chatId(chatId).text(readingExerciseMessage).parseMode("HTML").build());
     }
 
-    private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages, Optional<ImageCaption> caption) {
+    private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages, MediaParameters mediaParameters) {
         var builder = SendMediaGroup.builder().chatId(chatId);
         int index = 0;
         for (byte[] imageData : binaryImages) {
-            InputMedia inputMedia = new InputMediaPhoto(new ByteArrayInputStream(imageData), "" + index);
+            InputMediaPhoto inputMedia = new InputMediaPhoto(new ByteArrayInputStream(imageData), "" + index);
+            inputMedia.setHasSpoiler(mediaParameters.withSpoiler());
             builder.media(inputMedia);
-            if (index == 0 && caption.isPresent()) {
-                inputMedia.setCaption(caption.get().caption);
-                inputMedia.setParseMode(caption.get().parseMode);
+            if (index == 0 && mediaParameters.imageCaption().isPresent()) {
+                inputMedia.setCaption(mediaParameters.imageCaption().get().caption);
+                inputMedia.setParseMode(mediaParameters.imageCaption().get().parseMode);
             }
             index++;
         }
         return builder.build();
     }
 
-    private SendPhoto toInputMediaPhoto(Long chatId, byte[] binaryImage, Optional<ImageCaption> caption) {
+    private SendPhoto toInputMediaPhoto(Long chatId, byte[] binaryImage, MediaParameters mediaParameters) {
         return SendPhoto.builder()
                 .chatId(chatId)
                 .photo(new InputFile(new ByteArrayInputStream(binaryImage), "___.png"))
-                .caption(caption.map(ImageCaption::caption).orElse(null))
-                .parseMode(caption.map(ImageCaption::parseMode).orElse(null))
+                .caption(mediaParameters.imageCaption().map(ImageCaption::caption).orElse(null))
+                .hasSpoiler(mediaParameters.withSpoiler())
+                .parseMode(mediaParameters.imageCaption().map(ImageCaption::parseMode).orElse(null))
                 .build();
     }
 
     private record ImageCaption(String caption, String parseMode) {
     }
+
+    private record MediaParameters(Optional<ImageCaption> imageCaption, boolean withSpoiler) {
+        private static final MediaParameters NO_MEDIA_PARAMS = new MediaParameters(Optional.empty(), false);
+    }
+
 }

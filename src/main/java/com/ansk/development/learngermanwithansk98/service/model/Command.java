@@ -15,9 +15,12 @@ public enum Command {
     DELETE_WORD("/delete_word"),
     CLEAR_WORD_CACHE("/clear_word_card"),
     PREVIEW("/preview_word_card"),
+
     READING_EXERCISE_GENERATE("/generate_reading_exercise"),
     READING_EXERCISE_CREATE("/create_reading_exercise"),
-    READING_EXERCISE_PREVIEW("/cached_reading_exercise");
+    READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
+
+    WRITING_WITH_EXAMPLE("/writing_with_example");
 
     private final String path;
 

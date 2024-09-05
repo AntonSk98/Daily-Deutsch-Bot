@@ -1,0 +1,11 @@
+.text-container {
+    margin-top: 1.3rem;
+}
+.paragraph {
+    text-align: justify;
+}
+.writing-topic {
+    font-size: 1.2rem;
+    color: #6D5DFD;
+    font-weight: bold;
+}
