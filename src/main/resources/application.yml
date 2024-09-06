@@ -159,6 +159,9 @@ ai:
           1. The writing sample should be contextually relevant, well-structured, and appropriate for learners at the specified language level.
           2. Ensure the text is divided into well-organized paragraphs.
           3. The response must include at least 200 tokens but can also be longer.
+        Structure:
+          Every sample must contain introduction, two arguments in favour or against the topic and the conclusion.
+          The structure must meet the best principles of the 'Deutsch als Fremdsprache' exam.
         Provide result in the following JSON:
         {
           "level": "{level - if missing, identify it yourself}",
