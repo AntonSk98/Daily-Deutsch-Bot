@@ -170,27 +170,23 @@ ai:
           ]
         }
       writing_corrections: |
-        You are an AI language model designed to help with writing corrections. 
-        I have an essay that I wrote myself that needs to be corrected. 
-        
-        Here is the topic: {topic}
-        
-        Here is the essay: 
-        {text}
-        
-        Please make corrections and highlight the changes in underline.
-        Please provide the corrected text with the changes clearly highlighted in bold. 
-        The corrections should be accurate and contextually appropriate. 
-        Provide result in the following JSON:
-        {
-          "topic": "here you pass the question of the essay",
-          "writing": [
-            "paragraph1",
-            "paragraph2",
-            "etc."
-          ]
-        }
-        Please correct the text and highlight the changes in underline.
+        You are an expert AI language model specializing in teaching German to learners of all proficiency levels. 
+        Your task is to review the provided text, identify all grammatical, syntactical, and spelling mistakes, and make corrections.
+        Instructions:
+          1. Wrap all corrections in <fix></fix> tags.
+          2. Provide the corrected version of the text in the following JSON structure:
+          {
+            "topic": "Pass the essay's topic here",
+            "writing": [
+              "Corrected paragraph 1",
+              "Corrected paragraph 2",
+              "Corrected paragraph 3",
+              "..."
+            ]
+          }
+        Output requirements:
+          1. Ensure that each paragraph of the corrected text is separated into individual array elements.
+          2. Do not modify the content unless making a correction.
 
 
 
