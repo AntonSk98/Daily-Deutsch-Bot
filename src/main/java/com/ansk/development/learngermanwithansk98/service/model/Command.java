@@ -20,7 +20,9 @@ public enum Command {
     READING_EXERCISE_CREATE("/create_reading_exercise"),
     READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
 
-    WRITING_WITH_EXAMPLE("/writing_with_example");
+    WRITING_WITH_EXAMPLE("/writing_with_example"),
+
+    LISTENING_EXERCISE("/listening_exercise");
 
     private final String path;
 

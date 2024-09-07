@@ -1,7 +1,8 @@
 package com.ansk.development.learngermanwithansk98.gateway;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
+import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,9 +11,12 @@ import okhttp3.OkHttpClient;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
+import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -22,6 +26,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +54,7 @@ public class OutputGateway {
 
     private final TelegramClient telegramClient;
     private final ObjectMapper objectMapper;
+    private final DailyDeutschBotConfiguration configuration;
 
     public OutputGateway(DailyDeutschBotConfiguration config,
                          ObjectMapper objectMapper) {
@@ -59,6 +67,7 @@ public class OutputGateway {
 
         this.telegramClient = new OkHttpTelegramClient(client, config.token());
         this.objectMapper = objectMapper;
+        this.configuration = config;
     }
 
     public void sendPlainMessage(Long chatId, String message) {
@@ -105,11 +114,11 @@ public class OutputGateway {
     }
 
 
-    public void sendWordCard(Long chatId, Images images) {
-        if (CollectionUtils.isEmpty(images.getBinaryImages())) {
+    public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
+        if (CollectionUtils.isEmpty(exerciseDocument.pages())) {
             throw new IllegalStateException("No images passed as a parameter!");
         }
-        Runnable sendMediaGroup = sendMediaGroup(chatId, images, MediaParameters.NO_MEDIA_PARAMS);
+        Runnable sendMediaGroup = sendMediaGroup(chatId, exerciseDocument, MediaParameters.NO_MEDIA_PARAMS);
         sendMediaGroup.run();
     }
 
@@ -127,7 +136,7 @@ public class OutputGateway {
         }
     }
 
-    public void sendWritingExercise(Long chatId, String topic, Images writingExerciseDocument) {
+    public void sendWritingExercise(Long chatId, String topic, ExerciseDocument writingExerciseDocument) {
         final String writingExerciseTemplate = """
                 ⭐️ #Writing
                 
@@ -149,14 +158,45 @@ public class OutputGateway {
         sendMediaGroup.run();
     }
 
-    private Runnable sendMediaGroup(Long chatId, Images images, MediaParameters mediaParameters) {
+    public InputStream audioStream(String audio) {
+        final String path = "https://api.telegram.org/file/%s/%s";
+        GetFile audioMetadata = new GetFile(audio);
+        try {
+            File audioFile = telegramClient.execute(audioMetadata);
+            return new URL(audioFile.getFileUrl(configuration.token())).openStream();
+        } catch (TelegramApiException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sendListeningExercise(Long chatId, ListeningExercise listeningExercise) {
+        InputStream audioStream = audioStream(listeningExercise.audio());
+        InputFile audioFile = new InputFile(audioStream, "audio.mp3");
+        SendAudio sendAudio = SendAudio.builder()
+                .chatId(chatId)
+                .audio(audioFile)
+                .caption("Here is an exercise")
+                .build();
+
+
+        Runnable mediaGroup = sendMediaGroup(chatId, listeningExercise.document(), MediaParameters.NO_MEDIA_PARAMS);
+
+        try {
+            telegramClient.execute(sendAudio);
+            mediaGroup.run();
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Runnable sendMediaGroup(Long chatId, ExerciseDocument exerciseDocument, MediaParameters mediaParameters) {
 
         return () -> {
-            var document = images.onePage()
-                    ? toInputMediaPhoto(chatId, images.getBinaryImages().getFirst(), mediaParameters)
+            var document = exerciseDocument.onePage()
+                    ? toInputMediaPhoto(chatId, exerciseDocument.pages().getFirst(), mediaParameters)
                     : null;
             var documents = Objects.isNull(document)
-                    ? toInputMediaPhotos(chatId, images.getBinaryImages(), mediaParameters)
+                    ? toInputMediaPhotos(chatId, exerciseDocument.pages(), mediaParameters)
                     : null;
 
             try {

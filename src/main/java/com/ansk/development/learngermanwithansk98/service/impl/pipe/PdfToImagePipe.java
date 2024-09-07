@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -12,27 +12,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Pipe that transform a pdf into an {@link Images}.
+ * Pipe that transform a pdf into an {@link ExerciseDocument}.
  *
  * @author Anton Skripin
  */
-public class PdfToImagePipe implements IConverterPipe<PDDocument, Images> {
+public class PdfToImagePipe implements IConverterPipe<PDDocument, ExerciseDocument> {
 
 
     private static final String IMAGE_FORMAT = "PNG";
     private static final Integer IMAGE_DPI = 300;
 
     @Override
-    public Images pipe(PDDocument pdfDocument) {
-        Images binaryImagesPipeValue = Images.of();
+    public ExerciseDocument pipe(PDDocument pdfDocument) {
+        ExerciseDocument binaryExerciseDocumentPipeValue = ExerciseDocument.of();
         PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
         int pageCount = pdfDocument.getNumberOfPages();
         for (int page = 0; page < pageCount; ++page) {
             BufferedImage image = toBufferedImage(pdfRenderer, page);
             byte[] binaryImage = toBinaryImage(image, IMAGE_FORMAT);
-            binaryImagesPipeValue.addBinaryImage(binaryImage);
+            binaryExerciseDocumentPipeValue.addPage(binaryImage);
         }
-        return binaryImagesPipeValue;
+        return binaryExerciseDocumentPipeValue;
     }
 
     private byte[] toBinaryImage(BufferedImage image, String format) {

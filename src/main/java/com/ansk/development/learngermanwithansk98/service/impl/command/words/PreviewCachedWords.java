@@ -11,7 +11,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCo
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.NoParamModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -59,9 +59,9 @@ public class PreviewCachedWords extends AbstractCommandService {
 
         outputGateway.sendPlainMessage(commandParameters.chatId(), "Please wait...I am preparing the preview...");
 
-        Images images = converterPipe.pipe(previewWordCard);
+        ExerciseDocument exerciseDocument = converterPipe.pipe(previewWordCard);
 
-        outputGateway.sendWordCard(commandParameters.chatId(), images);
+        outputGateway.sendWordCard(commandParameters.chatId(), exerciseDocument);
     }
 
     @Override

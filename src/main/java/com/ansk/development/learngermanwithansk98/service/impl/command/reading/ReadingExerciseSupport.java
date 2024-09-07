@@ -11,7 +11,7 @@ import com.ansk.development.learngermanwithansk98.service.impl.pipe.ReadingExerc
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
@@ -95,7 +95,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandService {
         );
     }
 
-    public Images pipeDocument(CommandParameters parameters, ReadingExercise.Document documentObject) {
+    public ExerciseDocument pipeDocument(CommandParameters parameters, ReadingExercise.Document documentObject) {
         outputGateway.sendPlainMessage(parameters.chatId(), "Piping the document into media files...");
         return readingExerciseDocumentPipe.pipe(documentObject);
     }

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reading exercise</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/listening_exercise_template.css"/>
+    <link rel="stylesheet"
+          type="text/css"
+          href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/common.css"/>
+</head>
+<body>
+<div class="outer-container">
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/logo.png"/>
+            </div>
+            <div class="reference">
+                <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/invitation_link.png"/>
+            </div>
+        </div>
+
+        <div class="top-separator"></div>
+
+        <section th:if="${listeningExercise.title} != null"
+                 class="title">
+            <div class="level" th:text="${listeningExercise.level}"></div>
+            <span th:text="${listeningExercise.title}"></span>
+        </section>
+
+        <div class="questions-container">
+            <div class="questions-title">Questions:</div>
+            <ul class="questions">
+                <li th:each="taks, stat : ${listeningExercise.tasks}">
+                    <span th:text="${stat.count} + '. '" class="question-number"></span>
+                    <span th:text="${taks.question}"></span>
+                </li>
+            </ul>
+            <div class="questions-separator">
+                <div></div>
+            </div>
+        </div>
+
+        <div class="text-container">
+            <section th:each="paragraph : ${readingExercise.paragraphs}">
+                <p th:text="${paragraph}" class="paragraph"></p>
+            </section>
+        </div>
+
+
+        <footer class="metadata">
+            <div class="follow_me">
+                <span>Learn more - follow <span class="channel">@daily_deutsch</span> on Telegram!</span>
+            </div>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

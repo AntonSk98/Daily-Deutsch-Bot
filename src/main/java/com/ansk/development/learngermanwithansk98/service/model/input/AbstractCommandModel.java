@@ -32,6 +32,7 @@ public abstract class AbstractCommandModel<T> {
         public static final String LEVEL = "level";
         public static final String TOPIC = "topic";
         public static final String TEXT = "text";
+        public static final String AUDIO = "audio";
     }
 
     @JsonIgnore

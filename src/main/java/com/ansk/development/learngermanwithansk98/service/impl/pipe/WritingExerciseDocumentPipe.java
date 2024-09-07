@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -10,12 +10,12 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 /**
- * Pipe that converts {@link WritingExercise} to {@link Images}.
+ * Pipe that converts {@link WritingExercise} to {@link ExerciseDocument}.
  *
  * @author Anton Skripin
  */
 @Component
-public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<WritingExercise> implements IConverterPipe<WritingExercise, Images> {
+public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<WritingExercise> implements IConverterPipe<WritingExercise, ExerciseDocument> {
 
     private final SpringTemplateEngine springTemplateEngine;
 
@@ -24,7 +24,7 @@ public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<Writin
     }
 
     @Override
-    public Images pipe(WritingExercise writingExercise) {
+    public ExerciseDocument pipe(WritingExercise writingExercise) {
         Document html = abstractPipe("writing_exercise_template.html", "writingExercise", writingExercise).apply(springTemplateEngine);
         PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);

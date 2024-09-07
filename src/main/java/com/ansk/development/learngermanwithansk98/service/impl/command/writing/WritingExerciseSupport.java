@@ -11,7 +11,7 @@ import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTem
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.WritingExerciseModel;
-import com.ansk.development.learngermanwithansk98.service.model.output.Images;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
@@ -62,7 +62,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
 
         outputGateway.sendPlainMessage(parameters.chatId(), "Creating the document...");
 
-        Images writingExerciseDocument = writingExerciseDocumentPipe.pipe(writingExercise);
+        ExerciseDocument writingExerciseDocument = writingExerciseDocumentPipe.pipe(writingExercise);
 
         outputGateway.sendPlainMessage(parameters.chatId(), "Saving in cache...");
 

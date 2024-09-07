@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author Anton Skripin
  */
-public record ReadingExercise(String title, Paragraphs paragraphs, ReadingTasks tasks, Images document) {
+public record ReadingExercise(String title, Paragraphs paragraphs, ReadingTasks tasks, ExerciseDocument document) {
     public record TextOutput(String level, String title, String text) {
     }
 

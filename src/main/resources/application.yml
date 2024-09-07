@@ -57,6 +57,10 @@ commands:
         - key: topic
           required: true
           prompt: please provide the topic for writing exercise
+    - path: /listening_exercise
+      parameters:
+        - key: audio
+          prompt: please provide audio
 
 bot:
   user:
@@ -193,3 +197,29 @@ ai:
 
 
 
+
+  listening:
+    prompts:
+      text-to-paragraphs: ${ai.reading.prompts.rephrase-text}
+      create-listening-exercise: |
+        You are an experienced German tutor with many years of experience teaching students at different levels.
+        I will send you a transcribed audio.
+        Create 10 questions related to the content of the transcribed audio, along with their corresponding answers.
+        The questions should be meaningful and not easily answerable by simply rephrasing sentences from the transcribed audio.
+        The response must have the following JSON structure:
+        {
+          level: "CEFR level here of the audio",
+          title: "Title based on the transcribed audio"
+          tasks: [
+            {
+              "question": "Here goes a question",
+              "answer": "Here goes an answer"
+            },
+            {
+              "question": "Here goes a question",
+              "answer": "Here goes an answer"
+            }
+          ]
+        }
+        Here is the transcribed audio:
+        { text }

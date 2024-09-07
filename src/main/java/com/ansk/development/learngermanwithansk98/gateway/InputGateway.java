@@ -5,6 +5,7 @@ import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Audio;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
@@ -36,7 +37,11 @@ public class InputGateway {
     }
 
     public void process(Update update) {
-        final String input = Optional.ofNullable(update.getMessage()).map(Message::getText).orElse(null);
+        final String input = Optional.ofNullable(update.getMessage())
+                .map(Message::getText)
+                .or(() -> Optional.ofNullable(update.getMessage()).map(Message::getAudio).map(Audio::getFileId))
+                .orElse(null);
+
         final long chatId = Optional.ofNullable(update.getMessage()).map(Message::getChatId)
                 .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
 
