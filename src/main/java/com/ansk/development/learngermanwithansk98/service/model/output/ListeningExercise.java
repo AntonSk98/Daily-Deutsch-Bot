@@ -7,8 +7,7 @@ import java.util.List;
  *
  * @author Anton Skripin
  */
-public record ListeningExercise(String audio, String level, String title, Paragraphs paragraphs, ListeningTasks tasks,
-                                ExerciseDocument document) {
+public record ListeningExercise(String audio, ListeningTasks tasks, ExerciseDocument document) {
     public record Output(String level, String title, List<Task> tasks) {
     }
 
@@ -19,6 +18,7 @@ public record ListeningExercise(String audio, String level, String title, Paragr
     }
 
     public record ListeningTasks(List<Task> tasks) {
-
     }
+
+    public record Document(String level, String title, List<String> paragraphs, List<String> questions) {}
 }

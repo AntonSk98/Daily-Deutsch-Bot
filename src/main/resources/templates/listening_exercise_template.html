@@ -30,24 +30,28 @@
         <section th:if="${listeningExercise.title} != null"
                  class="title">
             <div class="level" th:text="${listeningExercise.level}"></div>
-            <span th:text="${listeningExercise.title}"></span>
+            <span>Listening</span>
         </section>
 
         <div class="questions-container">
+            <div class="listening-title"
+                 th:if="${listeningExercise.title != null && !listeningExercise.title.isEmpty()}"
+                 th:text="${listeningExercise.title}"></div>
             <div class="questions-title">Questions:</div>
             <ul class="questions">
-                <li th:each="taks, stat : ${listeningExercise.tasks}">
+                <li th:each="question, stat : ${listeningExercise.questions}">
                     <span th:text="${stat.count} + '. '" class="question-number"></span>
-                    <span th:text="${taks.question}"></span>
+                    <span th:text="${question}"></span>
                 </li>
             </ul>
-            <div class="questions-separator">
-                <div></div>
-            </div>
+        </div>
+
+        <div class="questions-separator">
+            <div>Transcription</div>
         </div>
 
         <div class="text-container">
-            <section th:each="paragraph : ${readingExercise.paragraphs}">
+            <section th:each="paragraph : ${listeningExercise.paragraphs}">
                 <p th:text="${paragraph}" class="paragraph"></p>
             </section>
         </div>

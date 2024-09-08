@@ -200,7 +200,7 @@ ai:
 
   listening:
     prompts:
-      text-to-paragraphs: ${ai.reading.prompts.rephrase-text}
+      text-to-paragraphs: ${ai.reading.prompts.text-to-paragraphs}
       create-listening-exercise: |
         You are an experienced German tutor with many years of experience teaching students at different levels.
         I will send you a transcribed audio.
@@ -209,17 +209,17 @@ ai:
         The response must have the following JSON structure:
         {
           level: "CEFR level here of the audio",
-          title: "Title based on the transcribed audio"
+          title: "Title based on the transcribed audio in German"
           tasks: [
             {
-              "question": "Here goes a question",
-              "answer": "Here goes an answer"
+              "question": "Here goes a question in German",
+              "answer": "Here goes an answer in German"
             },
             {
-              "question": "Here goes a question",
-              "answer": "Here goes an answer"
+              "question": "Here goes a question in German",
+              "answer": "Here goes an answer in German"
             }
           ]
         }
         Here is the transcribed audio:
-        { text }
+        {text}

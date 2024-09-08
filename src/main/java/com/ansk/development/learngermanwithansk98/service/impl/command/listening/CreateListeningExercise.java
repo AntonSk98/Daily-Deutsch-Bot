@@ -62,19 +62,25 @@ public class CreateListeningExercise extends AbstractCommandService {
                 .resolveVariable(TEXT, transcribedAudio);
 
         var listeningExerciseOutput = aiGateway.sendRequest(listeningExercisePrompt.getPrompt(), ListeningExercise.Output.class);
-        ExerciseDocument listeningExerciseDocument = documentPipe.pipe(listeningExerciseOutput);
+
+        var listeningExerciseDocumentMetadata = new ListeningExercise.Document(
+                listeningExerciseOutput.level(),
+                listeningExerciseOutput.title(),
+                paragraphs.paragraphs(),
+                listeningExerciseOutput.tasks().stream().map(ListeningExercise.Task::question).toList()
+        );
+
+
+        ExerciseDocument listeningExerciseDocument = documentPipe.pipe(listeningExerciseDocumentMetadata);
 
         ListeningExercise listeningExercise = new ListeningExercise(
                 listeningExerciseModel.getAudio(),
-                listeningExerciseOutput.level(),
-                listeningExerciseOutput.title(),
-                paragraphs,
                 new ListeningExercise.ListeningTasks(listeningExerciseOutput.tasks()),
                 listeningExerciseDocument
         );
 
-        outputGateway.sendListeningExercise(parameters.chatId(), listeningExercise);
 
+        outputGateway.sendListeningExercise(parameters.chatId(), listeningExercise);
     }
 
     @Override

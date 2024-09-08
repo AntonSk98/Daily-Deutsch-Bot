@@ -28,11 +28,9 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -51,6 +49,53 @@ import static com.ansk.development.learngermanwithansk98.service.model.Navigatio
 public class OutputGateway {
 
     private static final int MAX_MESSAGE_LENGTH = 4096;
+
+    private static final String READING_EXERCISE_TEMPLATE = """
+            ⭐️ #Reading
+            
+            📚 <b>%s</b>
+            
+            <i>%s</i>
+            """;
+
+    private static final String READING_EXERCISE_DOCUMENT = """
+            📄️ #ReadingExerciseDocument
+            📚 Here’s the reading exercise.
+            """;
+
+    private static final String LISTENING_EXERCISE_TEMPLATE = """
+            ⭐️ #Listening
+            
+            🎧 <b>Please listen to the audio and complete the exercise in the 🗒️ document below ⬇️</b>
+            
+            <i>Blurred answers are also attached 👇. 
+            Do not look at them before completing exercise!</i>
+            """;
+
+    public static final String LISTENING_EXERCISE_DOCUMENT = """
+            📄️ #ListeningExerciseDocument
+            📚 Here’s the listening exercise.
+            """;
+
+    private static final String EXERCISE_KEYS_TEMPLATE = """
+            💬 <b>Questions and answers:</b>
+                <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
+            """;
+
+    private static final String QUESTIONS_AND_ANSWERS_TEMPLATE = """
+            <b>%s</b>
+            <i>%s</i>
+            """;
+
+    private static final String WRITING_EXERCISE_TEMPLATE = """
+            ⭐️ #Writing
+            
+            🗒️ Please write your opinion on the following topic:
+            
+            <b>%s</b>
+            
+            Also feel free to check out our sample text ⬆️
+            """;
 
     private final TelegramClient telegramClient;
     private final ObjectMapper objectMapper;
@@ -137,17 +182,7 @@ public class OutputGateway {
     }
 
     public void sendWritingExercise(Long chatId, String topic, ExerciseDocument writingExerciseDocument) {
-        final String writingExerciseTemplate = """
-                ⭐️ #Writing
-                
-                🗒️ Please write your opinion on the following topic:
-                
-                <b>%s</b>
-                
-                Also feel free to check out our sample text ⬆️
-                """;
-
-        final String writingExercise = String.format(writingExerciseTemplate, topic);
+        final String writingExercise = String.format(WRITING_EXERCISE_TEMPLATE, topic);
 
         MediaParameters mediaParameters = new MediaParameters(
                 Optional.of(new ImageCaption(writingExercise, "HTML")),
@@ -159,12 +194,11 @@ public class OutputGateway {
     }
 
     public InputStream audioStream(String audio) {
-        final String path = "https://api.telegram.org/file/%s/%s";
         GetFile audioMetadata = new GetFile(audio);
         try {
             File audioFile = telegramClient.execute(audioMetadata);
-            return new URL(audioFile.getFileUrl(configuration.token())).openStream();
-        } catch (TelegramApiException | IOException e) {
+            return new URI(audioFile.getFileUrl(configuration.token())).toURL().openStream();
+        } catch (TelegramApiException | IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
@@ -175,14 +209,19 @@ public class OutputGateway {
         SendAudio sendAudio = SendAudio.builder()
                 .chatId(chatId)
                 .audio(audioFile)
-                .caption("Here is an exercise")
+                .caption(LISTENING_EXERCISE_TEMPLATE)
+                .parseMode("HTML")
                 .build();
 
 
-        Runnable mediaGroup = sendMediaGroup(chatId, listeningExercise.document(), MediaParameters.NO_MEDIA_PARAMS);
+        MediaParameters parameters = new MediaParameters(Optional.of(new ImageCaption(LISTENING_EXERCISE_DOCUMENT, "HTML")), false);
+        Runnable mediaGroup = sendMediaGroup(chatId, listeningExercise.document(), parameters);
 
+        String exercisePart = exercisePart(listeningExercise.tasks().tasks().stream().collect(Collectors.toMap(ListeningExercise.Task::question, ListeningExercise.Task::answer)));
+        SendMessage questionsAndAnswers = SendMessage.builder().chatId(chatId).text(exercisePart).parseMode("HTML").build();
         try {
             telegramClient.execute(sendAudio);
+            telegramClient.execute(questionsAndAnswers);
             mediaGroup.run();
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
@@ -219,54 +258,43 @@ public class OutputGateway {
     }
 
     private MediaParameters readingMediaParameters() {
-        final String documentCaption = """
-                🖨️ #ReadingForPrinting
-                📚 Here’s the reading exercise formatted for printing.
-                """;
-
-        var caption = new ImageCaption(documentCaption, "HTML");
+        var caption = new ImageCaption(READING_EXERCISE_DOCUMENT, "HTML");
 
         return new MediaParameters(Optional.of(caption), false);
     }
 
-    private List<SendMessage> toReadingExercise(Long chatId, ReadingExercise readingExercise) {
-        final String textTemplate = """
-                ⭐️ #Reading
-                
-                📚 <b>%s</b>
-                
-                <i>%s</i>
-                """;
+    private List<SendMessage> toExerciseWithQuestionAnswers(Long chatId, String payload, Map<String, String> questionAndAnswerMap) {
+        String exercisePart = exercisePart(questionAndAnswerMap);
+        String payloadAndExercisePart = String.join("\n", payload, exercisePart);
 
-        final String readingExerciseTemplate = """
-                💬 <b>Questions and answers:</b>
-                <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
-                """;
-
-        final String questionsAndAnswersTemplate = """
-                <b>%s</b>
-                <i>%s</i>
-                """;
-
-        final AtomicInteger counter = new AtomicInteger(1);
-        final String title = readingExercise.title();
-        final String text = String.join("\n\n", readingExercise.paragraphs().paragraphs());
-        final String answers = readingExercise.tasks()
-                .tasks()
-                .stream()
-                .map(task -> String.format(questionsAndAnswersTemplate, counter.getAndIncrement() + ". " + task.question(), task.answer()))
-                .collect(Collectors.joining("\n"));
-
-        final String readingText = String.format(textTemplate, title, text);
-        final String exercisePart = String.format(readingExerciseTemplate, answers);
-        final String readingExerciseMessage = String.join("\n", readingText, exercisePart);
-
-        if (readingExerciseMessage.getBytes().length >= MAX_MESSAGE_LENGTH) {
+        if (payloadAndExercisePart.getBytes().length >= MAX_MESSAGE_LENGTH) {
             Function<String, SendMessage> toSendMessage = txt -> SendMessage.builder().chatId(chatId).text(txt).parseMode("HTML").build();
-            return Stream.of(readingText, exercisePart).map(toSendMessage).toList();
+            return Stream.of(payload, exercisePart).map(toSendMessage).toList();
         }
 
-        return Collections.singletonList(SendMessage.builder().chatId(chatId).text(readingExerciseMessage).parseMode("HTML").build());
+        return Collections.singletonList(SendMessage.builder().chatId(chatId).text(payloadAndExercisePart).parseMode("HTML").build());
+    }
+
+    private String exercisePart(Map<String, String> questionAndAnswerMap) {
+        final AtomicInteger counter = new AtomicInteger(1);
+        final String questionAndAnswers = questionAndAnswerMap.entrySet()
+                .stream()
+                .map(questionAndAnswer -> String.format(
+                                QUESTIONS_AND_ANSWERS_TEMPLATE,
+                                counter.getAndIncrement() + ". " + questionAndAnswer.getKey(),
+                                questionAndAnswer.getValue()
+                        )
+                )
+                .collect(Collectors.joining("\n"));
+
+        return String.format(EXERCISE_KEYS_TEMPLATE, questionAndAnswers);
+    }
+
+    private List<SendMessage> toReadingExercise(Long chatId, ReadingExercise readingExercise) {
+        final String title = readingExercise.title();
+        final String text = String.join("\n\n", readingExercise.paragraphs().paragraphs());
+        final String readingText = String.format(READING_EXERCISE_TEMPLATE, title, text);
+        return toExerciseWithQuestionAnswers(chatId, readingText, readingExercise.tasks().tasks().stream().collect(Collectors.toMap(ReadingExercise.Task::question, ReadingExercise.Task::answer)));
     }
 
     private SendMediaGroup toInputMediaPhotos(Long chatId, List<byte[]> binaryImages, MediaParameters mediaParameters) {

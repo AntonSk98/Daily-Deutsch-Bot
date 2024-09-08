@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.OpenAIConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -70,12 +70,28 @@ public class OpenAiGateway {
     public String transcribeAudio(InputStream audioStream) {
         HttpHeaders headers = headersWithAuth();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new InputStreamResource(audioStream));
-        body.add("model", "whisper-1");
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map<String, String>> response = restTemplate.exchange(AUDIO_URL, HttpMethod.POST, requestEntity, new ParameterizedTypeReference<>() {});
-        return Optional.ofNullable(response.getBody()).map(transcription -> transcription.get("text")).orElseThrow();
+
+        try {
+            ByteArrayResource byteArrayResource = new ByteArrayResource(audioStream.readAllBytes()) {
+                @Override
+                public String getFilename() {
+                    return "audio.mp3";  // Provide the filename
+                }
+            };
+
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", byteArrayResource);
+            body.add("model", "whisper-1");
+            body.add("language", "de");
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            ResponseEntity<Map<String, String>> response = restTemplate.exchange(AUDIO_URL, HttpMethod.POST, requestEntity, new ParameterizedTypeReference<>() {
+            });
+            return Optional.ofNullable(response.getBody()).map(transcription -> transcription.get("text")).orElseThrow();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
     }
 
     private HttpHeaders headersWithAuth() {
