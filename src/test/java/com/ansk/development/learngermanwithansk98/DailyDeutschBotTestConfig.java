@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98;
 
-import com.ansk.development.learngermanwithansk98.gateway.DailyDeutschBotConsumer;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.DailyDeutschBotConsumer;
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;

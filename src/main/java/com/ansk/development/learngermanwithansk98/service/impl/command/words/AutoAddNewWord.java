@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WordCardPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
@@ -26,19 +26,19 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class AutoAddNewWord extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
     private final WordCardPromptsConfiguration promptsConfiguration;
     private final WordCache wordCache;
 
     protected AutoAddNewWord(CommandsConfiguration commandsConfiguration,
-                             OutputGateway outputGateway,
+                             TelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
                              OpenAiGateway openAiGateway,
                              WordCardPromptsConfiguration promptsConfiguration,
                              WordCache wordCache) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.openAiGateway = openAiGateway;
         this.promptsConfiguration = promptsConfiguration;
         this.wordCache = wordCache;
@@ -53,13 +53,13 @@ public class AutoAddNewWord extends AbstractCommandService {
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         AutoWordCompletionModel autoWordCompletionModel = model.map(AutoWordCompletionModel.class);
 
-        outputGateway.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
         GenericPromptTemplate autoDefineWord = new GenericPromptTemplate(promptsConfiguration.autoWordDefinition())
                 .resolveVariable(WORD, autoWordCompletionModel.getWord());
         var word = openAiGateway.sendRequest(autoDefineWord.getPrompt(), Word.class);
         wordCache.addWord(word);
 
-        outputGateway.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
+        telegramOutputGateway.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
     }
 
     @Override

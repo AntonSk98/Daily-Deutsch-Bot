@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -26,17 +26,17 @@ import java.util.List;
 @Service
 public class PreviewCachedWords extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
     private final CardToImagesConverterPipe converterPipe;
 
     protected PreviewCachedWords(CommandsConfiguration commandsConfiguration,
-                                 OutputGateway outputGateway,
+                                 TelegramOutputGateway telegramOutputGateway,
                                  CommandCache commandCache,
                                  WordCache wordCache,
                                  CardToImagesConverterPipe converterPipe) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.wordCache = wordCache;
         this.converterPipe = converterPipe;
     }
@@ -51,17 +51,17 @@ public class PreviewCachedWords extends AbstractCommandService {
         List<Word> wordsInCache = wordCache.getWords();
 
         if (CollectionUtils.isEmpty(wordsInCache)) {
-            outputGateway.sendPlainMessage(commandParameters.chatId(), "No words added in cache yet!");
+            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "No words added in cache yet!");
             return;
         }
 
         WordCard previewWordCard = new WordCard("preview", wordsInCache);
 
-        outputGateway.sendPlainMessage(commandParameters.chatId(), "Please wait...I am preparing the preview...");
+        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "Please wait...I am preparing the preview...");
 
         ExerciseDocument exerciseDocument = converterPipe.pipe(previewWordCard);
 
-        outputGateway.sendWordCard(commandParameters.chatId(), exerciseDocument);
+        telegramOutputGateway.sendWordCard(commandParameters.chatId(), exerciseDocument);
     }
 
     @Override

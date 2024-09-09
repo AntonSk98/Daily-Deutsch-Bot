@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CommandState;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
@@ -21,14 +21,14 @@ import java.util.ListIterator;
 public abstract class AbstractCommandService implements ICommandService {
 
     private final CommandsConfiguration commandsConfiguration;
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final CommandCache commandCache;
 
     protected AbstractCommandService(CommandsConfiguration commandsConfiguration,
-                                     OutputGateway outputGateway,
+                                     TelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache) {
         this.commandsConfiguration = commandsConfiguration;
-        this.outputGateway = outputGateway;
+        this.telegramOutputGateway = telegramOutputGateway;
         this.commandCache = commandCache;
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractCommandService implements ICommandService {
                 && !commandState.getCurrentCommandModel().isDefined(commandState.getAwaitingKey())
                 && commandsConfiguration.findParameter(command.getPath(), commandState.getAwaitingKey()).required()
         ) {
-            outputGateway.sendPlainMessage(commandParameters.chatId(), "This is a required parameter");
+            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "This is a required parameter");
             return;
         }
 
@@ -80,10 +80,10 @@ public abstract class AbstractCommandService implements ICommandService {
         String prompt = commandsConfiguration.findParameter(command.getPath(), key).prompt();
         commandState.setAwaitingKey(key);
         if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
-            outputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
+            telegramOutputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
             return;
         }
-        outputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
+        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
 
     }
 

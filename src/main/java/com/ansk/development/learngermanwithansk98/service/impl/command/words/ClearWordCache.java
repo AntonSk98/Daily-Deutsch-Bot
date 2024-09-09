@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -19,15 +19,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClearWordCache extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
 
     protected ClearWordCache(CommandsConfiguration commandsConfiguration,
-                             OutputGateway outputGateway,
+                             TelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
                              WordCache wordCache) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.wordCache = wordCache;
     }
 
@@ -39,7 +39,7 @@ public class ClearWordCache extends AbstractCommandService {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters parameters) {
         wordCache.cleanCache();
-        outputGateway.sendPlainMessage(parameters.chatId(), "Word cache has been successfully cleared.");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Word cache has been successfully cleared.");
     }
 
     @Override

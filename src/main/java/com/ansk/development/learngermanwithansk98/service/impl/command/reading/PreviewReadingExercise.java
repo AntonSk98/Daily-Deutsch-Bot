@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -20,15 +20,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewReadingExercise extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final ReadingExerciseCache readingExerciseCache;
 
     protected PreviewReadingExercise(CommandsConfiguration commandsConfiguration,
-                                     OutputGateway outputGateway,
+                                     TelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,
                                      ReadingExerciseCache readingExerciseCache) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.readingExerciseCache = readingExerciseCache;
     }
 
@@ -41,11 +41,11 @@ public class PreviewReadingExercise extends AbstractCommandService {
     public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters paramaters) {
         readingExerciseCache.cachedReadingExercise().ifPresentOrElse(
                 readingExercise -> {
-                    outputGateway.sendPlainMessage(paramaters.chatId(), "Preparing reading exercise for preview");
-                    outputGateway.sendReadingExercise(paramaters.chatId(), readingExercise);
+                    telegramOutputGateway.sendPlainMessage(paramaters.chatId(), "Preparing reading exercise for preview");
+                    telegramOutputGateway.sendReadingExercise(paramaters.chatId(), readingExercise);
 
                 },
-                () -> outputGateway.sendPlainMessage(paramaters.chatId(), "No reading exercise is in cache currently")
+                () -> telegramOutputGateway.sendPlainMessage(paramaters.chatId(), "No reading exercise is in cache currently")
         );
     }
 

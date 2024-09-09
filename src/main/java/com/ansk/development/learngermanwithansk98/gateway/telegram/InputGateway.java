@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway;
+package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
@@ -17,9 +17,9 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 
 /**
  * A component that processes incoming messages by determining the appropriate {@link Command}.
- * Then the execution is delegated to the corresponding {@link ICommandService}.
  * <p>
- * {@link InputGateway} utilizes a cache to keep track of the current command and supports command execution based on the input text from a user.
+ * The {@link InputGateway} class delegates the execution of commands to the corresponding {@link ICommandService}.
+ * It uses a cache to manage the current command and supports text and audio inputs from users.
  *
  * @author Anton Skripin
  */
@@ -30,40 +30,61 @@ public class InputGateway {
 
     private final CommandCache commandCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandServices See {@link ICommandService}
+     * @param commandCache    See {@link CommandCache}
+     */
     public InputGateway(List<ICommandService> commandServices,
                         CommandCache commandCache) {
         this.commandServices = commandServices;
         this.commandCache = commandCache;
     }
 
+    /**
+     * Processes an {@link Update} received from Telegram.
+     * <p>
+     * This method extracts the input -> determines the appropriate {@link Command} ->
+     * -> delegates the execution to the corresponding {@link ICommandService}.
+     * <p>
+     * The state of the command is managed  {@link CommandCache}.
+     * </p>
+     *
+     * @param update the {@link Update} object containing the message or audio to be processed.
+     */
     public void process(Update update) {
         final String input = Optional.ofNullable(update.getMessage())
                 .map(Message::getText)
                 .or(() -> Optional.ofNullable(update.getMessage()).map(Message::getAudio).map(Audio::getFileId))
                 .orElse(null);
 
-        final long chatId = Optional.ofNullable(update.getMessage()).map(Message::getChatId)
+        final long chatId = Optional.ofNullable(update.getMessage())
+                .map(Message::getChatId)
                 .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
 
-        Command command = Command
-                .find(input)
+        Command command = Command.find(input)
                 .map(cmd -> {
                     commandCache.clear();
                     return cmd;
                 })
                 .or(() -> Optional.ofNullable(commandCache.getCurrentCommand()))
+                .map(cmd -> {
+                    commandCache.setCurrentCommand(cmd);
+                    return cmd;
+                })
                 .orElseThrow(() -> new IllegalStateException("Unknown command..."));
 
-        commandCache.setCurrentCommand(command);
-        ICommandService commandService = commandServices.stream()
+
+        commandServices
+                .stream()
                 .filter(service -> service.supportedCommand().equals(command))
                 .findFirst()
-                .orElseThrow();
-
-        commandService.processCommand(CommandParameters
-                .create()
-                .withChatId(chatId)
-                .withInput(input)
-                .addNavigation(map(update)));
+                .orElseThrow()
+                .processCommand(CommandParameters.create()
+                        .withChatId(chatId)
+                        .withInput(input)
+                        .addNavigation(map(update))
+                );
     }
 }

@@ -1,11 +1,10 @@
 package com.ansk.development.learngermanwithansk98.gateway.openai;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 /**
  * Encapsulates output response from OpenAI.
+ * This record represents the structure of the response received from the OpenAI API.
  *
  * @author Anton Skripin
  */

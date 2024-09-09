@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
@@ -26,20 +26,20 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class GenerateReadingExercise extends ReadingExerciseSupport {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;
     private final ReadingPromptsConfiguration promptsConfiguration;
 
 
     protected GenerateReadingExercise(CommandsConfiguration commandsConfiguration,
-                                      OutputGateway outputGateway,
+                                      TelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,
                                       OpenAiGateway aiGateway,
                                       ReadingPromptsConfiguration promptsConfiguration,
                                       ReadingExerciseDocumentPipe readingExerciseDocumentPipe,
                                       ReadingExerciseCache readingExerciseCache) {
         super(commandsConfiguration,
-                outputGateway,
+                telegramOutputGateway,
                 commandCache,
                 aiGateway,
                 promptsConfiguration,
@@ -47,7 +47,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
                 readingExerciseCache);
 
         this.aiGateway = aiGateway;
-        this.outputGateway = outputGateway;
+        this.telegramOutputGateway = telegramOutputGateway;
         this.promptsConfiguration = promptsConfiguration;
     }
 
@@ -63,7 +63,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
     }
 
     private ReadingExercise.TextOutput generateText(CommandParameters parameters, ReadingExerciseModel readingExerciseModel) {
-        outputGateway.sendPlainMessage(
+        telegramOutputGateway.sendPlainMessage(
                 parameters.chatId(),
                 String.format(
                         "Generating a text for level: %s. Topic of the text is '%s'",
@@ -76,7 +76,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
                 .resolveVariable(TOPIC, readingExerciseModel.getTopic());
 
         var generatedText = aiGateway.sendRequest(generateText.getPrompt(), ReadingExercise.TextOutput.class);
-        outputGateway.sendPlainMessage(parameters.chatId(), "The text is generated.");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The text is generated.");
         return generatedText;
     }
 

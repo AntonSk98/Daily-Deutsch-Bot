@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.listenin
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ListeningPromptConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -24,19 +24,19 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class CreateListeningExercise extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;
     private final ListeningPromptConfiguration promptsConfiguration;
     private final ListeningExerciseDocumentPipe documentPipe;
 
     protected CreateListeningExercise(CommandsConfiguration commandsConfiguration,
-                                      OutputGateway outputGateway,
+                                      TelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,
                                       OpenAiGateway aiGateway,
                                       ListeningPromptConfiguration promptConfiguration,
                                       ListeningExerciseDocumentPipe documentPipe) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.aiGateway = aiGateway;
         this.promptsConfiguration = promptConfiguration;
         this.documentPipe = documentPipe;
@@ -50,7 +50,7 @@ public class CreateListeningExercise extends AbstractCommandService {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         ListeningExerciseModel listeningExerciseModel = model.map(ListeningExerciseModel.class);
-        InputStream audioStream = outputGateway.audioStream(listeningExerciseModel.getAudio());
+        InputStream audioStream = telegramOutputGateway.streamAudio(listeningExerciseModel.getAudio());
         String transcribedAudio = aiGateway.transcribeAudio(audioStream);
 
         GenericPromptTemplate transcribedAudioToParagraphs = new GenericPromptTemplate(promptsConfiguration.textToParagraphs())
@@ -80,7 +80,7 @@ public class CreateListeningExercise extends AbstractCommandService {
         );
 
 
-        outputGateway.sendListeningExercise(parameters.chatId(), listeningExercise);
+        telegramOutputGateway.sendListeningExercise(parameters.chatId(), listeningExercise);
     }
 
     @Override

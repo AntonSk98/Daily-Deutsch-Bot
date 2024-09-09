@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WritingPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -19,19 +19,19 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 
 public abstract class WritingExerciseSupport extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
     private final WritingPromptsConfiguration promptsConfiguration;
     private final WritingExerciseDocumentPipe writingExerciseDocumentPipe;
 
     protected WritingExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                     OutputGateway outputGateway,
+                                     TelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,
                                      OpenAiGateway openAiGateway,
                                      WritingPromptsConfiguration promptsConfiguration,
                                      WritingExerciseDocumentPipe writingExerciseDocumentPipe) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.openAiGateway = openAiGateway;
         this.promptsConfiguration = promptsConfiguration;
         this.writingExerciseDocumentPipe = writingExerciseDocumentPipe;
@@ -54,21 +54,21 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
         createExercisePrompt.resolveVariable(TOPIC, writingExerciseModel.getTopic());
         createExercisePrompt.resolveVariable(LEVEL, writingExerciseModel.getLevel());
 
-        outputGateway.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
 
         WritingExercise writingExercise = openAiGateway.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.class);
 
         writingExercise = transform(writingExercise);
 
-        outputGateway.sendPlainMessage(parameters.chatId(), "Creating the document...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating the document...");
 
         ExerciseDocument writingExerciseDocument = writingExerciseDocumentPipe.pipe(writingExercise);
 
-        outputGateway.sendPlainMessage(parameters.chatId(), "Saving in cache...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Saving in cache...");
 
-        outputGateway.sendWritingExercise(parameters.chatId(), writingExercise.topic(), writingExerciseDocument);
+        telegramOutputGateway.sendWritingExercise(parameters.chatId(), writingExercise.topic(), writingExerciseDocument);
 
-        outputGateway.sendPlainMessage(parameters.chatId(), "Created and saved!");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Created and saved!");
     }
 
     @Override

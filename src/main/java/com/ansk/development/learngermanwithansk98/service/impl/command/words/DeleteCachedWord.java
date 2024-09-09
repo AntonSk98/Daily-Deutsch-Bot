@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -27,15 +27,15 @@ import static java.lang.String.format;
 @Service
 public class DeleteCachedWord extends AbstractCommandService {
 
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
 
     protected DeleteCachedWord(CommandsConfiguration commandsConfiguration,
-                               OutputGateway outputGateway,
+                               TelegramOutputGateway telegramOutputGateway,
                                CommandCache commandCache,
                                WordCache wordCache) {
-        super(commandsConfiguration, outputGateway, commandCache);
-        this.outputGateway = outputGateway;
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        this.telegramOutputGateway = telegramOutputGateway;
         this.wordCache = wordCache;
     }
 
@@ -61,11 +61,11 @@ public class DeleteCachedWord extends AbstractCommandService {
                             wordCache.deleteWord(word);
                             String message = "Successfully deleted the word '%s'";
                             String deletedWord = model.map(ToBeDeletedWord.class).getWordReference();
-                            outputGateway.sendPlainMessage(commandParameters.chatId(), format(message, deletedWord));
+                            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), format(message, deletedWord));
                         },
                         () -> {
                             String message = "Word '%s' not present in cache";
-                            outputGateway.sendPlainMessage(commandParameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
+                            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
                         });
     }
 

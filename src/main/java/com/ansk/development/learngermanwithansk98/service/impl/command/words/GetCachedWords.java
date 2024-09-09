@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.OutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -28,15 +28,15 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 public class GetCachedWords extends AbstractCommandService {
 
     private final WordCache wordCache;
-    private final OutputGateway outputGateway;
+    private final TelegramOutputGateway telegramOutputGateway;
 
     protected GetCachedWords(CommandsConfiguration commandsConfiguration,
-                             OutputGateway outputGateway,
+                             TelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
                              WordCache wordCache) {
-        super(commandsConfiguration, outputGateway, commandCache);
+        super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.wordCache = wordCache;
-        this.outputGateway = outputGateway;
+        this.telegramOutputGateway = telegramOutputGateway;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GetCachedWords extends AbstractCommandService {
         Collection<WordInfo> wordInfoCollection = map(wordCache.getWords());
         String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
         String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
-        outputGateway.sendPlainMessage(commandParameters.chatId(), message);
+        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), message);
     }
 
     @Override
