@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.listenin
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ListeningPromptConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
+import com.ansk.development.learngermanwithansk98.gateway.openai.AIGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
@@ -26,7 +26,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
     public class CreateListeningExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
-    private final OpenAiGateway aiGateway;
+    private final AIGateway aiGateway;
     private final ListeningPromptConfiguration promptsConfiguration;
     private final ListeningExerciseDocumentPipe documentPipe;
     private final ListeningExerciseCache listeningExerciseCache;
@@ -34,7 +34,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
     protected CreateListeningExercise(CommandsConfiguration commandsConfiguration,
                                       ITelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,
-                                      OpenAiGateway aiGateway,
+                                      AIGateway aiGateway,
                                       ListeningPromptConfiguration promptConfiguration,
                                       ListeningExerciseDocumentPipe documentPipe,
                                       ListeningExerciseCache listeningExerciseCache) {

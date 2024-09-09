@@ -2,8 +2,8 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WordCardPromptsConfiguration;
+import com.ansk.development.learngermanwithansk98.gateway.openai.AIGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
-import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
@@ -19,7 +19,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.Command.A
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD;
 
 /**
- * Service that allows to define a word automatically with the help of AI.
+ * Service that adds a new word automatically without the client interaction.
  *
  * @author Anton Skripin
  */
@@ -27,19 +27,29 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 public class AutoAddNewWord extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
-    private final OpenAiGateway openAiGateway;
+    private final AIGateway AIGateway;
     private final WordCardPromptsConfiguration promptsConfiguration;
     private final WordCache wordCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration See {@link CommandsConfiguration}
+     * @param telegramOutputGateway See {@link ITelegramOutputGateway}
+     * @param commandCache          See {@link CommandCache}
+     * @param AIGateway             See {@link AIGateway}
+     * @param promptsConfiguration  See {@link WordCardPromptsConfiguration}
+     * @param wordCache             See {@link WordCache}
+     */
     protected AutoAddNewWord(CommandsConfiguration commandsConfiguration,
                              ITelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
-                             OpenAiGateway openAiGateway,
+                             AIGateway AIGateway,
                              WordCardPromptsConfiguration promptsConfiguration,
                              WordCache wordCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.telegramOutputGateway = telegramOutputGateway;
-        this.openAiGateway = openAiGateway;
+        this.AIGateway = AIGateway;
         this.promptsConfiguration = promptsConfiguration;
         this.wordCache = wordCache;
     }
@@ -56,7 +66,7 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
         GenericPromptTemplate autoDefineWord = new GenericPromptTemplate(promptsConfiguration.autoWordDefinition())
                 .resolveVariable(WORD, autoWordCompletionModel.getWord());
-        var word = openAiGateway.sendRequest(autoDefineWord.getPrompt(), Word.class);
+        var word = AIGateway.sendRequest(autoDefineWord.getPrompt(), Word.class);
         wordCache.addWord(word);
 
         telegramOutputGateway.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);

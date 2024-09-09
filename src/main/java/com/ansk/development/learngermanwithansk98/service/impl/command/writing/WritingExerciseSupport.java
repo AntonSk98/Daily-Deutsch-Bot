@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WritingPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
+import com.ansk.development.learngermanwithansk98.gateway.openai.AIGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WritingExerciseCache;
@@ -18,24 +18,40 @@ import com.ansk.development.learngermanwithansk98.service.model.output.WritingEx
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
 
+/**
+ * Utility class to generate writing exercise.
+ *
+ * @author Anton Skripin
+ */
 public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
-    private final OpenAiGateway openAiGateway;
+    private final AIGateway AIGateway;
     private final WritingPromptsConfiguration promptsConfiguration;
     private final WritingExerciseDocumentPipe writingExerciseDocumentPipe;
     private final WritingExerciseCache writingExerciseCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration       See {@link CommandsConfiguration}
+     * @param telegramOutputGateway       See {@link ITelegramOutputGateway}
+     * @param commandCache                See {@link CommandCache}
+     * @param AIGateway                   See {@link AIGateway}
+     * @param promptsConfiguration        See {@link WritingPromptsConfiguration}
+     * @param writingExerciseDocumentPipe See {@link WritingExerciseDocumentPipe}
+     * @param writingExerciseCache        See {@link WritingExerciseCache}
+     */
     protected WritingExerciseSupport(CommandsConfiguration commandsConfiguration,
                                      ITelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,
-                                     OpenAiGateway openAiGateway,
+                                     AIGateway AIGateway,
                                      WritingPromptsConfiguration promptsConfiguration,
                                      WritingExerciseDocumentPipe writingExerciseDocumentPipe,
                                      WritingExerciseCache writingExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.telegramOutputGateway = telegramOutputGateway;
-        this.openAiGateway = openAiGateway;
+        this.AIGateway = AIGateway;
         this.promptsConfiguration = promptsConfiguration;
         this.writingExerciseDocumentPipe = writingExerciseDocumentPipe;
         this.writingExerciseCache = writingExerciseCache;
@@ -60,7 +76,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
 
-        WritingExercise.Output writingExercise = openAiGateway.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.Output.class);
+        WritingExercise.Output writingExercise = AIGateway.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.Output.class);
 
         writingExercise = transform(writingExercise);
 

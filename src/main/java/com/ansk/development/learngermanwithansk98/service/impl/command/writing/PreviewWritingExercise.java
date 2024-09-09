@@ -23,6 +23,14 @@ public class PreviewWritingExercise extends AbstractCommandProcessor {
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WritingExerciseCache writingExerciseCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration {@link CommandsConfiguration}
+     * @param telegramOutputGateway {@link ITelegramOutputGateway}
+     * @param commandCache          {@link CommandCache}
+     * @param writingExerciseCache  {@link WritingExerciseCache}
+     */
     protected PreviewWritingExercise(CommandsConfiguration commandsConfiguration,
                                      ITelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,

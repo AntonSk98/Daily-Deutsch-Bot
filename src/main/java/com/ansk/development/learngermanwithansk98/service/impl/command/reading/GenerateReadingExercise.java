@@ -2,8 +2,8 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfiguration;
+import com.ansk.development.learngermanwithansk98.gateway.openai.AIGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
-import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ReadingExerciseDocumentPipe;
@@ -19,7 +19,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
 
 /**
- * Service to generate reading exercise.
+ * Service to generate reading exercise based on the topic and the language level.
  *
  * @author Anton Skripin
  */
@@ -27,14 +27,24 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 public class GenerateReadingExercise extends ReadingExerciseSupport {
 
     private final ITelegramOutputGateway telegramOutputGateway;
-    private final OpenAiGateway aiGateway;
+    private final AIGateway aiGateway;
     private final ReadingPromptsConfiguration promptsConfiguration;
 
-
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration       See {@link CommandsConfiguration}
+     * @param telegramOutputGateway       See {@link ITelegramOutputGateway}
+     * @param commandCache                See {@link CommandCache}
+     * @param aiGateway                   See {@link AIGateway}
+     * @param promptsConfiguration        See {@link ReadingPromptsConfiguration}
+     * @param readingExerciseDocumentPipe See {@link ReadingExerciseDocumentPipe}
+     * @param readingExerciseCache        See {@link ReadingExerciseCache}
+     */
     protected GenerateReadingExercise(CommandsConfiguration commandsConfiguration,
                                       ITelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,
-                                      OpenAiGateway aiGateway,
+                                      AIGateway aiGateway,
                                       ReadingPromptsConfiguration promptsConfiguration,
                                       ReadingExerciseDocumentPipe readingExerciseDocumentPipe,
                                       ReadingExerciseCache readingExerciseCache) {
@@ -62,6 +72,14 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
         return generateText(parameters, readingExerciseModel);
     }
 
+    @Override
+    public AbstractCommandModel<?> supportedModelWithMapping() {
+        return new ReadingExerciseModel()
+                .init()
+                .addMapping(LEVEL, ReadingExerciseModel::setLevel)
+                .addMapping(TOPIC, ReadingExerciseModel::setTopic);
+    }
+
     private ReadingExercise.TextOutput generateText(CommandParameters parameters, ReadingExerciseModel readingExerciseModel) {
         telegramOutputGateway.sendPlainMessage(
                 parameters.chatId(),
@@ -78,13 +96,5 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
         var generatedText = aiGateway.sendRequest(generateText.getPrompt(), ReadingExercise.TextOutput.class);
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The text is generated.");
         return generatedText;
-    }
-
-    @Override
-    public AbstractCommandModel<?> supportedModelWithMapping() {
-        return new ReadingExerciseModel()
-                .init()
-                .addMapping(LEVEL, ReadingExerciseModel::setLevel)
-                .addMapping(TOPIC, ReadingExerciseModel::setTopic);
     }
 }

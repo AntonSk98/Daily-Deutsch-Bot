@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author Anton Skripin
  */
 @Component
-public class OpenAiGateway {
+public class AIGateway {
 
     private static final String TEXT_REQUEST_URL = "https://api.openai.com/v1/chat/completions";
     private static final String AUDIO_URL = "https://api.openai.com/v1/audio/transcriptions";
@@ -39,8 +39,8 @@ public class OpenAiGateway {
      * @param openAIConfiguration See {@link OpenAIConfiguration}
      * @param objectMapper        See {@link ObjectMapper}
      */
-    public OpenAiGateway(OpenAIConfiguration openAIConfiguration,
-                         ObjectMapper objectMapper) {
+    public AIGateway(OpenAIConfiguration openAIConfiguration,
+                     ObjectMapper objectMapper) {
         this.openAIConfiguration = openAIConfiguration;
         this.objectMapper = objectMapper;
         this.restTemplate = new RestTemplate();

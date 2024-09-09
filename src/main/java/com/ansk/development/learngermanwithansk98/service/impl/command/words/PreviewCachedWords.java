@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CardToImagesConverterPipe;
-import com.ansk.development.learngermanwithansk98.service.model.*;
+import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.NoParamModel;
@@ -30,6 +30,15 @@ public class PreviewCachedWords extends AbstractCommandProcessor {
     private final WordCache wordCache;
     private final CardToImagesConverterPipe converterPipe;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration See {@link CommandsConfiguration}
+     * @param telegramOutputGateway See {@link ITelegramOutputGateway}
+     * @param commandCache          See {@link CommandCache}
+     * @param wordCache             See {@link WordCache}
+     * @param converterPipe         See {@link CardToImagesConverterPipe}
+     */
     protected PreviewCachedWords(CommandsConfiguration commandsConfiguration,
                                  ITelegramOutputGateway telegramOutputGateway,
                                  CommandCache commandCache,

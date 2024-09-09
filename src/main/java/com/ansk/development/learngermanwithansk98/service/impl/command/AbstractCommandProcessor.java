@@ -24,6 +24,13 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
     private final ITelegramOutputGateway telegramOutputGateway;
     private final CommandCache commandCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration See {@link CommandsConfiguration}
+     * @param telegramOutputGateway See {@link ITelegramOutputGateway}
+     * @param commandCache          See {@link CommandCache}
+     */
     protected AbstractCommandProcessor(CommandsConfiguration commandsConfiguration,
                                        ITelegramOutputGateway telegramOutputGateway,
                                        CommandCache commandCache) {

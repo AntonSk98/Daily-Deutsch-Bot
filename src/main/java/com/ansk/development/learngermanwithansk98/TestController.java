@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98;
 
-import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
+import com.ansk.development.learngermanwithansk98.gateway.openai.AIGateway;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ReadingExerciseDocumentPipe;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/test")
 public class TestController {
 
-    private final OpenAiGateway aiGateway;
+    private final AIGateway aiGateway;
 
     private static final String TITLE = "Der Einfluss sozialer Medien auf die mentale Gesundheit";
 
@@ -45,7 +45,7 @@ public class TestController {
 
     private final ReadingExerciseDocumentPipe pipe;
 
-    public TestController(OpenAiGateway aiGateway, ReadingExerciseDocumentPipe pipe) {
+    public TestController(AIGateway aiGateway, ReadingExerciseDocumentPipe pipe) {
         this.aiGateway = aiGateway;
         this.pipe = pipe;
     }
