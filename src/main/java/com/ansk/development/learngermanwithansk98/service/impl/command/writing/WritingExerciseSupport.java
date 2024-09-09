@@ -2,9 +2,10 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WritingPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import com.ansk.development.learngermanwithansk98.repository.WritingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.WritingExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
@@ -19,22 +20,25 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 
 public abstract class WritingExerciseSupport extends AbstractCommandService {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
     private final WritingPromptsConfiguration promptsConfiguration;
     private final WritingExerciseDocumentPipe writingExerciseDocumentPipe;
+    private final WritingExerciseCache writingExerciseCache;
 
     protected WritingExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                     TelegramOutputGateway telegramOutputGateway,
+                                     ITelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,
                                      OpenAiGateway openAiGateway,
                                      WritingPromptsConfiguration promptsConfiguration,
-                                     WritingExerciseDocumentPipe writingExerciseDocumentPipe) {
+                                     WritingExerciseDocumentPipe writingExerciseDocumentPipe,
+                                     WritingExerciseCache writingExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.telegramOutputGateway = telegramOutputGateway;
         this.openAiGateway = openAiGateway;
         this.promptsConfiguration = promptsConfiguration;
         this.writingExerciseDocumentPipe = writingExerciseDocumentPipe;
+        this.writingExerciseCache = writingExerciseCache;
     }
 
     /**
@@ -43,7 +47,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
      * @param writingExercise writing exercise
      * @return transformed writing exercise
      */
-    WritingExercise transform(WritingExercise writingExercise) {
+    WritingExercise.Output transform(WritingExercise.Output writingExercise) {
         return writingExercise;
     }
 
@@ -56,7 +60,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
 
-        WritingExercise writingExercise = openAiGateway.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.class);
+        WritingExercise.Output writingExercise = openAiGateway.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.Output.class);
 
         writingExercise = transform(writingExercise);
 
@@ -66,7 +70,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Saving in cache...");
 
-        telegramOutputGateway.sendWritingExercise(parameters.chatId(), writingExercise.topic(), writingExerciseDocument);
+        writingExerciseCache.saveWritingExercise(new WritingExercise(writingExercise.topic(), writingExerciseDocument));
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Created and saved!");
     }

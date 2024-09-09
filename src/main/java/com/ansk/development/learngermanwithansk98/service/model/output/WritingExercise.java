@@ -5,10 +5,12 @@ import java.util.List;
 /**
  * Contains properties of a generated writing exercise.
  *
- * @param level   of the writing exercise
  * @param topic   of the writing exercise
- * @param writing the writing itself
+ * @param exerciseDocument writing exercise
  * @author Anton Skripin
  */
-public record WritingExercise(String level, String topic, List<String> writing) {
+public record WritingExercise(String topic, ExerciseDocument exerciseDocument) {
+    public record Output(String level, String topic, List<String> writing) {
+    }
+
 }

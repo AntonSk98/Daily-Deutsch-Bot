@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.WordCardPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
@@ -26,13 +26,13 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class AutoAddNewWord extends AbstractCommandService {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
     private final WordCardPromptsConfiguration promptsConfiguration;
     private final WordCache wordCache;
 
     protected AutoAddNewWord(CommandsConfiguration commandsConfiguration,
-                             TelegramOutputGateway telegramOutputGateway,
+                             ITelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
                              OpenAiGateway openAiGateway,
                              WordCardPromptsConfiguration promptsConfiguration,

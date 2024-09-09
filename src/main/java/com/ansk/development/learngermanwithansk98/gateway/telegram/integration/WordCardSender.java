@@ -4,6 +4,8 @@ import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseD
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.util.Optional;
+
 import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
 
 /**
@@ -12,6 +14,12 @@ import static com.ansk.development.learngermanwithansk98.gateway.telegram.integr
  * @author Anton Skripin
  */
 public class WordCardSender {
+
+    private static final String WORD_CARD_TEMPLATE = """
+            ⭐️ #Words
+            
+            📝 Enjoy a new word card! ⬆️
+            """;
 
     private final TelegramClient telegramClient;
 
@@ -31,11 +39,14 @@ public class WordCardSender {
      * @param exerciseDocument document with words
      */
     public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
+        var documentCaption = new TelegramSenderSupport.DocumentCaption(WORD_CARD_TEMPLATE, "HTML");
+        var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), true);
+
         if (CollectionUtils.isEmpty(exerciseDocument.pages())) {
             throw new IllegalStateException("No exercise document is passed as a parameter!");
         }
 
-        documentSender(chatId, exerciseDocument, TelegramSenderSupport.DocumentRenderingParams.NO_RENDERING_PARAMS).accept(telegramClient);
+        documentSender(chatId, exerciseDocument, mediaParameters).accept(telegramClient);
     }
 
 

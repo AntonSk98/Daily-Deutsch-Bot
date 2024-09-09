@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ReadingPromptsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
@@ -25,13 +25,13 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class CreateReadingExercise extends ReadingExerciseSupport {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;
     private final ReadingPromptsConfiguration promptsConfiguration;
 
 
     protected CreateReadingExercise(CommandsConfiguration commandsConfiguration,
-                                    TelegramOutputGateway telegramOutputGateway,
+                                    ITelegramOutputGateway telegramOutputGateway,
                                     CommandCache commandCache,
                                     OpenAiGateway aiGateway,
                                     ReadingPromptsConfiguration promptsConfiguration,

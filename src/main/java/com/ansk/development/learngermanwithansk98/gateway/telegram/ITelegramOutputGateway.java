@@ -3,6 +3,7 @@ package com.ansk.development.learngermanwithansk98.gateway.telegram;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -62,11 +63,10 @@ public interface ITelegramOutputGateway {
     /**
      * Sends a writing exercise to the specified chat.
      *
-     * @param chatId                  the ID of the chat
-     * @param topic                   the writing exercise topic
-     * @param writingExerciseDocument the writing exercise document
+     * @param chatId          the ID of the chat
+     * @param writingExercise writing exercise content
      */
-    void sendWritingExercise(Long chatId, String topic, ExerciseDocument writingExerciseDocument);
+    void sendWritingExercise(Long chatId, WritingExercise writingExercise);
 
     /**
      * Sends a listening exercise to the specified chat.

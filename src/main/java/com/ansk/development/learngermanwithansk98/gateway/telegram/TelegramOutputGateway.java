@@ -5,6 +5,7 @@ import com.ansk.development.learngermanwithansk98.gateway.telegram.integration.*
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -66,8 +67,8 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
     }
 
     @Override
-    public void sendWritingExercise(Long chatId, String topic, ExerciseDocument writingExerciseDocument) {
-        writingExerciseSender.sendWritingExercise(chatId, topic, writingExerciseDocument);
+    public void sendWritingExercise(Long chatId, WritingExercise writingExercise) {
+        writingExerciseSender.sendWritingExercise(chatId, writingExercise);
     }
 
     @Override

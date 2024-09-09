@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CommandState;
 import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
@@ -21,11 +21,11 @@ import java.util.ListIterator;
 public abstract class AbstractCommandService implements ICommandService {
 
     private final CommandsConfiguration commandsConfiguration;
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final CommandCache commandCache;
 
     protected AbstractCommandService(CommandsConfiguration commandsConfiguration,
-                                     TelegramOutputGateway telegramOutputGateway,
+                                     ITelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache) {
         this.commandsConfiguration = commandsConfiguration;
         this.telegramOutputGateway = telegramOutputGateway;

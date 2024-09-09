@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -20,11 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewReadingExercise extends AbstractCommandService {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final ReadingExerciseCache readingExerciseCache;
 
     protected PreviewReadingExercise(CommandsConfiguration commandsConfiguration,
-                                     TelegramOutputGateway telegramOutputGateway,
+                                     ITelegramOutputGateway telegramOutputGateway,
                                      CommandCache commandCache,
                                      ReadingExerciseCache readingExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);

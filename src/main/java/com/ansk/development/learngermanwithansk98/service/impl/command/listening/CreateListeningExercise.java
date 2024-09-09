@@ -2,9 +2,10 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.listenin
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.ListeningPromptConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
+import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ListeningExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
@@ -24,22 +25,25 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class CreateListeningExercise extends AbstractCommandService {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;
     private final ListeningPromptConfiguration promptsConfiguration;
     private final ListeningExerciseDocumentPipe documentPipe;
+    private final ListeningExerciseCache listeningExerciseCache;
 
     protected CreateListeningExercise(CommandsConfiguration commandsConfiguration,
-                                      TelegramOutputGateway telegramOutputGateway,
+                                      ITelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,
                                       OpenAiGateway aiGateway,
                                       ListeningPromptConfiguration promptConfiguration,
-                                      ListeningExerciseDocumentPipe documentPipe) {
+                                      ListeningExerciseDocumentPipe documentPipe,
+                                      ListeningExerciseCache listeningExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.telegramOutputGateway = telegramOutputGateway;
         this.aiGateway = aiGateway;
         this.promptsConfiguration = promptConfiguration;
         this.documentPipe = documentPipe;
+        this.listeningExerciseCache = listeningExerciseCache;
     }
 
     @Override
@@ -49,13 +53,16 @@ public class CreateListeningExercise extends AbstractCommandService {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Transcribing an audio");
         ListeningExerciseModel listeningExerciseModel = model.map(ListeningExerciseModel.class);
         InputStream audioStream = telegramOutputGateway.streamAudio(listeningExerciseModel.getAudio());
         String transcribedAudio = aiGateway.transcribeAudio(audioStream);
 
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Splitting transcribed text into paragraphs");
         GenericPromptTemplate transcribedAudioToParagraphs = new GenericPromptTemplate(promptsConfiguration.textToParagraphs())
                 .resolveVariable(TEXT, transcribedAudio);
 
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating listening exercise");
         var paragraphs = aiGateway.sendRequest(transcribedAudioToParagraphs.getPrompt(), ListeningExercise.Paragraphs.class);
 
         GenericPromptTemplate listeningExercisePrompt = new GenericPromptTemplate(promptsConfiguration.createListeningExercise())
@@ -70,7 +77,7 @@ public class CreateListeningExercise extends AbstractCommandService {
                 listeningExerciseOutput.tasks().stream().map(ListeningExercise.Task::question).toList()
         );
 
-
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating a document with listening exercise");
         ExerciseDocument listeningExerciseDocument = documentPipe.pipe(listeningExerciseDocumentMetadata);
 
         ListeningExercise listeningExercise = new ListeningExercise(
@@ -79,8 +86,9 @@ public class CreateListeningExercise extends AbstractCommandService {
                 listeningExerciseDocument
         );
 
-
-        telegramOutputGateway.sendListeningExercise(parameters.chatId(), listeningExercise);
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Saving it all into cache");
+        listeningExerciseCache.saveListeningExercise(listeningExercise);
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Listening exercise saved into cache");
     }
 
     @Override

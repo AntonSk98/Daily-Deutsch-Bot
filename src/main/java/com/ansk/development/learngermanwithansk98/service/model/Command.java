@@ -21,8 +21,10 @@ public enum Command {
     READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
 
     WRITING_WITH_EXAMPLE("/writing_with_example"),
+    WRITING_EXERCISE_PREVIEW("/cached_writing_exercise"),
 
-    LISTENING_EXERCISE("/listening_exercise");
+    LISTENING_EXERCISE("/listening_exercise"),
+    LISTENING_EXERCISE_PREVIEW("/cached_listening_exercise");
 
     private final String path;
 

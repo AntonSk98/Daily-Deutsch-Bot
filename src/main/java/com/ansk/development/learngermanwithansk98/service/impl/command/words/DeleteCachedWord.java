@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -27,11 +27,11 @@ import static java.lang.String.format;
 @Service
 public class DeleteCachedWord extends AbstractCommandService {
 
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
 
     protected DeleteCachedWord(CommandsConfiguration commandsConfiguration,
-                               TelegramOutputGateway telegramOutputGateway,
+                               ITelegramOutputGateway telegramOutputGateway,
                                CommandCache commandCache,
                                WordCache wordCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);

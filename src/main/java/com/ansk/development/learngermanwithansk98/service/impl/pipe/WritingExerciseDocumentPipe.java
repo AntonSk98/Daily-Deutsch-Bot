@@ -15,7 +15,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
  * @author Anton Skripin
  */
 @Component
-public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<WritingExercise> implements IConverterPipe<WritingExercise, ExerciseDocument> {
+public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<WritingExercise.Output> implements IConverterPipe<WritingExercise.Output, ExerciseDocument> {
 
     private final SpringTemplateEngine springTemplateEngine;
 
@@ -24,7 +24,7 @@ public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<Writin
     }
 
     @Override
-    public ExerciseDocument pipe(WritingExercise writingExercise) {
+    public ExerciseDocument pipe(WritingExercise.Output writingExercise) {
         Document html = abstractPipe("writing_exercise_template.html", "writingExercise", writingExercise).apply(springTemplateEngine);
         PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);

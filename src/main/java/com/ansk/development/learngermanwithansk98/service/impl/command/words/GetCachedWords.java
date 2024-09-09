@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
@@ -28,10 +28,10 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 public class GetCachedWords extends AbstractCommandService {
 
     private final WordCache wordCache;
-    private final TelegramOutputGateway telegramOutputGateway;
+    private final ITelegramOutputGateway telegramOutputGateway;
 
     protected GetCachedWords(CommandsConfiguration commandsConfiguration,
-                             TelegramOutputGateway telegramOutputGateway,
+                             ITelegramOutputGateway telegramOutputGateway,
                              CommandCache commandCache,
                              WordCache wordCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
