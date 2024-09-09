@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutp
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ReadingExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
@@ -21,7 +21,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  *
  * @author Anton Skripin
  */
-public abstract class ReadingExerciseSupport extends AbstractCommandService {
+public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;

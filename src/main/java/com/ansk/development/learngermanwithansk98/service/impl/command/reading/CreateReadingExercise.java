@@ -71,7 +71,7 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new ReadingExerciseWithTextModel()
                 .init()
                 .addMapping(TEXT, ReadingExerciseWithTextModel::setText);

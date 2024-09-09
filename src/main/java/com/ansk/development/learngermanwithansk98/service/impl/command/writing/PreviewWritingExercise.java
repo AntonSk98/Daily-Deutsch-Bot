@@ -2,10 +2,9 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WritingExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @author Anton Skripin
  */
 @Service
-public class PreviewWritingExercise extends AbstractCommandService {
+public class PreviewWritingExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WritingExerciseCache writingExerciseCache;
@@ -47,7 +46,7 @@ public class PreviewWritingExercise extends AbstractCommandService {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

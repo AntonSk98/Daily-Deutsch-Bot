@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @author Anton Skripin
  */
 @Service
-public class PreviewListeningExercise extends AbstractCommandService {
+public class PreviewListeningExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final ListeningExerciseCache listeningExerciseCache;
@@ -46,7 +46,7 @@ public class PreviewListeningExercise extends AbstractCommandService {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

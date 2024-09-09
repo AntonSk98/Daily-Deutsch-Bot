@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WritingExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.WritingExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
@@ -18,7 +18,7 @@ import com.ansk.development.learngermanwithansk98.service.model.output.WritingEx
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
 
-public abstract class WritingExerciseSupport extends AbstractCommandService {
+public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
@@ -76,7 +76,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandService {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new WritingExerciseModel()
                 .init()
                 .addMapping(LEVEL, WritingExerciseModel::setLevel)

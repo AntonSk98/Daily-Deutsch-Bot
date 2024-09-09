@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @author Anton Skripin
  */
 @Service
-public class PreviewReadingExercise extends AbstractCommandService {
+public class PreviewReadingExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final ReadingExerciseCache readingExerciseCache;
@@ -38,19 +38,19 @@ public class PreviewReadingExercise extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters paramaters) {
+    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         readingExerciseCache.cachedReadingExercise().ifPresentOrElse(
                 readingExercise -> {
-                    telegramOutputGateway.sendPlainMessage(paramaters.chatId(), "Preparing reading exercise for preview");
-                    telegramOutputGateway.sendReadingExercise(paramaters.chatId(), readingExercise);
+                    telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Preparing reading exercise for preview");
+                    telegramOutputGateway.sendReadingExercise(parameters.chatId(), readingExercise);
 
                 },
-                () -> telegramOutputGateway.sendPlainMessage(paramaters.chatId(), "No reading exercise is in cache currently")
+                () -> telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No reading exercise is in cache currently")
         );
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

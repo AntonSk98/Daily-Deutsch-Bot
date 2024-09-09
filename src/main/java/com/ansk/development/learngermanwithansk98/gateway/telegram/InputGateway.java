@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
-import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
+import com.ansk.development.learngermanwithansk98.service.api.ICommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 /**
  * A component that processes incoming messages by determining the appropriate {@link Command}.
  * <p>
- * The {@link InputGateway} class delegates the execution of commands to the corresponding {@link ICommandService}.
+ * The {@link InputGateway} class delegates the execution of commands to the corresponding {@link ICommandProcessor}.
  * It uses a cache to manage the current command and supports text and audio inputs from users.
  *
  * @author Anton Skripin
@@ -26,17 +26,17 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 @Component
 public class InputGateway {
 
-    private final List<ICommandService> commandServices;
+    private final List<ICommandProcessor> commandServices;
 
     private final CommandCache commandCache;
 
     /**
      * Constructor.
      *
-     * @param commandServices See {@link ICommandService}
+     * @param commandServices See {@link ICommandProcessor}
      * @param commandCache    See {@link CommandCache}
      */
-    public InputGateway(List<ICommandService> commandServices,
+    public InputGateway(List<ICommandProcessor> commandServices,
                         CommandCache commandCache) {
         this.commandServices = commandServices;
         this.commandCache = commandCache;
@@ -46,7 +46,7 @@ public class InputGateway {
      * Processes an {@link Update} received from Telegram.
      * <p>
      * This method extracts the input -> determines the appropriate {@link Command} ->
-     * -> delegates the execution to the corresponding {@link ICommandService}.
+     * -> delegates the execution to the corresponding {@link ICommandProcessor}.
      * <p>
      * The state of the command is managed  {@link CommandCache}.
      * </p>

@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CommandState;
-import com.ansk.development.learngermanwithansk98.service.api.ICommandService;
+import com.ansk.development.learngermanwithansk98.service.api.ICommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -13,20 +13,20 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ListIterator;
 
 /**
- * Abstract implementation of {@link ICommandService}.
+ * Abstract implementation of {@link ICommandProcessor}.
  * This is required to handle parameters of a {@link Command} if provided by {@link CommandsConfiguration.CommandDefinition}.
  *
  * @author Anton Skripin
  */
-public abstract class AbstractCommandService implements ICommandService {
+public abstract class AbstractCommandProcessor implements ICommandProcessor {
 
     private final CommandsConfiguration commandsConfiguration;
     private final ITelegramOutputGateway telegramOutputGateway;
     private final CommandCache commandCache;
 
-    protected AbstractCommandService(CommandsConfiguration commandsConfiguration,
-                                     ITelegramOutputGateway telegramOutputGateway,
-                                     CommandCache commandCache) {
+    protected AbstractCommandProcessor(CommandsConfiguration commandsConfiguration,
+                                       ITelegramOutputGateway telegramOutputGateway,
+                                       CommandCache commandCache) {
         this.commandsConfiguration = commandsConfiguration;
         this.telegramOutputGateway = telegramOutputGateway;
         this.commandCache = commandCache;
@@ -35,7 +35,7 @@ public abstract class AbstractCommandService implements ICommandService {
     @Override
     public void processCommand(CommandParameters commandParameters) {
         Command command = supportedCommand();
-        AbstractCommandModel<?> model = supportedCommandModel();
+        AbstractCommandModel<?> model = supportedModelWithMapping();
         CommandState commandState = commandCache.getOrInit(command, model);
 
         // todo move it to a separate filter ?

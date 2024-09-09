@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CardToImagesConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.*;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
@@ -24,7 +24,7 @@ import java.util.List;
  * @author Anton Skripin
  */
 @Service
-public class PreviewCachedWords extends AbstractCommandService {
+public class PreviewCachedWords extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
@@ -47,25 +47,25 @@ public class PreviewCachedWords extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters commandParameters) {
+    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         List<Word> wordsInCache = wordCache.getWords();
 
         if (CollectionUtils.isEmpty(wordsInCache)) {
-            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "No words added in cache yet!");
+            telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No words added in cache yet!");
             return;
         }
 
         WordCard previewWordCard = new WordCard("preview", wordsInCache);
 
-        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "Please wait...I am preparing the preview...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Please wait...I am preparing the preview...");
 
         ExerciseDocument exerciseDocument = converterPipe.pipe(previewWordCard);
 
-        telegramOutputGateway.sendWordCard(commandParameters.chatId(), exerciseDocument);
+        telegramOutputGateway.sendWordCard(parameters.chatId(), exerciseDocument);
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

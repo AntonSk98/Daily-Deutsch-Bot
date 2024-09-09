@@ -6,5 +6,11 @@ package com.ansk.development.learngermanwithansk98.service.filter;
  * @author Anton Skripin
  */
 public interface IFilter {
+
+    /**
+     * Filters the command by passed {@link FilterParameters}.
+     *
+     * @param parameters parameters
+     */
     void filter(FilterParameters parameters);
 }

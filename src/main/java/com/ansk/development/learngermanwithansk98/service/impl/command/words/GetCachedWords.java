@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.*;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -25,7 +25,7 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
  * @author Anton Skripin
  */
 @Service
-public class GetCachedWords extends AbstractCommandService {
+public class GetCachedWords extends AbstractCommandProcessor {
 
     private final WordCache wordCache;
     private final ITelegramOutputGateway telegramOutputGateway;
@@ -45,15 +45,15 @@ public class GetCachedWords extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters commandParameters) {
+    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         Collection<WordInfo> wordInfoCollection = map(wordCache.getWords());
         String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
         String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
-        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), message);
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), message);
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

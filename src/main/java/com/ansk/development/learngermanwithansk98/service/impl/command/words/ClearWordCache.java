@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author Anton Skripin
  */
 @Service
-public class ClearWordCache extends AbstractCommandService {
+public class ClearWordCache extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
@@ -37,13 +37,13 @@ public class ClearWordCache extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> currentCommandModel, CommandParameters parameters) {
+    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         wordCache.cleanCache();
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Word cache has been successfully cleared.");
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new NoParamModel();
     }
 }

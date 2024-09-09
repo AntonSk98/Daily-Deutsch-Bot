@@ -1,9 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itextpdf.kernel.pdf.filespec.PdfStringFS;
 
 import java.util.LinkedHashMap;
 import java.util.ListIterator;
@@ -14,7 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * Abstract command model.
- * It encapsulates common fields and methods that are required by {@link AbstractCommandService}.
+ * It encapsulates common fields and methods that are required by {@link AbstractCommandProcessor}.
  *
  * @param <T> concrete command model
  */

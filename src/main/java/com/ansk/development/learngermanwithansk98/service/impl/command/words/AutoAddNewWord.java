@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutp
 import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
@@ -24,7 +24,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  * @author Anton Skripin
  */
 @Service
-public class AutoAddNewWord extends AbstractCommandService {
+public class AutoAddNewWord extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway openAiGateway;
@@ -63,7 +63,7 @@ public class AutoAddNewWord extends AbstractCommandService {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new AutoWordCompletionModel()
                 .init()
                 .addMapping("word", AutoWordCompletionModel::setWord);

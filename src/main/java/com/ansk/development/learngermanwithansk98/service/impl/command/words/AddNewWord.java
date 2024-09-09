@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
@@ -20,7 +20,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  * @author Anton Skripin
  */
 @Service
-public class AddNewWord extends AbstractCommandService {
+public class AddNewWord extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
@@ -40,13 +40,13 @@ public class AddNewWord extends AbstractCommandService {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters commandParameters) {
+    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         wordCache.addWord(model.map(Word.class));
-        telegramOutputGateway.sendMessageWithPayload(commandParameters.chatId(), "Word saved to cache!", model);
+        telegramOutputGateway.sendMessageWithPayload(parameters.chatId(), "Word saved to cache!", model);
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new Word()
                 .init()
                 .addMapping(WORD, Word::setWord)

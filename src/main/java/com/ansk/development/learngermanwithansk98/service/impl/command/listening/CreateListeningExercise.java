@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.gateway.openai.OpenAiGateway;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandService;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.ListeningExerciseDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.GenericPromptTemplate;
@@ -23,7 +23,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
 @Service
-public class CreateListeningExercise extends AbstractCommandService {
+    public class CreateListeningExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final OpenAiGateway aiGateway;
@@ -92,7 +92,7 @@ public class CreateListeningExercise extends AbstractCommandService {
     }
 
     @Override
-    public AbstractCommandModel<?> supportedCommandModel() {
+    public AbstractCommandModel<?> supportedModelWithMapping() {
         return new ListeningExerciseModel().init().addMapping(AUDIO, ListeningExerciseModel::setAudio);
     }
 }
