@@ -12,10 +12,20 @@ public class AutoWordCompletionModel extends AbstractCommandModel<AutoWordComple
 
     private String word;
 
+    /**
+     * Getter for {@link #word}.
+     *
+     * @return {@link #word}
+     */
     public String getWord() {
         return word;
     }
 
+    /**
+     * Setter for {@link #word}.
+     *
+     * @param word {@link #word}
+     */
     public void setWord(String word) {
         this.word = word;
     }

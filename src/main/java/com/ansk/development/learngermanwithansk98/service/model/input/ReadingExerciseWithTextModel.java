@@ -8,10 +8,18 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
 public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingExerciseWithTextModel> {
     private String text;
 
+    /**
+     * Getter for {@link #text}.
+     * @return {@link #text}
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Setter for {@link #text}.
+     * @param text {@link #text}
+     */
     public void setText(String text) {
         this.text = text;
     }
