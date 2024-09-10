@@ -28,14 +28,30 @@ public enum Command {
 
     private final String path;
 
+    /**
+     * Creates a new command.
+     *
+     * @param path path
+     */
     Command(String path) {
         this.path = path;
     }
 
+    /**
+     * Get path of current command
+     *
+     * @return pat
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Finds a command by its string representation.
+     *
+     * @param command command as string
+     * @return command
+     */
     public static Optional<Command> find(String command) {
         return Arrays.stream(Command.values())
                 .filter(cmd -> cmd.getPath().equals(command))
