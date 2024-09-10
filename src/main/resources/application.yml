@@ -57,12 +57,12 @@ commands:
         - key: topic
           required: true
           prompt: please provide the topic for writing exercise
-    - path: /cached_writing_exercise
+    - path: /preview_writing_exercise
     - path: /listening_exercise
       parameters:
         - key: audio
           prompt: please provide audio
-    - path: /cached_listening_exercise
+    - path: /preview_listening_exercise
 
 bot:
   user:

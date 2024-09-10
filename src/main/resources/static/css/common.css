@@ -3,29 +3,16 @@
     align-items: end;
 }
 
-.log > img,
-.reference > img {
+.log > img {
     height: auto;
 }
 
 .logo > img {
-    width: 100px;
-}
-
-.reference > img {
-    width: 50px;
-    margin-left: 1.5rem;
-}
-
-.top-separator {
-    width: 33%;
-    margin: 1rem 0;
-    border-top: solid 2px #6D5DFD;
-    border-radius: 3px;
+    width: 125px;
 }
 
 .level {
-    color: #6D5DFD;
+    color: #216968;
     font-weight: bold;
     font-size: 1.2rem;
 }
@@ -36,7 +23,7 @@
     font-weight: bold;
     font-size: 1.5rem;
     color: #6B6B6B;
-    border-right: solid 3px #6D5DFD;
+    border-right: solid 3px #216968;
     padding-top: 0.5rem;
     padding-right: 0.5rem;
 }
@@ -49,7 +36,7 @@
 
 .metadata-container span:nth-child(1) {
     font-weight: bold;
-    color: #6D5DFD;
+    color: #216968;
     margin-right: 4px;
 }
 
@@ -69,7 +56,13 @@
 }
 
 .follow_me .channel {
-    color: #6D5DFD;
+    color: #216968;
+}
+
+.left-border {
+    border-left: 3px solid #216968;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
 }
 
 

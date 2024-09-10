@@ -18,7 +18,7 @@
 
 .table-container th {
     padding: 0.7rem 1.2rem;
-    background-color: #6D5DFD;
+    background-color: #216968;
     color: white;
     font-weight: bold;
     text-transform: uppercase;
@@ -39,7 +39,7 @@
 }
 
 .border-bottom {
-    border-bottom: 2px solid #6D5DFD;
+    border-bottom: 2px solid #216968;
     padding-bottom: 0.7rem;
 }
 
@@ -58,7 +58,7 @@
 .info-lack {
     font-weight: bold;
     font-size: 1.5rem;
-    color: #6D5DFD;
+    color: #216968;
 }
 
 .frequency-container,
