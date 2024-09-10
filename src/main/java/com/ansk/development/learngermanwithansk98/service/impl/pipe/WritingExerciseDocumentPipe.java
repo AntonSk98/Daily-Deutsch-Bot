@@ -19,6 +19,11 @@ public class WritingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<Writin
 
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * Constructor.
+     *
+     * @param springTemplateEngine See {@link SpringTemplateEngine}
+     */
     public WritingExerciseDocumentPipe(SpringTemplateEngine springTemplateEngine) {
         this.springTemplateEngine = springTemplateEngine;
     }

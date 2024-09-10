@@ -18,6 +18,11 @@ public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard
 
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * Constructor.
+     *
+     * @param springTemplateEngine See {@link SpringTemplateEngine}
+     */
     public CardToImagesConverterPipe(SpringTemplateEngine springTemplateEngine) {
         this.springTemplateEngine = springTemplateEngine;
     }

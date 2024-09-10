@@ -23,6 +23,12 @@ import static com.ansk.development.learngermanwithansk98.service.model.Navigatio
  */
 public class MapperUtils {
 
+    /**
+     * Maps an update message to navigation parameters.
+     *
+     * @param update telegram message
+     * @return navigation
+     */
     public static Navigation map(Update update) {
         return Optional.ofNullable(update.getCallbackQuery())
                 .map(CallbackQuery::getData)
@@ -38,6 +44,12 @@ public class MapperUtils {
                 }).orElse(null);
     }
 
+    /**
+     * Maps the collection of {@link Word} to the projection collection of {@link WordInfo}.
+     *
+     * @param words words
+     * @return projection collections
+     */
     public static Collection<WordInfo> map(Collection<Word> words) {
         Map<String, Long> wordToTotalOccurrences = words
                 .stream()

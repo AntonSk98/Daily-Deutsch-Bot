@@ -18,6 +18,11 @@ public class ListeningExerciseDocumentPipe extends AbstractObjectToHtmlPipe<List
 
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * Constructor.
+     *
+     * @param springTemplateEngine See {@link SpringTemplateEngine}
+     */
     public ListeningExerciseDocumentPipe(SpringTemplateEngine springTemplateEngine) {
         this.springTemplateEngine = springTemplateEngine;
     }

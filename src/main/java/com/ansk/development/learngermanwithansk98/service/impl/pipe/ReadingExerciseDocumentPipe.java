@@ -18,6 +18,11 @@ public class ReadingExerciseDocumentPipe extends AbstractObjectToHtmlPipe<Readin
 
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * Constructor.
+     *
+     * @param springTemplateEngine See {@link SpringTemplateEngine}
+     */
     public ReadingExerciseDocumentPipe(SpringTemplateEngine springTemplateEngine) {
         this.springTemplateEngine = springTemplateEngine;
     }
