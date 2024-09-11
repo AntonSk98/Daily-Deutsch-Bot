@@ -10,24 +10,16 @@
     </parent>
     <groupId>com.ansk.development</groupId>
     <artifactId>learn-german-with-ansk98</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>learn-german-with-ansk98</name>
     <description>learn-german-with-ansk98</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>21</java.version>
+        <html2pdf.version>5.0.5</html2pdf.version>
+        <pdfbox.version>3.0.3</pdfbox.version>
+        <commons-io.version>2.16.1</commons-io.version>
+        <telegrambots.version>7.9.0</telegrambots.version>
+        <commons-text.version>1.12.0</commons-text.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,37 +46,37 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>html2pdf</artifactId>
-            <version>5.0.5</version>
+            <version>${html2pdf.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>3.0.3</version>
+            <version>${pdfbox.version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.16.1</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-longpolling</artifactId>
-            <version>7.9.0</version>
+            <version>${telegrambots.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
-            <version>7.9.0</version>
+            <version>${telegrambots.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.12.0</version>
+            <version>${commons-text.version}</version>
         </dependency>
     </dependencies>
 
