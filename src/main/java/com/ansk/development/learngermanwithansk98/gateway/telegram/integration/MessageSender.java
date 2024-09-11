@@ -101,4 +101,23 @@ public class MessageSender {
             throw new IllegalStateException("Unexpected error occurred while sending a message with payload to telegram", e);
         }
     }
+
+    /**
+     * Sends an error message.
+     *
+     * @param chatId  chat id
+     * @param message message
+     */
+    public void sendErrorMessage(Long chatId, String message) {
+        String errorReport = "⚠\uFE0F   <b>Error occurred</b>   ⬇\uFE0F" + "\n\n" + message;
+
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(errorReport).parseMode("HTML").build();
+
+        try {
+            telegramClient.execute(sendMessage);
+
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Unexpected error occurred while sending an error", e);
+        }
+    }
 }

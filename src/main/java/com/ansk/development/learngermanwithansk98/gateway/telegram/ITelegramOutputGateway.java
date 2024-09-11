@@ -35,6 +35,13 @@ public interface ITelegramOutputGateway {
     void sendMessageWithNavigation(Long chatId, String message);
 
     /**
+     * Sends an error message.
+     * @param chatId chat id
+     * @param message message
+     */
+    void sendErrorMessage(Long chatId, String message);
+
+    /**
      * Sends a message with an attached code payload to the specified chat.
      *
      * @param chatId  the ID of the chat

@@ -155,6 +155,7 @@ ai:
           "exampleTranslation": "provide the translation of the example sentence"
         }
         Ensure the explanation is concise, accurate, and adapted to the word’s usage today.
+        If a word is a noun always include preposition in the 'word' variable. Example: das  Haus
         Here is the word: {word}.
   writing:
     prompts:
