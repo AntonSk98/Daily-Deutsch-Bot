@@ -18,12 +18,13 @@ import com.ansk.development.learngermanwithansk98.service.model.output.Listening
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.Objects;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.AUDIO;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
 @Service
-    public class CreateListeningExercise extends AbstractCommandProcessor {
+public class CreateListeningExercise extends AbstractCommandProcessor {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final AIGateway aiGateway;
@@ -69,6 +70,11 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
                 .resolveVariable(TEXT, transcribedAudio);
 
         var listeningExerciseOutput = aiGateway.sendRequest(listeningExercisePrompt.getPrompt(), ListeningExercise.Output.class);
+
+        Objects.requireNonNull(listeningExerciseOutput.level(), "Listening exercise | Level cannot be null");
+        Objects.requireNonNull(listeningExerciseOutput.title(), "LListening exercise | Title cannot be null");
+        Objects.requireNonNull(paragraphs.paragraphs(), "Transcription cannot be null");
+        Objects.requireNonNull(listeningExerciseOutput.tasks(), "Listening tasks cannot be null");
 
         var listeningExerciseDocumentMetadata = new ListeningExercise.Document(
                 listeningExerciseOutput.level(),
