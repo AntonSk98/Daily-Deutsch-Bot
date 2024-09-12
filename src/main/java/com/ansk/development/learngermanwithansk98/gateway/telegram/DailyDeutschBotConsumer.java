@@ -1,6 +1,7 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
+import com.ansk.development.learngermanwithansk98.exception.CommandExceptionHandler;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.chatId;
 
 /**
  * A consumer class for handling updates in a single-threaded, long-polling manner for the Daily Deutsch Bot.
@@ -25,22 +28,27 @@ public class DailyDeutschBotConsumer implements LongPollingSingleThreadUpdateCon
     private final DailyDeutschBotConfiguration config;
     private final FilterChain filterChain;
     private final InputGateway inputGateway;
+    private final CommandExceptionHandler exceptionHandler;
+
     private TelegramBotsLongPollingApplication longPollingApplication;
 
 
     /**
      * Constructor.
      *
-     * @param config       See {@link DailyDeutschBotConfiguration}
-     * @param filterChain  See {@link FilterChain}
-     * @param inputGateway See {@link InputGateway}
+     * @param config           See {@link DailyDeutschBotConfiguration}
+     * @param filterChain      See {@link FilterChain}
+     * @param inputGateway     See {@link InputGateway}
+     * @param exceptionHandler See {@link CommandExceptionHandler}
      */
     public DailyDeutschBotConsumer(DailyDeutschBotConfiguration config,
                                    FilterChain filterChain,
-                                   InputGateway inputGateway) {
+                                   InputGateway inputGateway,
+                                   CommandExceptionHandler exceptionHandler) {
         this.config = config;
         this.filterChain = filterChain;
         this.inputGateway = inputGateway;
+        this.exceptionHandler = exceptionHandler;
     }
 
     /**
@@ -63,8 +71,13 @@ public class DailyDeutschBotConsumer implements LongPollingSingleThreadUpdateCon
      */
     @Override
     public void consume(Update update) {
-        filterChain.filter(update);
-        inputGateway.process(update);
+        try {
+            filterChain.filter(update);
+            inputGateway.process(update);
+        } catch (Exception e) {
+            exceptionHandler.handleGlobalException(chatId(update), e);
+        }
+
     }
 
     /**

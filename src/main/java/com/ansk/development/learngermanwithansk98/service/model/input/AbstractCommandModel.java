@@ -99,7 +99,7 @@ public abstract class AbstractCommandModel<T> {
     }
 
     /**
-     * Checks if the given key is defined in the current command model.
+     * Checks if the value is already set for the given key in the current command model.
      *
      * @param key the input parameter key to check
      * @return {@code true} if the key is defined, {@code false} otherwise

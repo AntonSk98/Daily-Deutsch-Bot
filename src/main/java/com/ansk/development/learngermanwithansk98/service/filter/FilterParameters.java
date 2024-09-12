@@ -5,5 +5,5 @@ package com.ansk.development.learngermanwithansk98.service.filter;
  *
  * @author Anton Skripin
  */
-public class FilterParameters {
+public record FilterParameters(Long userId, String input) {
 }

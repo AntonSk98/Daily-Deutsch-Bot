@@ -110,14 +110,14 @@ public class MessageSender {
      * @param message message
      */
     public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
-        String errorReport = "⚠\uFE0F  <b>Error occurred</b>  /➡\uFE0F"
+        String errorReport = "⚠\uFE0F  <b>Error occurred</b>  ➡\uFE0F"
                 + "\n\n" + "<b>Class: </b>"
                 + clazz.getSimpleName()
                 + "\n"
                 + "<b>"
                 + "Message: "
                 + "</b>"
-                + (StringUtils.isEmpty(message) ? "-" : message);
+                + (StringUtils.isEmpty(message) ? "N/A" : message);
 
         SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(errorReport).parseMode("HTML").build();
 
