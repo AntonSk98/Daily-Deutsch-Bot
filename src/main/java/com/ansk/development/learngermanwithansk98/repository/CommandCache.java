@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -68,5 +69,14 @@ public class CommandCache {
      */
     public void setCurrentCommand(Command currentCommand) {
         this.currentCommand = currentCommand;
+    }
+
+    /**
+     * Finds current command state that is being processed.
+     *
+     * @return current command state or empty
+     */
+    public Optional<CommandState> findCurrentCommandState() {
+        return Optional.ofNullable(commandToModel.get(this.currentCommand));
     }
 }

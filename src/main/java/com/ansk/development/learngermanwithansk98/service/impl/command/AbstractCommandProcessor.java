@@ -8,7 +8,6 @@ import com.ansk.development.learngermanwithansk98.service.api.ICommandProcessor;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ListIterator;
 
@@ -44,16 +43,6 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
         Command command = supportedCommand();
         AbstractCommandModel<?> model = supportedModelWithMapping();
         CommandState commandState = commandCache.getOrInit(command, model);
-
-        // todo move it to a separate filter ?
-        if (StringUtils.isNotEmpty(commandState.getAwaitingKey())
-                && StringUtils.isEmpty(commandParameters.input())
-                && !commandState.getCurrentCommandModel().isDefined(commandState.getAwaitingKey())
-                && commandsConfiguration.findParameter(command.getPath(), commandState.getAwaitingKey()).required()
-        ) {
-            telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), "This is a required parameter");
-            return;
-        }
 
         if (commandParameters.navigation() != null) {
             handleNavigation(commandParameters, commandState);
