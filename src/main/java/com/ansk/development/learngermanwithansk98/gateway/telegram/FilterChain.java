@@ -1,10 +1,14 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
+import com.ansk.development.learngermanwithansk98.service.filter.FilterParameters;
 import com.ansk.development.learngermanwithansk98.service.filter.IFilter;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+
+import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.input;
+import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.userId;
 
 /**
  * A component that applies a chain of filters to a given input received from {@link DailyDeutschBotConsumer}.
@@ -33,6 +37,11 @@ public class FilterChain {
      * @param update the {@link Update} to be filtered.
      */
     public void filter(Update update) {
-        // todo
+        FilterParameters filterParameters = new FilterParameters(
+                userId(update),
+                input(update)
+        );
+
+        filters.forEach(iFilter -> iFilter.filter(filterParameters));
     }
 }
