@@ -120,7 +120,7 @@ public class AIGateway {
         ByteArrayResource byteArrayResource = new ByteArrayResource(audioStream.readAllBytes()) {
             @Override
             public String getFilename() {
-                return "audio.mp3";  // Provide the filename
+                return "audio.mp3";
             }
         };
 

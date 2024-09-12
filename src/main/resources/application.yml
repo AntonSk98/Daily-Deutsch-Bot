@@ -65,7 +65,7 @@ commands:
     - path: /preview_listening_exercise
 
 bot:
-  user:
+  verified-user: 402877944
   token: '6925832793:AAFDt_BI3-3Olw6iqrvuYczCvwKgDk5Qx1w'
 
 ai:
