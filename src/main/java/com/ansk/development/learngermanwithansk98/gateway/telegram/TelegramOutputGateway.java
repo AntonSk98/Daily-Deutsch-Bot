@@ -52,8 +52,8 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
     }
 
     @Override
-    public void sendErrorMessage(Long chatId, String message) {
-        messageSender.sendErrorMessage(chatId, message);
+    public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
+        messageSender.sendErrorMessage(chatId, clazz, message);
     }
 
     @Override

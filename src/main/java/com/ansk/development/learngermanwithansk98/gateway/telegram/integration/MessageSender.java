@@ -3,6 +3,7 @@ package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -108,8 +109,15 @@ public class MessageSender {
      * @param chatId  chat id
      * @param message message
      */
-    public void sendErrorMessage(Long chatId, String message) {
-        String errorReport = "⚠\uFE0F   <b>Error occurred</b>   ⬇\uFE0F" + "\n\n" + message;
+    public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
+        String errorReport = "⚠\uFE0F  <b>Error occurred</b>  /➡\uFE0F"
+                + "\n\n" + "<b>Class: </b>"
+                + clazz.getSimpleName()
+                + "\n"
+                + "<b>"
+                + "Message: "
+                + "</b>"
+                + (StringUtils.isEmpty(message) ? "-" : message);
 
         SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(errorReport).parseMode("HTML").build();
 

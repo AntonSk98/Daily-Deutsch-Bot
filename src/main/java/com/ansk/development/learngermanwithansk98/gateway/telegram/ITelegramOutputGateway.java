@@ -37,9 +37,10 @@ public interface ITelegramOutputGateway {
     /**
      * Sends an error message.
      * @param chatId chat id
+     * @param clazz exception class
      * @param message message
      */
-    void sendErrorMessage(Long chatId, String message);
+    void sendErrorMessage(Long chatId, Class<?> clazz, String message);
 
     /**
      * Sends a message with an attached code payload to the specified chat.

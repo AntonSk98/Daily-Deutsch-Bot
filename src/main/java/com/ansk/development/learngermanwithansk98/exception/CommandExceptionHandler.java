@@ -27,6 +27,6 @@ public class CommandExceptionHandler {
      * @param ex exception
      */
     public void handleGlobalException(Long chatId, Exception ex) {
-        outputGateway.sendErrorMessage(chatId, ex.getMessage());
+        outputGateway.sendErrorMessage(chatId, ex.getClass(), ex.getMessage());
     }
 }

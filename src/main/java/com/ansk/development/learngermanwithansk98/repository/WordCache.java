@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Cache to store {@link Word}s in the service of {@link AddNewWord}.
@@ -44,7 +45,7 @@ public class WordCache {
     public void deleteWord(Word word) {
         words = words.stream()
                 .filter(cachedWord -> !StringUtils.equalsIgnoreCase(cachedWord.getWord(), word.getWord()))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**

@@ -40,7 +40,7 @@ public class WordCardSender {
      */
     public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
         var documentCaption = new TelegramSenderSupport.DocumentCaption(WORD_CARD_TEMPLATE, "HTML");
-        var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), true);
+        var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), false);
 
         if (CollectionUtils.isEmpty(exerciseDocument.pages())) {
             throw new IllegalStateException("No exercise document is passed as a parameter!");
