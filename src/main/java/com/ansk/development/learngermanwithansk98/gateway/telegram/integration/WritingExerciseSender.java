@@ -19,11 +19,11 @@ public class WritingExerciseSender {
     private static final String WRITING_EXERCISE_TEMPLATE = """
             ⭐️ #Writing
             
-            🗒️ Please write your opinion on the following topic:
+            🗒️ Share your thoughts on the topic below:
             
             <b>%s</b>
             
-            Also feel free to check out our sample text ⬆️
+            You can also always review our sample text for inspiration ⬆️
             """;
 
     /**

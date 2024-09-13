@@ -36,7 +36,8 @@ public class ReadingExerciseSender {
 
     private static final String READING_EXERCISE_DOCUMENT = """
             📄️ #ReadingExerciseDocument
-            📚 Here’s the reading exercise.
+            
+            📚 Your Reading Challenge Awaits!
             """;
 
     private final TelegramClient telegramClient;

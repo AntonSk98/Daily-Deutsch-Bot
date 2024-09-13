@@ -30,15 +30,17 @@ public class AudioExerciseSender {
     private static final String LISTENING_EXERCISE_TEMPLATE = """
             ⭐️ #Listening
             
-            🎧 <b>Please listen to the audio and complete the exercise in the 🗒️ document below ⬇️</b>
+            🎧 Tune in to the audio and complete the task in the 🗒️ document below ⬇️.
             
-            <i>Blurred answers are also attached 👇. 
-            Do not look at them before completing exercise!</i>
+            <b>Resist the temptation!</b>
+            Blurred answers are included 👇...
+            ...but don't peek until you've given it your best shot!
             """;
 
     private static final String LISTENING_EXERCISE_DOCUMENT = """
             📄️ #ListeningExerciseDocument
-            📚 Here’s the listening exercise.
+            
+            🎧 Your Listening Challenge Awaits!
             """;
 
     private final TelegramClient telegramClient;
