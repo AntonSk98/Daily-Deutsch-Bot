@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reading exercise</title>
+    <title>Lesen</title>
     <link rel="stylesheet"
           type="text/css"
           th:href="${resources} + '/css/reading_exercise_template.css'"/>
@@ -35,7 +35,7 @@
         </div>
 
         <div class="questions-container">
-            <div class="questions-title">Questions:</div>
+            <div class="questions-title">Fragen:</div>
             <ul class="questions">
                 <li th:each="question, stat : ${readingExercise.questions}">
                     <span th:text="${stat.count} + '. '" class="question-number"></span>

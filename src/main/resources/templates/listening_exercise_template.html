@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reading exercise</title>
+    <title>Hören</title>
     <link rel="stylesheet"
           type="text/css"
           th:href="${resources} + '/css/listening_exercise_template.css'"/>
@@ -25,14 +25,14 @@
         <section th:if="${listeningExercise.title} != null"
                  class="title">
             <div class="level" th:text="${listeningExercise.level}"></div>
-            <span>Listening</span>
+            <span>Hören</span>
         </section>
 
         <div class="questions-container">
             <div class="listening-title"
                  th:if="${listeningExercise.title != null && !listeningExercise.title.isEmpty()}"
                  th:text="${listeningExercise.title}"></div>
-            <div class="questions-title">Questions:</div>
+            <div class="questions-title">Fragen:</div>
             <ul class="questions">
                 <li th:each="question, stat : ${listeningExercise.questions}">
                     <span th:text="${stat.count} + '. '" class="question-number"></span>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="questions-separator">
-            <div>Transcription</div>
+            <div>Skript</div>
         </div>
 
         <div class="text-container">
