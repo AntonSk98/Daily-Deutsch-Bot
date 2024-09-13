@@ -5,17 +5,17 @@
     <title>Vocabulary card</title>
     <link rel="stylesheet"
           type="text/css"
-          href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/vocab_template.css"/>
+          th:href="${resources} + '/css/vocab_template.css'"/>
     <link rel="stylesheet"
           type="text/css"
-          href="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/css/common.css"/>
+          th:href="${resources} + '/css/common.css'"/>
 </head>
 <body>
 <div class="outer-container">
     <div class="container">
         <div class="header">
             <div class="logo">
-                <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/logo.png"/>
+                <img th:src="${resources} + '/img/logo.png'"/>
             </div>
         </div>
 
@@ -28,9 +28,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Word</th>
-                        <th>Translation</th>
-                        <th>Meaning</th>
+                        <th>Wort</th>
+                        <th>Übersetzung</th>
+                        <th>Bedeutung</th>
                     </tr>
                 </thead>
 
@@ -52,14 +52,11 @@
 
                             <td colspan="1">
                                 <div class="frequency-container">
-                                    <span>Frequency:</span>
+                                    <span>Worthäufigkeit:</span>
                                     <div class="word-frequency">
                                         <div th:if="${word.frequency > 0}"
                                                 th:each="i : ${#numbers.sequence(1, 5)}">
-                                            <img th:src="${word.frequency >= i ?
-                                                '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/filled-star.png'
-                                                : '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/star.png'}"
-                                            />
+                                            <img th:src="${word.frequency >= i ? resources + '/img/filled-star.png' : resources + '/img/star.png'}" />
                                         </div>
                                     </div>
                                 </div>
@@ -72,7 +69,7 @@
                                 class="example-top-separator">
 
                                 <div class="example">
-                                    <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/circle.png">
+                                    <img th:src="${resources} + '/img/circle.png'">
                                     <span th:text="${word.example}"></span>
                                 </div>
 
@@ -83,7 +80,7 @@
                             class="example-translation-row">
                             <td colspan="3" class="border-bottom">
                                 <div class="example-translation">
-                                    <img src="/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static/img/circle-secondary.png">
+                                    <img th:src="${resources} + '/img/circle-secondary.png'">
                                     <span th:text="${word.exampleTranslation}"></span>
                                 </div>
                             </td>
@@ -99,7 +96,7 @@
                 <span th:text="${wordCard.id}"></span>
             </div>
             <div class="follow_me">
-                <span>Learn more - follow <span class="channel">@daily_deutsch</span> on Telegram!</span>
+                <span>Bleib am Ball – abonniere <span class="channel">@daily_deutsch</span> auf Telegram!</span>
             </div>
         </footer>
     </div>

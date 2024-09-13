@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
+import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
@@ -16,20 +17,21 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Service
 public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard> implements IConverterPipe<WordCard, ExerciseDocument> {
 
-    private final SpringTemplateEngine springTemplateEngine;
 
     /**
      * Constructor.
      *
+     * @param configuration        See {@link DailyDeutschBotConfiguration}
      * @param springTemplateEngine See {@link SpringTemplateEngine}
      */
-    public CardToImagesConverterPipe(SpringTemplateEngine springTemplateEngine) {
-        this.springTemplateEngine = springTemplateEngine;
+    protected CardToImagesConverterPipe(DailyDeutschBotConfiguration configuration, SpringTemplateEngine springTemplateEngine) {
+        super(configuration, springTemplateEngine);
     }
+
 
     @Override
     public ExerciseDocument pipe(WordCard wordCard) {
-        Document html = abstractPipe("vocab_template", "wordCard", wordCard).apply(springTemplateEngine);
+        Document html = abstractPipe("vocab_template", "wordCard", wordCard);
         PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);
     }

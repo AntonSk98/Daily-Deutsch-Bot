@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
+import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
@@ -16,20 +17,21 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Component
 public class ListeningExerciseDocumentPipe extends AbstractObjectToHtmlPipe<ListeningExercise.Document> implements IConverterPipe<ListeningExercise.Document, ExerciseDocument> {
 
-    private final SpringTemplateEngine springTemplateEngine;
 
     /**
      * Constructor.
      *
+     * @param configuration        See {@link DailyDeutschBotConfiguration}
      * @param springTemplateEngine See {@link SpringTemplateEngine}
      */
-    public ListeningExerciseDocumentPipe(SpringTemplateEngine springTemplateEngine) {
-        this.springTemplateEngine = springTemplateEngine;
+    protected ListeningExerciseDocumentPipe(DailyDeutschBotConfiguration configuration,
+                                            SpringTemplateEngine springTemplateEngine) {
+        super(configuration, springTemplateEngine);
     }
 
     @Override
     public ExerciseDocument pipe(ListeningExercise.Document exercise) {
-        Document html = abstractPipe("listening_exercise_template", "listeningExercise", exercise).apply(springTemplateEngine);
+        Document html = abstractPipe("listening_exercise_template", "listeningExercise", exercise);
         PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);
     }
