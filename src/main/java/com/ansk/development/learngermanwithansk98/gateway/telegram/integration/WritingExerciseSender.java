@@ -17,9 +17,9 @@ public class WritingExerciseSender {
     private final TelegramClient telegramClient;
 
     private static final String WRITING_EXERCISE_TEMPLATE = """
-            ⭐️ #Writing
+            ⭐️ #Writing <b>| %s</b>
             
-            🗒️ Share your thoughts on the topic below:
+            🗒️ Share your thoughts on the following topic:
             
             <b>%s</b>
             
@@ -42,7 +42,7 @@ public class WritingExerciseSender {
      * @param writingExercise writing exercise
      */
     public void sendWritingExercise(Long chatId, WritingExercise writingExercise) {
-        final String writingExerciseText = String.format(WRITING_EXERCISE_TEMPLATE, writingExercise.topic());
+        final String writingExerciseText = String.format(WRITING_EXERCISE_TEMPLATE, writingExercise.level(), writingExercise.topic());
 
         var documentCaption = new TelegramSenderSupport.DocumentCaption(writingExerciseText, "HTML");
         var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), true);

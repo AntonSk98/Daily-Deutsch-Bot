@@ -86,7 +86,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Saving in cache...");
 
-        writingExerciseCache.saveWritingExercise(new WritingExercise(writingExercise.topic(), writingExerciseDocument));
+        writingExerciseCache.saveWritingExercise(new WritingExercise(writingExercise.topic(), writingExercise.level(), writingExerciseDocument));
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Created and saved!");
     }

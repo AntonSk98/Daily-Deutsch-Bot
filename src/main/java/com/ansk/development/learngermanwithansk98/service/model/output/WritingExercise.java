@@ -6,10 +6,11 @@ import java.util.List;
  * Represents a generated writing exercise, including its topic and associated document with writing sample.
  *
  * @param topic            the topic of the writing exercise
+ * @param level            writing exercise difficulty
  * @param exerciseDocument the {@link ExerciseDocument} containing details and content for the writing exercise
  * @author Anton Skripin
  */
-public record WritingExercise(String topic, ExerciseDocument exerciseDocument) {
+public record WritingExercise(String topic, String level, ExerciseDocument exerciseDocument) {
 
     /**
      * Represents the structure of a writing exercise, including its level, topic, and a list of writing tasks.
