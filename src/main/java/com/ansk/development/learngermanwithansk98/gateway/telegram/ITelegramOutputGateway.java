@@ -1,9 +1,6 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
-import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
-import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
-import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
-import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.*;
 import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -36,8 +33,9 @@ public interface ITelegramOutputGateway {
 
     /**
      * Sends an error message.
-     * @param chatId chat id
-     * @param clazz exception class
+     *
+     * @param chatId  chat id
+     * @param clazz   exception class
      * @param message message
      */
     void sendErrorMessage(Long chatId, Class<?> clazz, String message);
@@ -107,4 +105,12 @@ public interface ITelegramOutputGateway {
 
         return new OkHttpTelegramClient(client, token);
     }
+
+    /**
+     * Sends dynamic prompt to edit a listening exercise.
+     *
+     * @param chatId        chat id
+     * @param dynamicPrompt dynamic prompt
+     */
+    void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt dynamicPrompt);
 }

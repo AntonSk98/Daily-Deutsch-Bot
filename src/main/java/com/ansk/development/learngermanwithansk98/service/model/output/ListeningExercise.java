@@ -6,13 +6,20 @@ import java.util.List;
  * Represents the details of a listening exercise, including audio, tasks, and an associated document.
  * This record encapsulates the main components of a listening exercise.
  *
- * @param audio    the audio file or ID for the listening exercise
- * @param level    difficulty of a listening exercise
- * @param tasks    the {@link ListeningTasks} associated with the listening exercise
- * @param document the {@link ExerciseDocument} containing additional document details for the exercise
+ * @param audio         the audio file or ID for the listening exercise
+ * @param level         difficulty of a listening exercise
+ * @param title         title of the listening exercise
+ * @param tasks         the {@link ListeningTasks} associated with the listening exercise
+ * @param document      the {@link ExerciseDocument} containing additional document details for the exercise
+ * @param transcription transcription split into paragraphs
  * @author Anton Skripin
  */
-public record ListeningExercise(String audio, String level, ListeningTasks tasks, ExerciseDocument document) {
+public record ListeningExercise(String audio,
+                                String level,
+                                String title,
+                                ListeningTasks tasks,
+                                ExerciseDocument document,
+                                List<String> transcription) {
 
     /**
      * Represents the structure for a listening exercise, including the level, title, and a list of tasks.

@@ -89,8 +89,10 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
         ListeningExercise listeningExercise = new ListeningExercise(
                 listeningExerciseModel.getAudio(),
                 listeningExerciseOutput.level(),
+                listeningExerciseOutput.title(),
                 new ListeningExercise.ListeningTasks(listeningExerciseOutput.tasks()),
-                listeningExerciseDocument
+                listeningExerciseDocument,
+                paragraphs.paragraphs()
         );
 
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Saving it all into cache");

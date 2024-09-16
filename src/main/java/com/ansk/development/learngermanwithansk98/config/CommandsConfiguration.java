@@ -57,13 +57,15 @@ public record CommandsConfiguration(List<CommandDefinition> commandDefinition) {
         /**
          * Represents a parameter of a command.
          *
-         * @param key      the key that identifies the parameter.
-         * @param prompt   the prompt text for the parameter.
-         * @param required whether the parameter is mandatory.
+         * @param key           the key that identifies the parameter.
+         * @param prompt        the prompt text for the parameter.
+         * @param dynamicPrompt whether a dynamic prompt should be provided
+         * @param required      whether the parameter is mandatory.
          */
         public record Parameter(
                 String key,
                 String prompt,
+                boolean dynamicPrompt,
                 boolean required) {
         }
     }

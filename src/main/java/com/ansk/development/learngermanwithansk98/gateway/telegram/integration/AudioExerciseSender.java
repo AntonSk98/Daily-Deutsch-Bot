@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
 
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
@@ -103,6 +104,27 @@ public class AudioExerciseSender {
             telegramClient.execute(sendAudio);
             audioExerciseSender.accept(telegramClient);
             telegramClient.execute(questionsAndAnswers);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Sends a dynamic prompt to edit listening exercise.
+     *
+     * @param chatId                      chat id
+     * @param editListeningExercisePrompt {@link EditListeningExercisePrompt}
+     */
+    public void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt editListeningExercisePrompt) {
+        SendAudio sendAudio = SendAudio.builder()
+                .chatId(chatId)
+                .audio(new InputFile(streamAudio(editListeningExercisePrompt.audio()), "tmp.mp3"))
+                .build();
+        SendMessage text = SendMessage.builder().chatId(chatId).text(editListeningExercisePrompt.transcription()).build();
+
+        try {
+            telegramClient.execute(sendAudio);
+            telegramClient.execute(text);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

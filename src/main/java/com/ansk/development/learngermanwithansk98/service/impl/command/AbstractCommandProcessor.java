@@ -73,8 +73,12 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
 
     private void promptNextParameter(Command command, CommandState commandState, CommandParameters commandParameters) {
         String key = commandState.getCurrentCommandModel().getParamIterator().next();
-        String prompt = commandsConfiguration.findParameter(command.getPath(), key).prompt();
+        var currentParameter = commandsConfiguration.findParameter(command.getPath(), key);
+        String prompt = currentParameter.prompt();
         commandState.setAwaitingKey(key);
+        if (currentParameter.dynamicPrompt()) {
+            provideDynamicPrompt(commandParameters);
+        }
         if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
             telegramOutputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
             return;
@@ -87,6 +91,4 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
         applyCommandModel(commandState.getCurrentCommandModel(), commandParameters);
         commandCache.clear();
     }
-
-
 }

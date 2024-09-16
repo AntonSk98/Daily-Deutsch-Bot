@@ -63,6 +63,11 @@ commands:
         - key: audio
           prompt: please provide audio
     - path: /preview_listening_exercise
+    - path: /listening_transcription
+      parameters:
+        - key: transcription
+          prompt: feel free to edit the transcription of the audio
+          dynamic-prompt: true
 
 bot:
   verified-user: 402877944

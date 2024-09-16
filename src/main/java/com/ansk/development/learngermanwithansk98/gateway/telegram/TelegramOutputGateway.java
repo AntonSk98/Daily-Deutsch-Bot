@@ -2,10 +2,7 @@ package com.ansk.development.learngermanwithansk98.gateway.telegram;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.integration.*;
-import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
-import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
-import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
-import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -84,6 +81,11 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
     @Override
     public void sendListeningExercise(Long chatId, ListeningExercise listeningExercise) {
         audioExerciseSender.sendListeningExercise(chatId, listeningExercise);
+    }
+
+    @Override
+    public void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt dynamicPrompt) {
+        audioExerciseSender.sendPromptToEditListeningExercise(chatId, dynamicPrompt);
     }
 
 
