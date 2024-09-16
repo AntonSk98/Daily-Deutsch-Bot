@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class TelegramSenderSupport {
 
     private static final String EXERCISE_KEYS_TEMPLATE = """
-            💬 <b>Questions and answers:</b>
+            💬 💬 <b>Questions and answers:</b> 🤫 🤫
                 <blockquote expandable><span class="tg-spoiler">%s</span></blockquote>
             """;
 

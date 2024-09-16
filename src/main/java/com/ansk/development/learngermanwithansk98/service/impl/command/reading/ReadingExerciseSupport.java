@@ -74,6 +74,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
 
         var readingExercise = new ReadingExercise(
                 generatedText.title(),
+                documentObject.level(),
                 paragraphs,
                 tasks,
                 document

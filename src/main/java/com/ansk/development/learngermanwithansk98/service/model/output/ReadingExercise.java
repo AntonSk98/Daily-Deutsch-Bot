@@ -6,13 +6,14 @@ import java.util.List;
  * Encapsulates the details and parameters related to a reading exercise part.
  *
  * @param title      the title of the reading exercise
+ * @param level      exercise difficulty
  * @param paragraphs the {@link Paragraphs} associated with the reading exercise
  * @param tasks      the {@link ReadingTasks} containing the tasks for the exercise
  * @param document   the {@link ExerciseDocument} containing document of the reading exercise
- *
  * @author Anton Skripin
  */
-public record ReadingExercise(String title, Paragraphs paragraphs, ReadingTasks tasks, ExerciseDocument document) {
+public record ReadingExercise(String title, String level, Paragraphs paragraphs, ReadingTasks tasks,
+                              ExerciseDocument document) {
 
     /**
      * Represents the textual output for the reading exercise, including level, title, and text.
