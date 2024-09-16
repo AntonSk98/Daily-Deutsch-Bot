@@ -18,7 +18,7 @@ public class WordCardSender {
     private static final String WORD_CARD_TEMPLATE = """
             ⭐️ #Words
             
-            📝 Explore new words and take your skills to the next level! ⬆️
+            📝 Expand your vocabulary with these new words! ⬆️
             """;
 
     private final TelegramClient telegramClient;
