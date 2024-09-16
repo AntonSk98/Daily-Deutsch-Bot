@@ -72,7 +72,7 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
         var listeningExerciseOutput = aiGateway.sendRequest(listeningExercisePrompt.getPrompt(), ListeningExercise.Output.class);
 
         Objects.requireNonNull(listeningExerciseOutput.level(), "Listening exercise | Level cannot be null");
-        Objects.requireNonNull(listeningExerciseOutput.title(), "LListening exercise | Title cannot be null");
+        Objects.requireNonNull(listeningExerciseOutput.title(), "Listening exercise | Title cannot be null");
         Objects.requireNonNull(paragraphs.paragraphs(), "Transcription cannot be null");
         Objects.requireNonNull(listeningExerciseOutput.tasks(), "Listening tasks cannot be null");
 
@@ -88,6 +88,7 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
 
         ListeningExercise listeningExercise = new ListeningExercise(
                 listeningExerciseModel.getAudio(),
+                listeningExerciseOutput.level(),
                 new ListeningExercise.ListeningTasks(listeningExerciseOutput.tasks()),
                 listeningExerciseDocument
         );

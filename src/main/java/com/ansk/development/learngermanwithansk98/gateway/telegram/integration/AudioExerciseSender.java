@@ -28,19 +28,17 @@ import static com.ansk.development.learngermanwithansk98.gateway.telegram.integr
 public class AudioExerciseSender {
 
     private static final String LISTENING_EXERCISE_TEMPLATE = """
-            ⭐️ #Listening
+            ⭐️ #Listening <b>| %s</b>
             
-            🎧 Tune in to the audio and complete the task in the 🗒️ document below ⬇️.
+            🎧 Listen to the audio and complete the exercise in the 🗒️ document.
             
-            <b>Resist the temptation!</b>
-            Blurred answers are included 👇...
-            ...but don't peek until you've given it your best shot!
+            🔹🔹🔹
             """;
 
     private static final String LISTENING_EXERCISE_DOCUMENT = """
-            📄️ #ListeningExerciseDocument
+            📄️ #ListeningExercise
             
-            🎧 Your Listening Challenge Awaits!
+            ✅ When you're done, feel free to check the answers below ⬇️
             """;
 
     private final TelegramClient telegramClient;
@@ -85,7 +83,7 @@ public class AudioExerciseSender {
         SendAudio sendAudio = SendAudio.builder()
                 .chatId(chatId)
                 .audio(audioFile)
-                .caption(LISTENING_EXERCISE_TEMPLATE)
+                .caption(String.format(LISTENING_EXERCISE_TEMPLATE, listeningExercise.level()))
                 .parseMode("HTML")
                 .build();
 
@@ -103,8 +101,8 @@ public class AudioExerciseSender {
         SendMessage questionsAndAnswers = SendMessage.builder().chatId(chatId).text(exercisePart).parseMode("HTML").build();
         try {
             telegramClient.execute(sendAudio);
-            telegramClient.execute(questionsAndAnswers);
             audioExerciseSender.accept(telegramClient);
+            telegramClient.execute(questionsAndAnswers);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

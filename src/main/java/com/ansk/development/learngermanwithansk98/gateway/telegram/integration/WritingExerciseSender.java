@@ -24,6 +24,8 @@ public class WritingExerciseSender {
             <b>%s</b>
             
             You can also always review our sample text for inspiration ⬆️
+            
+            🔹🔹🔹
             """;
 
     /**
