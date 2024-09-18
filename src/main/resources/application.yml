@@ -57,6 +57,17 @@ commands:
         - key: topic
           required: true
           prompt: please provide the topic for writing exercise
+    - path: /corrected_writing
+      parameters:
+        - key: topic
+          prompt: provide a topic
+        - key: corrected_writing
+          prompt: |
+            please provide the text with corrections:
+            🔹 any removed blocks must be wrapped with --abc--- symbols.
+            🔹 any added blocks must be wrapped with ++abc++ symbols.
+            🔹 any paragraph must be separated by empty line
+
     - path: /preview_writing_exercise
     - path: /listening_exercise
       parameters:

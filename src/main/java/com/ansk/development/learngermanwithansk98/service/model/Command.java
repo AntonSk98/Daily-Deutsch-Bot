@@ -22,6 +22,7 @@ public enum Command {
 
     WRITING_WITH_EXAMPLE("/writing_with_example"),
     WRITING_EXERCISE_PREVIEW("/preview_writing_exercise"),
+    CORRECTED_WRITING("/corrected_writing"),
 
     LISTENING_EXERCISE("/listening_exercise"),
     LISTENING_EXERCISE_PREVIEW("/preview_listening_exercise"),

@@ -1,9 +1,11 @@
 package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
 
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
 
@@ -24,6 +26,18 @@ public class WritingExerciseSender {
             <b>%s</b>
             
             You can also always review our sample text for inspiration ⬆️
+            
+            🔹🔹🔹
+            """;
+
+    public static final String TEXT_CORRECTION_TEMPLATE = """
+            ⭐️ #WritingCorrection
+            
+            ✏️This exercise contains two versions of the text:
+                 • The original text.
+                 • The corrected version.
+           
+            Compare and learn!
             
             🔹🔹🔹
             """;
@@ -50,5 +64,23 @@ public class WritingExerciseSender {
         var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), true);
 
         documentSender(chatId, writingExercise.exerciseDocument(), mediaParameters).accept(telegramClient);
+    }
+
+    /**
+     * Sends an exercise with the text and its corrected version.
+     *
+     * @param chatId                chat id
+     * @param originalTextDocument  original text document
+     * @param correctedTextDocument corrected text document
+     */
+    public void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+        ExerciseDocument mergedDocument = ExerciseDocument.of();
+        Stream.concat(originalTextDocument.pages().stream(), correctedTextDocument.pages().stream()).forEach(mergedDocument::addPage);
+        var documentRendererParams = new TelegramSenderSupport.DocumentRenderingParams(
+                Optional.of(new TelegramSenderSupport.DocumentCaption(TEXT_CORRECTION_TEMPLATE, "HTML")),
+                false
+        );
+
+        documentSender(chatId, mergedDocument, documentRendererParams).accept(telegramClient);
     }
 }

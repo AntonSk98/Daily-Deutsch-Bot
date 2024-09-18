@@ -113,4 +113,13 @@ public interface ITelegramOutputGateway {
      * @param dynamicPrompt dynamic prompt
      */
     void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt dynamicPrompt);
+
+    /**
+     * Sends a document with the original text and its corrected version.
+     *
+     * @param chatId                chat id
+     * @param originalTextDocument  documents with the original text
+     * @param correctedTextDocument document with the corrected text
+     */
+    void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument);
 }

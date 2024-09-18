@@ -88,5 +88,10 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
         audioExerciseSender.sendPromptToEditListeningExercise(chatId, dynamicPrompt);
     }
 
+    @Override
+    public void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+        writingExerciseSender.sendCorrectedWriting(chatId, originalTextDocument, correctedTextDocument);
+    }
+
 
 }

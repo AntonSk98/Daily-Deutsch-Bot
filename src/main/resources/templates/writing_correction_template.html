@@ -28,23 +28,23 @@
         </div>
 
         <section class="title">
-            <div th:if="${writingCorrection.mode.getValue() == 'original'}"
-                 class="original">
-                Original
-            </div>
-            <div th:if="${writingCorrection.mode.getValue() == 'corrections'}"
-                 class="correction">
-                Correction
-            </div>
             <span>Schreiben</span>
+            <div th:if="${writingCorrection.mode.mode() == 'text'}"
+                 class="original">
+                Originaltext
+            </div>
+            <div th:if="${writingCorrection.mode.mode() == 'correction'}"
+                 class="correction">
+                Korrektur
+            </div>
         </section>
 
         <div class="text-container">
             <div class="writing-topic"
                  th:if="${writingCorrection.topic != null && !writingCorrection.topic.isEmpty()}"
                  th:text="${writingCorrection.topic}"></div>
-            <section th:each="paragraph : ${writingCorrection.writing}">
-                <p th:text="${paragraph}" class="paragraph"></p>
+            <section th:each="paragraph : ${writingCorrection.paragraphs}">
+                <p th:utext="${paragraph}"></p>
             </section>
         </div>
 

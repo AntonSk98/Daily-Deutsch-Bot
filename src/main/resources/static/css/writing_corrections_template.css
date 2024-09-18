@@ -1,0 +1,27 @@
+.title {
+    font-size: 1.2rem !important;
+}
+
+.original, .correction {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.original {
+    color: #216968;
+}
+
+.correction {
+    color: #FF5C5C;
+}
+
+.removed {
+    text-decoration: line-through;
+    color: #FF5C5C;
+    font-weight: bold;
+}
+
+.added {
+    color: #216968;
+    font-weight: bold;
+}
