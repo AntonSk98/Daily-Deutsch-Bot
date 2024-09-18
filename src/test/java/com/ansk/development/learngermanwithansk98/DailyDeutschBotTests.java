@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootTest
 @Import(DailyDeutschBotTestConfig.class)
-class LearnGermanWithAnsk98ApplicationTests {
+class DailyDeutschBotTests {
 
     @Test
     void contextLoads() {
