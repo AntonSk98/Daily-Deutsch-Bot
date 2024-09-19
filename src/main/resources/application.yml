@@ -1,10 +1,10 @@
 spring.application.name: daily-deutsch-bot
 
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/learn-german-with-ansk98-db
-    username: ${db-username}
-    password: ${db-password}
+rest:
+  internal:
+    security:
+      username: ${rest-internal-access-username}
+      password: ${reset-internal-access-password}
 
 commands:
   command-definition:

@@ -95,4 +95,16 @@ public class DailyDeutschBotConsumer implements LongPollingSingleThreadUpdateCon
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Restarts the bot.
+     */
+    public void restartBot() {
+        try {
+            longPollingApplication.stop();
+            longPollingApplication.start();
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
