@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TRANSCRIPTION;
+
 /**
  * Service that edits existing {@link ListeningExercise}.
  *
@@ -53,7 +55,7 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
 
     @Override
     public Command supportedCommand() {
-        return Command.LISTENING_TRANSCRIPTION;
+        return Command.LISTENING_EDIT_TRANSCRIPTION;
     }
 
     @Override
@@ -85,7 +87,7 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
 
     @Override
     public AbstractCommandModel<?> supportedModelWithMapping() {
-        return new EditListeningExerciseModel().addMapping("transcription", EditListeningExerciseModel::setEditedTranscription);
+        return new EditListeningExerciseModel().addMapping(TRANSCRIPTION, EditListeningExerciseModel::setEditedTranscription);
     }
 
     @Override

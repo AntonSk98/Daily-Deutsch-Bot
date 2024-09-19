@@ -76,6 +76,6 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
     public AbstractCommandModel<?> supportedModelWithMapping() {
         return new AutoWordCompletionModel()
                 .init()
-                .addMapping("word", AutoWordCompletionModel::setWord);
+                .addMapping(WORD, AutoWordCompletionModel::setWord);
     }
 }

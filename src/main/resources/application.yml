@@ -44,6 +44,10 @@ commands:
       parameters:
         - key: text
           prompt: please provide a text to create reading exercise for
+        - key: should_rephrase_text
+          prompt: should submitted text be rephrased?
+            ✅ Type '+' to approve
+            ❌ Type any other symbol to decline
     - path: /cached_reading_exercise
     - path: /ai_new_word
       parameters:
@@ -61,13 +65,13 @@ commands:
       parameters:
         - key: topic
           prompt: provide a topic
-        - key: corrected_writing
+        - key: corrected_text
           prompt: |
             please provide the text with corrections:
               🔹 any removed blocks must be wrapped with --abc--- symbols.
               🔹 any added blocks must be wrapped with ++abc++ symbols.
               🔹 any paragraph must be separated by empty line
-        - key: should_publish
+        - key: should_publish_text_and_correction
           prompt: |
             Would you like to publish this post?
               ✅ Type '+' to approve
@@ -80,7 +84,7 @@ commands:
         - key: audio
           prompt: please provide audio
     - path: /preview_listening_exercise
-    - path: /listening_transcription
+    - path: /listening_edit_transcription
       parameters:
         - key: transcription
           prompt: feel free to edit the transcription of the audio

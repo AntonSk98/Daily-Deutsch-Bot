@@ -7,6 +7,7 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
  */
 public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingExerciseWithTextModel> {
     private String text;
+    private boolean shouldRephrase;
 
     /**
      * Getter for {@link #text}.
@@ -24,6 +25,24 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
      */
     public void setText(String text) {
         this.text = text;
+    }
+
+    /**
+     * Getter for {@link #shouldRephrase}.
+     *
+     * @return {@link #shouldRephrase}
+     */
+    public boolean shouldRephrase() {
+        return this.shouldRephrase;
+    }
+
+    /**
+     * Setter for {@link #shouldRephrase}.
+     *
+     * @param shouldRephrase {@link #shouldRephrase}
+     */
+    public void shouldRephrase(boolean shouldRephrase) {
+        this.shouldRephrase = shouldRephrase;
     }
 
     @Override

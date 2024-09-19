@@ -11,12 +11,14 @@ import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.CorrectTextModel;
-import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.CorrectedTextDocumentMetadata;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
 
 /**
  * Service responsible for processing a text and returning both the original text and its corrected version.
@@ -33,8 +35,8 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
     /**
      * Constructor.
      *
-     * @param commandsConfiguration         See {@link CommandsConfiguration}
-     * @param telegramOutputGateway         See {@link ITelegramOutputGateway}
+     * @param commandsConfiguration     See {@link CommandsConfiguration}
+     * @param telegramOutputGateway     See {@link ITelegramOutputGateway}
      * @param correctedTextDocumentPipe See {@link CorrectedTextDocumentPipe}
      */
     protected CorrectTextExercise(CommandsConfiguration commandsConfiguration,
@@ -113,8 +115,8 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
     @Override
     public AbstractCommandModel<?> supportedModelWithMapping() {
         return new CorrectTextModel()
-                .addMapping("topic", CorrectTextModel::setTopic)
-                .addMapping("corrected_writing", CorrectTextModel::setTextWithCorrections)
-                .addMapping("should_publish", (model, value) -> model.setShouldPublish(value.contains("+")));
+                .addMapping(TOPIC, CorrectTextModel::setTopic)
+                .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
+                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, (model, value) -> model.setShouldPublish(value.contains("+")));
     }
 }
