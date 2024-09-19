@@ -10,6 +10,7 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
 
     /**
      * Getter for {@link #text}.
+     *
      * @return {@link #text}
      */
     public String getText() {
@@ -18,6 +19,7 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
 
     /**
      * Setter for {@link #text}.
+     *
      * @param text {@link #text}
      */
     public void setText(String text) {

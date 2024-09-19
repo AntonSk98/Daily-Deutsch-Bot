@@ -9,7 +9,6 @@ public class ReadingExerciseModel extends AbstractCommandModel<ReadingExerciseMo
     private String level;
     private String topic;
 
-
     /**
      * Getter for {@link #level}.
      *

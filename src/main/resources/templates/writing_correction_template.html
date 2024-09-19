@@ -29,11 +29,11 @@
 
         <section class="title">
             <span>Schreiben</span>
-            <div th:if="${writingCorrection.mode.mode() == 'text'}"
+            <div th:if="${writingCorrection.textType.type() == 'text'}"
                  class="original">
                 Originaltext
             </div>
-            <div th:if="${writingCorrection.mode.mode() == 'correction'}"
+            <div th:if="${writingCorrection.textType.type() == 'correction'}"
                  class="correction">
                 Korrektur
             </div>

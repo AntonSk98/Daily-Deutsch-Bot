@@ -7,8 +7,6 @@ import com.itextpdf.styledxmlparser.jsoup.parser.Parser;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import java.util.function.Function;
-
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
@@ -22,6 +20,12 @@ public abstract class AbstractObjectToHtmlPipe<T> {
     private final DailyDeutschBotConfiguration botConfiguration;
     private final SpringTemplateEngine springTemplateEngine;
 
+    /**
+     * Constructor.
+     *
+     * @param configuration        See {@link DailyDeutschBotConfiguration}
+     * @param springTemplateEngine See {@link SpringTemplateEngine}
+     */
     protected AbstractObjectToHtmlPipe(DailyDeutschBotConfiguration configuration,
                                        SpringTemplateEngine springTemplateEngine) {
         this.botConfiguration = configuration;

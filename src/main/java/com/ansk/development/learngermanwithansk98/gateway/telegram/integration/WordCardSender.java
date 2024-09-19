@@ -33,7 +33,7 @@ public class WordCardSender {
     }
 
     /**
-     * Sends a word card
+     * Sends a word card.
      *
      * @param chatId           char id
      * @param exerciseDocument document with words

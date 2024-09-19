@@ -6,7 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
- * Filter tha checks whether a user is trusted before processing a command further.
+ * Filter that checks whether a user is trusted before processing a command further.
  *
  * @author Anton Skripin
  */

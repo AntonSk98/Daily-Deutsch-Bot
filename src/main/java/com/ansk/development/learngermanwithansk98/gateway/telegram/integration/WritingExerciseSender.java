@@ -30,7 +30,7 @@ public class WritingExerciseSender {
             🔹🔹🔹
             """;
 
-    public static final String TEXT_CORRECTION_TEMPLATE = """
+    private static final String TEXT_CORRECTION_TEMPLATE = """
             ⭐️ #WritingCorrection
             
             ✏️ <b>In this exercise, you'll find two versions of the text:</b>
@@ -52,7 +52,7 @@ public class WritingExerciseSender {
     }
 
     /**
-     * Sends a writing exercise
+     * Sends a writing exercise.
      *
      * @param chatId          chat id
      * @param writingExercise writing exercise

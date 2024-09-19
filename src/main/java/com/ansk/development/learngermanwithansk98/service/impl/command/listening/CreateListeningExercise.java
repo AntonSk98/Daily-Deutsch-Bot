@@ -23,6 +23,11 @@ import java.util.Objects;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.AUDIO;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
+/**
+ * Service to create a listening exercise.
+ *
+ * @author Anton Skripin
+ */
 @Service
 public class CreateListeningExercise extends AbstractCommandProcessor {
 
@@ -32,6 +37,17 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
     private final ListeningExerciseDocumentPipe documentPipe;
     private final ListeningExerciseCache listeningExerciseCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandsConfiguration  See {@link CommandsConfiguration}
+     * @param telegramOutputGateway  See {@link ITelegramOutputGateway}
+     * @param commandCache           See {@link CommandCache}
+     * @param aiGateway              See {@link AIGateway}
+     * @param promptConfiguration    See {@link ListeningPromptConfiguration}
+     * @param documentPipe           See {@link ListeningExerciseDocumentPipe}
+     * @param listeningExerciseCache See {@link ListeningExerciseCache}
+     */
     protected CreateListeningExercise(CommandsConfiguration commandsConfiguration,
                                       ITelegramOutputGateway telegramOutputGateway,
                                       CommandCache commandCache,

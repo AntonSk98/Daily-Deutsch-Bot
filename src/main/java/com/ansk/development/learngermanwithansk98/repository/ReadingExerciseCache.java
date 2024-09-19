@@ -17,6 +17,7 @@ public class ReadingExerciseCache {
 
     /**
      * Saves a reading exercise into cache.
+     *
      * @param readingExercise reading exercise
      */
     public void saveReadingExercise(ReadingExercise readingExercise) {
@@ -32,6 +33,7 @@ public class ReadingExerciseCache {
 
     /**
      * Returns the cached reading exercise or empty if nothing is cached.
+     *
      * @return cached reading exercise or empty optional
      */
     public Optional<ReadingExercise> cachedReadingExercise() {

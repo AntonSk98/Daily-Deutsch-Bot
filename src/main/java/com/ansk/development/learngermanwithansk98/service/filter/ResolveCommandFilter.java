@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * Filter that checks whether the incoming command is a known one
- * or checks whether one of the commands is being already processed.
+ * Filter that checks whether the incoming command is a known one or whether one of the commands is being already processed.
  *
  * @author Anton Skripin
  */
@@ -19,6 +18,11 @@ public class ResolveCommandFilter implements IFilter {
 
     private final CommandCache commandCache;
 
+    /**
+     * Constructor.
+     *
+     * @param commandCache See {@link CommandCache}
+     */
     public ResolveCommandFilter(CommandCache commandCache) {
         this.commandCache = commandCache;
     }

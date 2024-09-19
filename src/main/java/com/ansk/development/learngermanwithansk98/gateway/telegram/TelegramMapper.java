@@ -22,7 +22,7 @@ class TelegramMapper {
     }
 
     /**
-     * Returns chat id
+     * Returns chat id.
      *
      * @param update update
      * @return chat id

@@ -1,7 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
-import com.ansk.development.learngermanwithansk98.service.impl.command.listening.EditListeningTranscription;
-
 /**
  * Model to edit listening exercise.
  *

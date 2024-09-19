@@ -28,7 +28,6 @@ public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard
         super(configuration, springTemplateEngine);
     }
 
-
     @Override
     public ExerciseDocument pipe(WordCard wordCard) {
         Document html = abstractPipe("vocab_template", "wordCard", wordCard);

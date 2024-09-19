@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.chatId;
 
 /**
- * A consumer class for handling updates in a single-threaded, long-polling manner for the Daily Deutsch Bot.
+ * A consumer class for handling updates in a single-threaded, long-polling manner.
  * This class processes incoming updates by filtering them using a {@link FilterChain}.
  * It then forwards the message to the {@link InputGateway}.
  *

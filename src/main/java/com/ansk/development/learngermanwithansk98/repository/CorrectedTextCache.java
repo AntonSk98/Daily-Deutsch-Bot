@@ -4,7 +4,7 @@ import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseD
 import org.springframework.stereotype.Component;
 
 /**
- * Cache to store corrected text metadata.
+ * Cache to store corrected text alongside the original text.
  *
  * @author Anton Skripin
  */
@@ -31,10 +31,19 @@ public class CorrectedTextCache {
         this.correctedTextContainer = correctedTextMetadata;
     }
 
+    /**
+     * Clears the cache.
+     */
     public void clear() {
         correctedTextContainer = null;
     }
 
+    /**
+     * Container to store the state of the exercise with a corrected text.
+     *
+     * @param originalText  original text with mistakes
+     * @param correctedText corrected text with mistakes
+     */
     public record CorrectedTexContainer(ExerciseDocument originalText, ExerciseDocument correctedText) {
     }
 }

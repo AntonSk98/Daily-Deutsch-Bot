@@ -22,7 +22,7 @@ public class FilterChain {
     private final List<IFilter> filters;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param filters filters. See {@link IFilter}
      */
@@ -32,7 +32,7 @@ public class FilterChain {
 
     /**
      * Applies the chain of filters to the given {@link Update}.
-     * This method iterates through each filter in the chain and applies it to the {@code update}.
+     * This method iterates through each registered filter in the chain and applies it to the currently received message.
      *
      * @param update the {@link Update} to be filtered.
      */

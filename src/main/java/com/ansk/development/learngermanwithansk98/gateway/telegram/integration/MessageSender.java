@@ -16,11 +16,6 @@ import static com.ansk.development.learngermanwithansk98.service.model.Navigatio
 
 /**
  * A component responsible for sending plain messages via Telegram.
- * <p>
- * The {@code MessageSender} class provides methods for:
- * -> sending plain messages
- * -> messages with navigation buttons
- * -> messages with payloads (such as JSON data) to a Telegram chat.
  *
  * @author Anton Skripin
  */

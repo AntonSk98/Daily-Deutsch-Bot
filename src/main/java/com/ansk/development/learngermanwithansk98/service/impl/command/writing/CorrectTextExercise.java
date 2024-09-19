@@ -90,13 +90,13 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
 
         CorrectedTextDocumentMetadata originalParagraphsDocumentMetadata = new CorrectedTextDocumentMetadata(
                 correctTextModel.getTopic(),
-                CorrectedTextDocumentMetadata.Mode.TEXT,
+                CorrectedTextDocumentMetadata.TextType.TEXT,
                 originalParagraphs
         );
 
         CorrectedTextDocumentMetadata correctedParagraphsDocumentMetadata = new CorrectedTextDocumentMetadata(
                 correctTextModel.getTopic(),
-                CorrectedTextDocumentMetadata.Mode.CORRECTION,
+                CorrectedTextDocumentMetadata.TextType.CORRECTION,
                 correctedParagraphs
         );
 

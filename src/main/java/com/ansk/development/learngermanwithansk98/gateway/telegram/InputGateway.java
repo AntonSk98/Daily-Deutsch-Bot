@@ -53,7 +53,7 @@ public class InputGateway {
      * The state of the command is managed  {@link CommandCache}.
      * </p>
      *
-     * @param update the {@link Update} object containing the message or audio to be processed.
+     * @param update the {@link Update} current message from a user
      */
     public void process(Update update) {
         final long chatId = chatId(update);

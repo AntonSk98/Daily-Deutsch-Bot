@@ -16,6 +16,13 @@ public class Word extends AbstractCommandModel<Word> {
     private String example;
     private String exampleTranslation;
 
+    /**
+     * Creates a new {@link Word}.
+     *
+     * @param word        word
+     * @param translation translation
+     * @return new {@link Word}
+     */
     public static Word of(String word, String translation) {
         Word w = new Word();
         w.setWord(word);
