@@ -117,6 +117,6 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
         return new CorrectTextModel()
                 .addMapping(TOPIC, CorrectTextModel::setTopic)
                 .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
-                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, (model, value) -> model.setShouldPublish(value.contains("+")));
+                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, (model, value) -> model.setShouldPublish(value.contains(APPROVE_PROMPT)));
     }
 }
