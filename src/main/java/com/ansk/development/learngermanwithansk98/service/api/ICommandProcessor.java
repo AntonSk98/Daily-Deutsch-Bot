@@ -44,10 +44,11 @@ public interface ICommandProcessor {
     /**
      * Provides the dynamic prompt required for a command parameter if it is set to be dynamic.
      *
-     * @param parameters
+     * @param currentModelState current state of a model. Since the command is not yet complete the state is not complete as well
+     * @param parameters        parameters
      * @throws UnsupportedOperationException if the dynamic prompt is missing for the model even though the dynamic prompt is required
      */
-    default void provideDynamicPrompt(CommandParameters parameters) {
+    default void provideDynamicPrompt(AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
         throw new UnsupportedOperationException("Parameter must provide a dynamic prompt but it is missing for the model!");
     }
 }

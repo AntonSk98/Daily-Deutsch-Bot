@@ -9,7 +9,7 @@ import java.util.List;
  * @param mode       mode if it is an original text or the corrected one
  * @param paragraphs paragraphs of the text
  */
-public record WritingCorrectionDocumentMetadata(String topic, Mode mode, List<String> paragraphs) {
+public record CorrectedTextDocumentMetadata(String topic, Mode mode, List<String> paragraphs) {
     public enum Mode {
         TEXT("text"),
         CORRECTION("correction");

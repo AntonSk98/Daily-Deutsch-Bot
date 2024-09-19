@@ -89,7 +89,7 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
     }
 
     @Override
-    public void provideDynamicPrompt(CommandParameters parameters) {
+    public void provideDynamicPrompt(AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
         if (listeningExerciseCache.cachedListeningExercise().isEmpty()) {
             throw new IllegalStateException("No listening exercise stored in cache...");
         }

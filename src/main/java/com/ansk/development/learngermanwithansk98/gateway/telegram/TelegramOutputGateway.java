@@ -89,8 +89,8 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
     }
 
     @Override
-    public void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
-        writingExerciseSender.sendCorrectedWriting(chatId, originalTextDocument, correctedTextDocument);
+    public void sendCorrectedText(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+        writingExerciseSender.sendCorrectedText(chatId, originalTextDocument, correctedTextDocument);
     }
 
 

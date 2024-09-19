@@ -57,16 +57,22 @@ commands:
         - key: topic
           required: true
           prompt: please provide the topic for writing exercise
-    - path: /corrected_writing
+    - path: /correct_text
       parameters:
         - key: topic
           prompt: provide a topic
         - key: corrected_writing
           prompt: |
             please provide the text with corrections:
-            🔹 any removed blocks must be wrapped with --abc--- symbols.
-            🔹 any added blocks must be wrapped with ++abc++ symbols.
-            🔹 any paragraph must be separated by empty line
+              🔹 any removed blocks must be wrapped with --abc--- symbols.
+              🔹 any added blocks must be wrapped with ++abc++ symbols.
+              🔹 any paragraph must be separated by empty line
+        - key: should_publish
+          prompt: |
+            Would you like to publish this post?
+              ✅ Type '+' to approve
+              ❌ Type any other symbol to decline
+          dynamic-prompt: true
 
     - path: /preview_writing_exercise
     - path: /listening_exercise

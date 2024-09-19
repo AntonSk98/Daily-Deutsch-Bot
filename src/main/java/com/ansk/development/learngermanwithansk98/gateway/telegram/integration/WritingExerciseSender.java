@@ -33,11 +33,11 @@ public class WritingExerciseSender {
     public static final String TEXT_CORRECTION_TEMPLATE = """
             ⭐️ #WritingCorrection
             
-            ✏️This exercise contains two versions of the text:
-                 • The original text.
-                 • The corrected version.
-           
-            Compare and learn!
+            ✏️ <b>In this exercise, you'll find two versions of the text:</b>
+                 📌 The original text.
+                 📌 The corrected version.
+            
+            🧐 Analyze the differences to sharpen your writing skills!
             
             🔹🔹🔹
             """;
@@ -73,7 +73,7 @@ public class WritingExerciseSender {
      * @param originalTextDocument  original text document
      * @param correctedTextDocument corrected text document
      */
-    public void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+    public void sendCorrectedText(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
         ExerciseDocument mergedDocument = ExerciseDocument.of();
         Stream.concat(originalTextDocument.pages().stream(), correctedTextDocument.pages().stream()).forEach(mergedDocument::addPage);
         var documentRendererParams = new TelegramSenderSupport.DocumentRenderingParams(

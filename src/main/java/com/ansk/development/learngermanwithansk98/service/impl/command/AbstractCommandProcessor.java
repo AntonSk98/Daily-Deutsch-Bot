@@ -77,7 +77,7 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
         String prompt = currentParameter.prompt();
         commandState.setAwaitingKey(key);
         if (currentParameter.dynamicPrompt()) {
-            provideDynamicPrompt(commandParameters);
+            provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
         }
         if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
             telegramOutputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);

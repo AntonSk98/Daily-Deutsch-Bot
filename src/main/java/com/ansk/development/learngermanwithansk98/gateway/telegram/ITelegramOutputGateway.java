@@ -121,5 +121,5 @@ public interface ITelegramOutputGateway {
      * @param originalTextDocument  documents with the original text
      * @param correctedTextDocument document with the corrected text
      */
-    void sendCorrectedWriting(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument);
+    void sendCorrectedText(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument);
 }
