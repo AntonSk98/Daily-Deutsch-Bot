@@ -9,6 +9,7 @@ import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
 import static com.ansk.development.learngermanwithansk98.service.model.Command.ADD_NEW_WORD;
@@ -61,8 +62,21 @@ public class AddNewWord extends AbstractCommandProcessor {
                 .addMapping(TRANSLATION, Word::setTranslation)
                 .addMapping(MEANING, Word::setMeaning)
                 .addMapping(FORMS, Word::setForms)
-                .addMapping(FREQUENCY, (word, frequency) -> word.setFrequency(Integer.parseInt(frequency)))
+                .addMapping(FREQUENCY, (word, frequencyString) -> {
+                    validateFrequency(frequencyString);
+                    word.setFrequency(Integer.parseInt(frequencyString));
+                })
                 .addMapping(EXAMPLE, Word::setExample)
                 .addMapping(EXAMPLE_TRANSLATION, Word::setExampleTranslation);
+    }
+
+    private void validateFrequency(String frequencyString) {
+        if (!NumberUtils.isCreatable(frequencyString)) {
+            throw new IllegalStateException(String.format("%s is not a number from 0 to 5!", frequencyString));
+        }
+        final int frequency = Integer.parseInt(frequencyString);
+        if (frequency < 0 || frequency > 5) {
+            throw new IllegalStateException("Valid frequency ranges from 0 to 5");
+        }
     }
 }
