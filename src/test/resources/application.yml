@@ -1,1 +1,4 @@
 bot.verified-user: 12345
+rest.internal.security:
+  username: test_user
+  password: password
