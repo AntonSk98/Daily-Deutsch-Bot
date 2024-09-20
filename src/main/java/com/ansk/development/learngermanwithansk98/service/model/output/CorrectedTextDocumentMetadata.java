@@ -24,7 +24,7 @@ public record CorrectedTextDocumentMetadata(String topic, TextType textType, Lis
             this.type = type;
         }
 
-        public String mode() {
+        public String type() {
             return type;
         }
     }

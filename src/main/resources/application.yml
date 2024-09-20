@@ -45,9 +45,10 @@ commands:
         - key: text
           prompt: please provide a text to create reading exercise for
         - key: should_rephrase_text
-          prompt: should submitted text be rephrased?
-            ✅ Type '+' to approve
-            ❌ Type any other symbol to decline
+          prompt: |
+            Should submitted text be rephrased?
+              ✅ Type '+' to approve
+              ❌ Type any other symbol to decline
     - path: /cached_reading_exercise
     - path: /ai_new_word
       parameters:
@@ -137,25 +138,29 @@ ai:
         Here is the text:
         {text}
       create-reading-exercise: |
-        You are an experienced German tutor with many years of experience teaching students at different levels.
-        I will send you a text.
-        Create 10 questions related to the content of the rephrased text, along with their corresponding answers. 
-        The questions should be meaningful and not easily answerable by simply rephrasing sentences from the text.
-        The response must have the following JSON structure:
+        You are an experienced German tutor with extensive experience teaching students at various levels.
+        I will provide you with a text.
+        Your task is to create 10 meaningful questions related to the rephrased content of the text, along with their corresponding answers. 
+        The questions should require thoughtful responses and not simply rephrasing sentences from the text.
+        Please structure your response in the following JSON format:
         {
-          tasks: [
+          "tasks": [
             {
-              "question": "Here goes a question",
-              "answer": "Here goes an answer"
+              "question": "Hier ist eine Frage",
+              "answer": "Hier ist eine Antwort"
             },
             {
-              "question": "Here goes a question",
-              "answer": "Here goes an answer"
+              "question": "Hier ist eine Frage",
+              "answer": "Hier ist eine Antwort"
             }
           ]
         }
-        Here is the text:
-        {text}
+        Rules:
+          1. Respond in German.
+          2. Follow the specified JSON structure.
+          3. Provide an answer for every question.
+          4. Use only words—no special characters are allowed.
+        Here is the text: {text}
       text-to-paragraphs: |
         I will send you a text.
         Please split it into paragraphs and return them in this JSON format:

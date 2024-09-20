@@ -54,7 +54,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            
+
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid authorization format");

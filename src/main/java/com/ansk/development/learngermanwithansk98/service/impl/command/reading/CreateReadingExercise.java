@@ -75,19 +75,19 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
     public AbstractCommandModel<?> supportedModelWithMapping() {
         return new ReadingExerciseWithTextModel()
                 .init()
-                .addMapping(SHOULD_REPHRASE_TEXT, (model, value) -> model.shouldRephrase(value.contains(APPROVE_PROMPT)))
-                .addMapping(TEXT, ReadingExerciseWithTextModel::setText);
+                .addMapping(TEXT, ReadingExerciseWithTextModel::setText)
+                .addMapping(SHOULD_REPHRASE_TEXT, (model, value) -> model.shouldRephrase(value.contains(APPROVE_PROMPT)));
     }
 
     private ReadingExercise.TextOutput analyzeText(CommandParameters parameters, ReadingExerciseWithTextModel model) {
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Analyzing and rephrasing the text...");
+        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Analyzing the text...");
         GenericPromptTemplate analyzeText = new GenericPromptTemplate(promptsConfiguration.rephraseText())
                 .resolveVariable(TEXT, model.getText());
         var analyzedText = aiGateway.sendRequest(analyzeText.getPrompt(), ReadingExercise.TextOutput.class);
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The text is successfully analyzed.");
 
         if (!model.shouldRephrase()) {
-            return new ReadingExercise.TextOutput(analyzedText.level(), analyzedText.text(), model.getText());
+            return new ReadingExercise.TextOutput(analyzedText.level(), analyzedText.title(), model.getText());
         }
 
         return analyzedText;

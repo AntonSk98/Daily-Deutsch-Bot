@@ -14,6 +14,8 @@ import com.ansk.development.learngermanwithansk98.service.model.input.CommandPar
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 
+import java.util.Objects;
+
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
 /**
@@ -71,6 +73,11 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
         var paragraphs = mapToParagraphs(parameters, generatedText);
         var documentObject = generateDocumentMetadata(parameters, generatedText, paragraphs, tasks);
         var document = pipeDocument(parameters, documentObject);
+
+        Objects.requireNonNull(paragraphs);
+        Objects.requireNonNull(paragraphs.paragraphs());
+        Objects.requireNonNull(tasks);
+        Objects.requireNonNull(tasks.tasks());
 
         var readingExercise = new ReadingExercise(
                 generatedText.title(),

@@ -21,7 +21,8 @@ public class ReadingExerciseSender {
 
     private static final String READING_EXERCISE_TEMPLATE = """
             ⭐️ #Reading <b> | %s</b>
-            <i>Please read the text and complete the exercise below.</i>
+            <i>Please read the text and answer the questions below.</i>
+            ➖➖➖
             
             📚 <b>%s</b>
             
@@ -35,6 +36,8 @@ public class ReadingExerciseSender {
             📚️ #ReadingExercise
             
             ✅ When you're done, feel free to check the answers below ⬇️
+            
+            🔹🔹🔹
             """;
 
     private final TelegramClient telegramClient;
@@ -80,7 +83,7 @@ public class ReadingExerciseSender {
         String questionsAndAnswers = questionsAndAnswersMessageBlock(tasks
                 .tasks()
                 .stream()
-                .collect(Collectors.toMap(ReadingExercise.Task::question, ReadingExercise.Task::answer)));
+                .collect(Collectors.toMap(ReadingExercise.Task::question, task -> Optional.ofNullable(task.answer()).orElse("-"))));
 
         return SendMessage.builder().chatId(chatId).text(questionsAndAnswers).parseMode("HTML").build();
     }
