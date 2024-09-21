@@ -13,7 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run your build or test commands
-        run: |
-          echo "Building project..."
-          # Add your build or test commands here
+      - name: Setting up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Building the DailyDeutsch Bot
+        run: ./mvnm clean package
