@@ -19,4 +19,4 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - name: Building the DailyDeutsch Bot
-        run: ./mvnm clean package
+        run: ./mvnw clean package
