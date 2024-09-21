@@ -1,0 +1,19 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - release_*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run your build or test commands
+        run: |
+          echo "Building project..."
+          # Add your build or test commands here
