@@ -36,7 +36,7 @@ jobs:
           printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > oracle_access_key.pem
           chmod 600 oracle_access_key.pem
           
-          scp -i oracle_access_key.pem daily-deutsch-app-development.tar -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
+          scp -i oracle_access_key.pem -o StrictHostKeyChecking=no daily-deutsch-app-development.tar "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
           ssh -i oracle_access_key.pem -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}" << 'EOF'
             docker stop "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" || true
             docker rm "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" || true
