@@ -22,13 +22,10 @@ jobs:
       - name: Building the DailyDeutsch Bot
         run: ./mvnw clean package
 
-      - name: See what is going on
-        run: |
-          ls
-
       - name: Build Docker image
         run: |
           docker build -t "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest .
+
       - name: Save Docker image as tar file
         run: |
           docker save "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest -o daily-deutsch-app-development.tar
@@ -39,8 +36,8 @@ jobs:
           printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > oracle_access_key.pem
           chmod 600 oracle_access_key.pem
           
-          scp -i oracle_access_key.pem daily-deutsch-app-development.tar "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
-          ssh -i oracle_access_key.pem "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}" << 'EOF'
+          scp -i oracle_access_key.pem daily-deutsch-app-development.tar -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
+          ssh -i oracle_access_key.pem -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}" << 'EOF'
             docker stop "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" || true
             docker rm "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" || true
             docker rmi "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest || true
