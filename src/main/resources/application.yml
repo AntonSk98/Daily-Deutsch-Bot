@@ -3,8 +3,8 @@ spring.application.name: daily-deutsch-bot
 rest:
   internal:
     security:
-      username: ${rest-internal-access-username}
-      password: ${reset-internal-access-password}
+      username: ${REST_INTERNAL_SECURITY_USERNAME}
+      password: ${REST_INTERNAL_SECURITY_PASSWORD}
 
 commands:
   command-definition:
@@ -92,13 +92,13 @@ commands:
           dynamic-prompt: true
 
 bot:
-  verified-user: 402877944
-  token: '6925832793:AAFDt_BI3-3Olw6iqrvuYczCvwKgDk5Qx1w'
-  resource-folder: '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static'
+  verified-user: ${BOT_VERIFIED_USER}
+  token: ${BOT_TOKEN}
+  resource-folder: ${RESOURCE_FOLDER}
 
 ai:
   params:
-    token: ${ai-token}
+    token: ${AI_TOKEN}
     text-based-model-configuration:
       model: gpt-4o-mini
       role: user

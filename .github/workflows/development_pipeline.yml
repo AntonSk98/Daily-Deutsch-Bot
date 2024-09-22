@@ -42,7 +42,8 @@ jobs:
             docker rm "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" || true
             docker rmi "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest || true
             docker load -i /home/ubuntu/daily-deutsch-bot/daily-deutsch-app-development.tar
-            docker run -d -p 8080:8080 --name "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" \
+            docker run -d --network host --name "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" \
+                -e SPRING_PROFILES_ACTIVE=dev \
                 -e AI_TOKEN=${{ secrets.AI_TOKEN }} \
                 -e REST_INTERNAL_SECURITY_PASSWORD=${{ secrets.REST_INTERNAL_SECURITY_PASSWORD }} \
                 -e REST_INTERNAL_SECURITY_USERNAME=${{ secrets.REST_INTERNAL_SECURITY_USERNAME }} \
