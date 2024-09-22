@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t daily-deutsch-bot:latest .
+          docker build -t "${{ secrets.SSH_PRIVATE_KEY }}":latest .
       - name: Save Docker image as tar file
         run: |
           docker save daily-deutsch-bot:latest -o daily-deutsch-app-development.tar
