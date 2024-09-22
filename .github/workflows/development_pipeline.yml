@@ -22,6 +22,10 @@ jobs:
       - name: Building the DailyDeutsch Bot
         run: ./mvnw clean package
 
+      - name: See what is going on
+        run: |
+          ls
+
       - name: Build Docker image
         run: |
           docker build -t "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest .
