@@ -52,7 +52,7 @@ public class PreviewCachedWords extends AbstractCommandProcessor {
 
     @Override
     public Command supportedCommand() {
-        return Command.PREVIEW;
+        return Command.PREVIEW_WORD_CARD;
     }
 
     @Override

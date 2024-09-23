@@ -58,7 +58,7 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         final CorrectTextModel correctTextModel = model.map(CorrectTextModel.class);
-        if (correctTextModel.shouldPublish()) {
+        if (correctTextModel.shouldDo()) {
             outputGateway.sendPlainMessage(parameters.chatId(), "Publishing...");
         }
         correctedTextCache.clear();
@@ -117,6 +117,6 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
         return new CorrectTextModel()
                 .addMapping(TOPIC, CorrectTextModel::setTopic)
                 .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
-                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, (model, value) -> model.setShouldPublish(value.contains(APPROVE_PROMPT)));
+                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, CorrectTextModel::parseValue);
     }
 }

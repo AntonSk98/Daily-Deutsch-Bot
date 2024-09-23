@@ -5,10 +5,10 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
  *
  * @author Anton Skripin
  */
-public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> {
+public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> implements IConfirmationModel {
     private String topic;
     private String textWithCorrections;
-    boolean shouldPublish;
+    private final CommandConfirmationModel confirmationModel = new CommandConfirmationModel();
 
     /**
      * Getter for {@link #topic}.
@@ -46,26 +46,18 @@ public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> {
         this.textWithCorrections = textWithCorrections;
     }
 
-    /**
-     * Getter for {@link #shouldPublish}.
-     *
-     * @return {@link #shouldPublish}
-     */
-    public boolean shouldPublish() {
-        return shouldPublish;
-    }
-
-    /**
-     * Setter for {@link #shouldPublish}.
-     *
-     * @param shouldPublish {@link #shouldPublish}
-     */
-    public void setShouldPublish(boolean shouldPublish) {
-        this.shouldPublish = shouldPublish;
-    }
-
     @Override
     public AbstractCommandModel<CorrectTextModel> init() {
         return new CorrectTextModel();
+    }
+
+    @Override
+    public void parseValue(String value) {
+        this.confirmationModel.setShouldDo(value);
+    }
+
+    @Override
+    public boolean shouldDo() {
+        return confirmationModel.shouldDo();
     }
 }
