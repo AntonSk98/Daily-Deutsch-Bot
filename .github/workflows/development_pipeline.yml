@@ -1,4 +1,4 @@
-name: Release Workflow
+name: Development pipeline
 
 on:
   push:
@@ -45,10 +45,11 @@ jobs:
             docker run -d --network host --name "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}" \
                 -e SPRING_PROFILES_ACTIVE=dev \
                 -e AI_TOKEN=${{ secrets.AI_TOKEN }} \
-                -e REST_INTERNAL_SECURITY_PASSWORD=${{ secrets.REST_INTERNAL_SECURITY_PASSWORD }} \
-                -e REST_INTERNAL_SECURITY_USERNAME=${{ secrets.REST_INTERNAL_SECURITY_USERNAME }} \
+                -e GROUP_ID=${{secrets.GROUP_ID_DEVELOPMENT}} \
+                -e REST_INTERNAL_SECURITY_USERNAME=${{ secrets.REST_INTERNAL_SECURITY_USERNAME_DEVELOPMENT }} \
+                -e REST_INTERNAL_SECURITY_PASSWORD=${{ secrets.REST_INTERNAL_SECURITY_PASSWORD_DEVELOPMENT }} \
                 -e BOT_VERIFIED_USER=${{ secrets.BOT_VERIFIED_USER }} \
-                -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} \
+                -e BOT_TOKEN=${{ secrets.BOT_TOKEN_DEVELOPMENT }} \
                 -e RESOURCE_FOLDER=${{ secrets.RESOURCE_FOLDER }} \
                 "${{ secrets.CONTAINER_NAME_DEVELOPMENT }}":latest
           EOF

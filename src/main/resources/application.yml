@@ -95,6 +95,7 @@ bot:
   verified-user: ${BOT_VERIFIED_USER}
   token: ${BOT_TOKEN}
   resource-folder: ${RESOURCE_FOLDER}
+  group-id: ${GROUP_ID}
 
 ai:
   params:

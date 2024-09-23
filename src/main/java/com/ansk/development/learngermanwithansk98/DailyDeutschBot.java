@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class DailyDeutschBot {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
         SpringApplication.run(DailyDeutschBot.class, args);
     }
 
