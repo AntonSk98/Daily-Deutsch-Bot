@@ -34,6 +34,13 @@ commands:
         - key: word_reference
           prompt: please provide a unique word reference
     - path: /preview_word_card
+    - path: /publish_word_card
+      parameters:
+        - key: should_do
+          prompt: |
+            Are you sure you would like to post the word card to the group?
+              ✅ Type '+' to approve
+              ❌ Type any other symbol to decline
     - path: /generate_reading_exercise
       parameters:
         - key: level
@@ -44,7 +51,7 @@ commands:
       parameters:
         - key: text
           prompt: please provide a text to create reading exercise for
-        - key: should_rephrase_text
+        - key: should_do
           prompt: |
             Should submitted text be rephrased?
               ✅ Type '+' to approve
@@ -72,7 +79,7 @@ commands:
               🔹 any removed blocks must be wrapped with --abc--- symbols.
               🔹 any added blocks must be wrapped with ++abc++ symbols.
               🔹 any paragraph must be separated by empty line
-        - key: should_publish_text_and_correction
+        - key: should_do
           prompt: |
             Would you like to publish this post?
               ✅ Type '+' to approve

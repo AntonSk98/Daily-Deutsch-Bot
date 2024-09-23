@@ -14,7 +14,8 @@ public enum Command {
     GET_WORDS("/cached_words"),
     DELETE_WORD("/delete_word"),
     CLEAR_WORD_CACHE("/clear_word_card"),
-    PREVIEW("/preview_word_card"),
+    PREVIEW_WORD_CARD("/preview_word_card"),
+    PUBLISH_WORD_CARD("/publish_word_card"),
 
     READING_EXERCISE_GENERATE("/generate_reading_exercise"),
     READING_EXERCISE_CREATE("/create_reading_exercise"),

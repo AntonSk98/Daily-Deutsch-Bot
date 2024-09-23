@@ -15,8 +15,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.ReadingExe
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 import org.springframework.stereotype.Service;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_REPHRASE_TEXT;
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
 
 /**
  * Service to create reading exercise based on the provided text.
@@ -77,7 +76,7 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
         return new ReadingExerciseWithTextModel()
                 .init()
                 .addMapping(TEXT, ReadingExerciseWithTextModel::setText)
-                .addMapping(SHOULD_REPHRASE_TEXT, ReadingExerciseWithTextModel::parseValue);
+                .addMapping(SHOULD_DO, ReadingExerciseWithTextModel::parseValue);
     }
 
     private ReadingExercise.TextOutput analyzeText(CommandParameters parameters, ReadingExerciseWithTextModel model) {
