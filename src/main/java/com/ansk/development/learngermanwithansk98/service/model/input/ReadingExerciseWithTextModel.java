@@ -8,7 +8,7 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
 public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingExerciseWithTextModel> implements IConfirmationModel {
     private String text;
     private boolean shouldRephrase;
-    private CommandConfirmationModel confirmationModel = new CommandConfirmationModel();
+    private final CommandConfirmationModel confirmationModel = new CommandConfirmationModel();
 
     /**
      * Getter for {@link #text}.
@@ -35,7 +35,7 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
 
     @Override
     public void parseValue(String value) {
-        confirmationModel.setShouldDo(value);
+        confirmationModel.parseValue(value);
     }
 
     @Override

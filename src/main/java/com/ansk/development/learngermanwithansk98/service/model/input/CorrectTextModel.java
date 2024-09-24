@@ -53,7 +53,7 @@ public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> imp
 
     @Override
     public void parseValue(String value) {
-        this.confirmationModel.setShouldDo(value);
+        this.confirmationModel.parseValue(value);
     }
 
     @Override

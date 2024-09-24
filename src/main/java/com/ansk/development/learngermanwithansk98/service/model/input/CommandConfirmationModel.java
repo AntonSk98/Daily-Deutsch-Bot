@@ -9,14 +9,22 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  *
  * @author Anton Skripin
  */
-public class CommandConfirmationModel {
+public class CommandConfirmationModel extends AbstractCommandModel<CommandConfirmationModel> implements IConfirmationModel {
     private boolean shouldDo;
 
+    @Override
+    public void parseValue(String value) {
+        this.shouldDo = StringUtils.isNotEmpty(value) && value.contains(APPROVE_PROMPT);
+    }
+
+    @Override
     public boolean shouldDo() {
         return shouldDo;
     }
 
-    public void setShouldDo(String value) {
-        this.shouldDo = StringUtils.isNotEmpty(value) && value.contains(APPROVE_PROMPT);
+
+    @Override
+    public AbstractCommandModel<CommandConfirmationModel> init() {
+        return this;
     }
 }
