@@ -24,6 +24,7 @@ public enum Command {
     WRITING_WITH_EXAMPLE("/writing_with_example"),
     WRITING_EXERCISE_PREVIEW("/preview_writing_exercise"),
     CORRECT_TEXT("/correct_text"),
+    PUBLISH_WRITING_EXERCISE("/publish_writing_exercise"),
 
     LISTENING_EXERCISE("/listening_exercise"),
     LISTENING_EXERCISE_PREVIEW("/preview_listening_exercise"),

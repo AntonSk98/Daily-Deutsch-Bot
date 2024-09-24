@@ -5,7 +5,7 @@ import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfigur
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractPublishSupport;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractPublishExerciseSupport;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CardToImagesConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
@@ -25,7 +25,7 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
  * @author Anton Skripin
  */
 @Service
-public class PublishWordCard extends AbstractPublishSupport {
+public class PublishWordCard extends AbstractPublishExerciseSupport {
 
     private final ITelegramOutputGateway telegramOutputGateway;
     private final WordCache wordCache;
@@ -70,7 +70,7 @@ public class PublishWordCard extends AbstractPublishSupport {
     }
 
     @Override
-    public Runnable cleanCache() {
+    public Runnable clearCache() {
         return wordCache::cleanCache;
     }
 }

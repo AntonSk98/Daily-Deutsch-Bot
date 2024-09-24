@@ -19,7 +19,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  *
  * @author Anton Skripin
  */
-public abstract class AbstractPublishSupport extends AbstractCommandProcessor {
+public abstract class AbstractPublishExerciseSupport extends AbstractCommandProcessor {
 
 
     private final Long groupId;
@@ -32,10 +32,10 @@ public abstract class AbstractPublishSupport extends AbstractCommandProcessor {
      * @param telegramOutputGateway See {@link ITelegramOutputGateway}
      * @param commandCache          See {@link CommandCache}
      */
-    protected AbstractPublishSupport(CommandsConfiguration commandsConfiguration,
-                                     ITelegramOutputGateway telegramOutputGateway,
-                                     CommandCache commandCache,
-                                     DailyDeutschBotConfiguration botConfiguration) {
+    protected AbstractPublishExerciseSupport(CommandsConfiguration commandsConfiguration,
+                                             ITelegramOutputGateway telegramOutputGateway,
+                                             CommandCache commandCache,
+                                             DailyDeutschBotConfiguration botConfiguration) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
         this.groupId = botConfiguration.groupId();
         this.outputGateway = telegramOutputGateway;
@@ -60,7 +60,7 @@ public abstract class AbstractPublishSupport extends AbstractCommandProcessor {
      *
      * @return runnable to clean up the cache
      */
-    public abstract Runnable cleanCache();
+    public abstract Runnable clearCache();
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
@@ -79,7 +79,7 @@ public abstract class AbstractPublishSupport extends AbstractCommandProcessor {
         outputGateway.sendPlainMessage(parameters.chatId(), "Publishing...");
         publish().accept(groupId);
         outputGateway.sendPlainMessage(parameters.chatId(), "Published!");
-        cleanCache().run();
+        clearCache().run();
         outputGateway.sendPlainMessage(parameters.chatId(), "Cache is cleaned");
     }
 
