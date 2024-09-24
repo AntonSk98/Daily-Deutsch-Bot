@@ -28,7 +28,8 @@ public enum Command {
 
     LISTENING_EXERCISE("/listening_exercise"),
     LISTENING_EXERCISE_PREVIEW("/preview_listening_exercise"),
-    LISTENING_EDIT_TRANSCRIPTION("/listening_edit_transcription");
+    LISTENING_EDIT_TRANSCRIPTION("/listening_edit_transcription"),
+    PUBLISH_LISTENING_EXERCISE("/publish_listening_exercise");
 
     private final String path;
 

@@ -104,6 +104,10 @@ commands:
         - key: transcription
           prompt: feel free to edit the transcription of the audio
           dynamic-prompt: true
+    - path: /publish_listening_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
 
 bot:
   verified-user: ${BOT_VERIFIED_USER}
