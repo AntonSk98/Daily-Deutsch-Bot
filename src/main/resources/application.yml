@@ -7,6 +7,12 @@ rest:
       password: ${REST_INTERNAL_SECURITY_PASSWORD}
 
 commands:
+  confirmation:
+    key: should_do
+    prompt: |
+      Would you like to perform this action?
+        ✅ Type '+' to approve
+        ❌ Type any other symbol to decline
   command-definition:
     - path: /new_word
       with-navigation: true
@@ -36,11 +42,8 @@ commands:
     - path: /preview_word_card
     - path: /publish_word_card
       parameters:
-        - key: should_do
-          prompt: |
-            Are you sure you would like to post the word card to the group?
-              ✅ Type '+' to approve
-              ❌ Type any other symbol to decline
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
     - path: /generate_reading_exercise
       parameters:
         - key: level
@@ -51,11 +54,11 @@ commands:
       parameters:
         - key: text
           prompt: please provide a text to create reading exercise for
-        - key: should_do
+        - key: ${commands.confirmation.key}
           prompt: |
-            Should submitted text be rephrased?
-              ✅ Type '+' to approve
-              ❌ Type any other symbol to decline
+            Text is gonna be rephrased.
+            
+            ${commands.confirmation.prompt}
     - path: /cached_reading_exercise
     - path: /ai_new_word
       parameters:
@@ -79,12 +82,16 @@ commands:
               🔹 any removed blocks must be wrapped with --abc--- symbols.
               🔹 any added blocks must be wrapped with ++abc++ symbols.
               🔹 any paragraph must be separated by empty line
-        - key: should_do
+        - key: ${commands.confirmation.key}
           prompt: |
-            Would you like to publish this post?
-              ✅ Type '+' to approve
-              ❌ Type any other symbol to decline
+            The following exercise is gonna be published...
+            
+            ${commands.confirmation.prompt}
           dynamic-prompt: true
+    - path: /publish_writing_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
 
     - path: /preview_writing_exercise
     - path: /listening_exercise
