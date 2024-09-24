@@ -21,9 +21,9 @@ public class WritingExerciseSender {
     private static final String WRITING_EXERCISE_TEMPLATE = """
             ⭐️ #Writing <b>| %s</b>
             
-            🗒️ Share your thoughts on the following topic:
+            🗒️ <b>Share your thoughts on the following topic:</b>
             
-            <b>%s</b>
+                <b><i>%s</i></b>
             
             You can also always review our sample text for inspiration ⬆️
             
