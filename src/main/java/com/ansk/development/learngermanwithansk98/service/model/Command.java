@@ -20,6 +20,7 @@ public enum Command {
     READING_EXERCISE_GENERATE("/generate_reading_exercise"),
     READING_EXERCISE_CREATE("/create_reading_exercise"),
     READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
+    READING_EXERCISE_PUBLISH("/publish_reading_exercise"),
 
     WRITING_WITH_EXAMPLE("/writing_with_example"),
     WRITING_EXERCISE_PREVIEW("/preview_writing_exercise"),

@@ -60,6 +60,13 @@ commands:
             
             ${commands.confirmation.prompt}
     - path: /cached_reading_exercise
+    - path: /publish_reading_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: |
+            Reading exercise is gonna be published.
+            
+            ${commands.confirmation.prompt}
     - path: /ai_new_word
       parameters:
         - key: word

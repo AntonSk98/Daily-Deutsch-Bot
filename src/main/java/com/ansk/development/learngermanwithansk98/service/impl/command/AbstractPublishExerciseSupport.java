@@ -31,6 +31,7 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
      * @param commandsConfiguration See {@link CommandsConfiguration}
      * @param telegramOutputGateway See {@link ITelegramOutputGateway}
      * @param commandCache          See {@link CommandCache}
+     * @param botConfiguration      See {@link DailyDeutschBotConfiguration}
      */
     protected AbstractPublishExerciseSupport(CommandsConfiguration commandsConfiguration,
                                              ITelegramOutputGateway telegramOutputGateway,
