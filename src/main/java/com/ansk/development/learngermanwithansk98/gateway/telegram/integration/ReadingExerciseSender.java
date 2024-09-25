@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -83,7 +84,15 @@ public class ReadingExerciseSender {
         String questionsAndAnswers = questionsAndAnswersMessageBlock(tasks
                 .tasks()
                 .stream()
-                .collect(Collectors.toMap(ReadingExercise.Task::question, task -> Optional.ofNullable(task.answer()).orElse("-"))));
+                .collect(
+                        Collectors.toMap(
+                                ReadingExercise.Task::question,
+                                task -> Optional.ofNullable(task.answer()).orElse("-"),
+                                (oldValue, newValue) -> newValue,
+                                LinkedHashMap::new
+                        )
+                )
+        );
 
         return SendMessage.builder().chatId(chatId).text(questionsAndAnswers).parseMode("HTML").build();
     }
