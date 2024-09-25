@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
+import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
@@ -24,6 +25,12 @@ import java.io.InputStream;
  */
 public class HtmlToPdfPipe implements IConverterPipe<Document, PDDocument> {
 
+    private final String fontsFolder;
+
+    public HtmlToPdfPipe(DailyDeutschBotConfiguration configuration) {
+        this.fontsFolder = configuration.resourceFolder() + "/fonts";
+    }
+
     @Override
     public PDDocument pipe(Document html) {
         String htmlString = html.html();
@@ -37,8 +44,8 @@ public class HtmlToPdfPipe implements IConverterPipe<Document, PDDocument> {
             pdfDocument.setDefaultPageSize(PageSize.A4);
 
             // Set up font resolver to use Helvetica
-            FontProvider fontProvider = new DefaultFontProvider(true, true, true);
-            fontProvider.addFont("Merriweather");
+            FontProvider fontProvider = new DefaultFontProvider(false, false, false);
+            fontProvider.addDirectory(fontsFolder);
 
             HtmlConverter.convertToPdf(htmlInputStream, pdfDocument, new ConverterProperties().setFontProvider(fontProvider));
 

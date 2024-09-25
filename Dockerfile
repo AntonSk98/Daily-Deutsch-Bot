@@ -11,11 +11,6 @@ RUN apt-get update && apt-get install -y fonts-dejavu && rm -rf /var/lib/apt/lis
 COPY target/daily-deutsch-bot*.jar /app/daily-deutsch-bot.jar
 COPY target/classes/static /app/static
 
-# Copy custom fonts (place your fonts in a fonts directory in your project)
-COPY target/classes/static/fonts /usr/share/fonts/truetype/custom/
-# Rebuild the font cache to make the new fonts available
-RUN fc-cache -f -v
-
 # Expose the application's port (adjust if necessary)
 EXPOSE 8080
 
