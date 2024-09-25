@@ -1,10 +1,13 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
+import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -32,7 +35,14 @@ public class HtmlToPdfPipe implements IConverterPipe<Document, PDDocument> {
             ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
             PdfDocument pdfDocument = new PdfDocument(new PdfWriter(pdfOutputStream));
             pdfDocument.setDefaultPageSize(PageSize.A4);
-            HtmlConverter.convertToPdf(htmlInputStream, pdfDocument);
+
+            // Set up font resolver to use Helvetica
+            FontProvider fontProvider = new DefaultFontProvider();
+            fontProvider.addFont("Helvetica-Bold"); // Use Helvetica Bold for contrast
+            fontProvider.addFont("Helvetica-BoldOblique");
+
+            HtmlConverter.convertToPdf(htmlInputStream, pdfDocument, new ConverterProperties().setFontProvider(fontProvider));
+
             return Loader.loadPDF(pdfOutputStream.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException(e);
