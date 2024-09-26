@@ -43,13 +43,12 @@ jobs:
             docker rmi "${{ secrets.CONTAINER_NAME }}":latest || true
             docker load -i /home/ubuntu/daily-deutsch-bot/daily-deutsch-app.tar
             docker run -d --network host --name "${{ secrets.CONTAINER_NAME }}" \
-                -e SPRING_PROFILES_ACTIVE=dev \
-                -e AI_TOKEN=${{ secrets.AI_TOKEN }} \     
-                -e GROUP_ID=${{secrets.GROUP_ID}} \
-                -e REST_INTERNAL_SECURITY_USERNAME=${{ secrets.REST_INTERNAL_SECURITY_USERNAME }} \
-                -e REST_INTERNAL_SECURITY_PASSWORD=${{ secrets.REST_INTERNAL_SECURITY_PASSWORD }} \
-                -e BOT_VERIFIED_USER=${{ secrets.BOT_VERIFIED_USER }} \
-                -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} \
-                -e RESOURCE_FOLDER=${{ secrets.RESOURCE_FOLDER }} \
-                "${{ secrets.CONTAINER_NAME }}":latest
+              -e AI_TOKEN="${{ secrets.AI_TOKEN }}" \
+              -e GROUP_ID="${{ secrets.GROUP_ID}}" \
+              -e REST_INTERNAL_SECURITY_USERNAME="${{ secrets.REST_INTERNAL_SECURITY_USERNAME }}" \
+              -e REST_INTERNAL_SECURITY_PASSWORD="${{ secrets.REST_INTERNAL_SECURITY_PASSWORD }}" \
+              -e BOT_VERIFIED_USER="${{ secrets.BOT_VERIFIED_USER }}" \
+              -e BOT_TOKEN="${{ secrets.BOT_TOKEN }}" \
+              -e RESOURCE_FOLDER="${{ secrets.RESOURCE_FOLDER }}" \
+              "${{ secrets.CONTAINER_NAME }}":latest
           EOF
