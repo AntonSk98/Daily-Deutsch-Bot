@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Anton SKripin
  */
 @ConfigurationProperties("bot")
-public record DailyDeutschBotConfiguration(Long verifiedUser, String token, String resourceFolder) {
+public record DailyDeutschBotConfiguration(Long verifiedUser, Long groupId, String token, String resourceFolder) {
 }

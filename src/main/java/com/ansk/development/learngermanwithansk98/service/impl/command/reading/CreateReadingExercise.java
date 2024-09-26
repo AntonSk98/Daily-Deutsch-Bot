@@ -76,7 +76,7 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
         return new ReadingExerciseWithTextModel()
                 .init()
                 .addMapping(TEXT, ReadingExerciseWithTextModel::setText)
-                .addMapping(SHOULD_REPHRASE_TEXT, (model, value) -> model.shouldRephrase(value.contains(APPROVE_PROMPT)));
+                .addMapping(SHOULD_DO, ReadingExerciseWithTextModel::parseValue);
     }
 
     private ReadingExercise.TextOutput analyzeText(CommandParameters parameters, ReadingExerciseWithTextModel model) {
@@ -86,7 +86,7 @@ public class CreateReadingExercise extends ReadingExerciseSupport {
         var analyzedText = aiGateway.sendRequest(analyzeText.getPrompt(), ReadingExercise.TextOutput.class);
         telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The text is successfully analyzed.");
 
-        if (!model.shouldRephrase()) {
+        if (!model.shouldDo()) {
             return new ReadingExercise.TextOutput(analyzedText.level(), analyzedText.title(), model.getText());
         }
 

@@ -46,7 +46,7 @@ public class PdfToImagePipe implements IConverterPipe<PDDocument, ExerciseDocume
 
     private BufferedImage toBufferedImage(PDFRenderer pdfRenderer, int page) {
         try {
-            return pdfRenderer.renderImageWithDPI(page, IMAGE_DPI, ImageType.BGR);
+            return pdfRenderer.renderImageWithDPI(page, IMAGE_DPI, ImageType.RGB);
         } catch (IOException e) {
             throw new RuntimeException("Failed to convert to buffered image", e);
         }

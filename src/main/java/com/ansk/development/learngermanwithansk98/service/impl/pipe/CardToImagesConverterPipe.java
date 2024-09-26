@@ -17,7 +17,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Service
 public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard> implements IConverterPipe<WordCard, ExerciseDocument> {
 
-
+    private final HtmlToPdfPipe htmlToPdfPipe;
     /**
      * Constructor.
      *
@@ -26,12 +26,13 @@ public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard
      */
     protected CardToImagesConverterPipe(DailyDeutschBotConfiguration configuration, SpringTemplateEngine springTemplateEngine) {
         super(configuration, springTemplateEngine);
+        htmlToPdfPipe = new HtmlToPdfPipe(configuration);
     }
 
     @Override
     public ExerciseDocument pipe(WordCard wordCard) {
         Document html = abstractPipe("vocab_template", "wordCard", wordCard);
-        PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
+        PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);
     }
 }

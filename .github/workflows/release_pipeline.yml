@@ -1,0 +1,55 @@
+name: Release pipeline
+
+on:
+  push:
+    branches:
+      - release*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setting up java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Building the DailyDeutsch Bot
+        run: ./mvnw clean package
+
+      - name: Build Docker image
+        run: |
+          docker build -t "${{ secrets.CONTAINER_NAME }}":latest .
+
+      - name: Save Docker image as tar file
+        run: |
+          docker save "${{ secrets.CONTAINER_NAME }}":latest -o daily-deutsch-app.tar
+
+      - name: SSH into remote server and deploy latest state
+        run: |
+          # Save the private SSH key to a file
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > oracle_access_key.pem
+          chmod 600 oracle_access_key.pem
+          
+          scp -i oracle_access_key.pem -o StrictHostKeyChecking=no daily-deutsch-app.tar "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
+          ssh -i oracle_access_key.pem -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}" << 'EOF'
+            docker stop "${{ secrets.CONTAINER_NAME }}" || true
+            docker rm "${{ secrets.CONTAINER_NAME }}" || true
+            docker rmi "${{ secrets.CONTAINER_NAME }}":latest || true
+            docker load -i /home/ubuntu/daily-deutsch-bot/daily-deutsch-app.tar
+            docker run -d --network host --name "${{ secrets.CONTAINER_NAME }}" \
+                -e SPRING_PROFILES_ACTIVE=dev \
+                -e AI_TOKEN=${{ secrets.AI_TOKEN }} \     
+                -e GROUP_ID=${{secrets.GROUP_ID}} \
+                -e REST_INTERNAL_SECURITY_USERNAME=${{ secrets.REST_INTERNAL_SECURITY_USERNAME }} \
+                -e REST_INTERNAL_SECURITY_PASSWORD=${{ secrets.REST_INTERNAL_SECURITY_PASSWORD }} \
+                -e BOT_VERIFIED_USER=${{ secrets.BOT_VERIFIED_USER }} \
+                -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} \
+                -e RESOURCE_FOLDER=${{ secrets.RESOURCE_FOLDER }} \
+                "${{ secrets.CONTAINER_NAME }}":latest
+          EOF

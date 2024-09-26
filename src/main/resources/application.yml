@@ -3,10 +3,16 @@ spring.application.name: daily-deutsch-bot
 rest:
   internal:
     security:
-      username: ${rest-internal-access-username}
-      password: ${reset-internal-access-password}
+      username: ${REST_INTERNAL_SECURITY_USERNAME}
+      password: ${REST_INTERNAL_SECURITY_PASSWORD}
 
 commands:
+  confirmation:
+    key: should_do
+    prompt: |
+      Would you like to perform this action?
+        ✅ Type '+' to approve
+        ❌ Type any other symbol to decline
   command-definition:
     - path: /new_word
       with-navigation: true
@@ -34,6 +40,10 @@ commands:
         - key: word_reference
           prompt: please provide a unique word reference
     - path: /preview_word_card
+    - path: /publish_word_card
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
     - path: /generate_reading_exercise
       parameters:
         - key: level
@@ -44,12 +54,19 @@ commands:
       parameters:
         - key: text
           prompt: please provide a text to create reading exercise for
-        - key: should_rephrase_text
+        - key: ${commands.confirmation.key}
           prompt: |
-            Should submitted text be rephrased?
-              ✅ Type '+' to approve
-              ❌ Type any other symbol to decline
+            Text is gonna be rephrased.
+            
+            ${commands.confirmation.prompt}
     - path: /cached_reading_exercise
+    - path: /publish_reading_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: |
+            Reading exercise is gonna be published.
+            
+            ${commands.confirmation.prompt}
     - path: /ai_new_word
       parameters:
         - key: word
@@ -72,12 +89,16 @@ commands:
               🔹 any removed blocks must be wrapped with --abc--- symbols.
               🔹 any added blocks must be wrapped with ++abc++ symbols.
               🔹 any paragraph must be separated by empty line
-        - key: should_publish_text_and_correction
+        - key: ${commands.confirmation.key}
           prompt: |
-            Would you like to publish this post?
-              ✅ Type '+' to approve
-              ❌ Type any other symbol to decline
+            The following exercise is gonna be published...
+            
+            ${commands.confirmation.prompt}
           dynamic-prompt: true
+    - path: /publish_writing_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
 
     - path: /preview_writing_exercise
     - path: /listening_exercise
@@ -90,15 +111,20 @@ commands:
         - key: transcription
           prompt: feel free to edit the transcription of the audio
           dynamic-prompt: true
+    - path: /publish_listening_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
 
 bot:
-  verified-user: 402877944
-  token: '6925832793:AAFDt_BI3-3Olw6iqrvuYczCvwKgDk5Qx1w'
-  resource-folder: '/media/ansk98/D/development/learn-german-with-ansk98/src/main/resources/static'
+  verified-user: ${BOT_VERIFIED_USER}
+  token: ${BOT_TOKEN}
+  resource-folder: ${RESOURCE_FOLDER}
+  group-id: ${GROUP_ID}
 
 ai:
   params:
-    token: ${ai-token}
+    token: ${AI_TOKEN}
     text-based-model-configuration:
       model: gpt-4o-mini
       role: user

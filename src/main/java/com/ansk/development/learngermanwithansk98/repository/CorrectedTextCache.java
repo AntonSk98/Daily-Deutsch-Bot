@@ -3,6 +3,8 @@ package com.ansk.development.learngermanwithansk98.repository;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * Cache to store corrected text alongside the original text.
  *
@@ -18,8 +20,8 @@ public class CorrectedTextCache {
      *
      * @return {@link CorrectedTexContainer}
      */
-    public CorrectedTexContainer getCorrectedText() {
-        return correctedTextContainer;
+    public Optional<CorrectedTexContainer> getCorrectedText() {
+        return Optional.ofNullable(correctedTextContainer);
     }
 
     /**

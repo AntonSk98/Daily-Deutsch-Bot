@@ -17,6 +17,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Component
 public class CorrectedTextDocumentPipe extends AbstractObjectToHtmlPipe<CorrectedTextDocumentMetadata> implements IConverterPipe<CorrectedTextDocumentMetadata, ExerciseDocument> {
 
+    private final HtmlToPdfPipe htmlToPdfPipe;
+
     /**
      * Constructor.
      *
@@ -26,12 +28,13 @@ public class CorrectedTextDocumentPipe extends AbstractObjectToHtmlPipe<Correcte
     protected CorrectedTextDocumentPipe(DailyDeutschBotConfiguration configuration,
                                         SpringTemplateEngine springTemplateEngine) {
         super(configuration, springTemplateEngine);
+        this.htmlToPdfPipe = new HtmlToPdfPipe(configuration);
     }
 
     @Override
     public ExerciseDocument pipe(CorrectedTextDocumentMetadata correctedTextDocumentMetadata) {
         Document html = abstractPipe("writing_correction_template", "writingCorrection", correctedTextDocumentMetadata);
-        PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
+        PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);
     }
 }

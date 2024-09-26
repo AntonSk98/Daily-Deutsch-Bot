@@ -14,19 +14,23 @@ public enum Command {
     GET_WORDS("/cached_words"),
     DELETE_WORD("/delete_word"),
     CLEAR_WORD_CACHE("/clear_word_card"),
-    PREVIEW("/preview_word_card"),
+    PREVIEW_WORD_CARD("/preview_word_card"),
+    PUBLISH_WORD_CARD("/publish_word_card"),
 
     READING_EXERCISE_GENERATE("/generate_reading_exercise"),
     READING_EXERCISE_CREATE("/create_reading_exercise"),
     READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
+    READING_EXERCISE_PUBLISH("/publish_reading_exercise"),
 
     WRITING_WITH_EXAMPLE("/writing_with_example"),
     WRITING_EXERCISE_PREVIEW("/preview_writing_exercise"),
     CORRECT_TEXT("/correct_text"),
+    PUBLISH_WRITING_EXERCISE("/publish_writing_exercise"),
 
     LISTENING_EXERCISE("/listening_exercise"),
     LISTENING_EXERCISE_PREVIEW("/preview_listening_exercise"),
-    LISTENING_EDIT_TRANSCRIPTION("/listening_edit_transcription");
+    LISTENING_EDIT_TRANSCRIPTION("/listening_edit_transcription"),
+    PUBLISH_LISTENING_EXERCISE("/publish_listening_exercise");
 
     private final String path;
 

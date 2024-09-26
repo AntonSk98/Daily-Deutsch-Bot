@@ -1,10 +1,11 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
+import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CorrectedTextCache;
-import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
+import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractPublishExerciseSupport;
 import com.ansk.development.learngermanwithansk98.service.impl.command.writing.correction.CorrectionRenderer;
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CorrectedTextDocumentPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
 
@@ -26,7 +29,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  * @author Anton Skripin
  */
 @Service
-public class CorrectTextExercise extends AbstractCommandProcessor {
+public class CorrectTextExercise extends AbstractPublishExerciseSupport {
 
     private final ITelegramOutputGateway outputGateway;
     private final CorrectedTextDocumentPipe correctedTextDocumentPipe;
@@ -43,8 +46,9 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
                                   ITelegramOutputGateway telegramOutputGateway,
                                   CommandCache commandCache,
                                   CorrectedTextDocumentPipe correctedTextDocumentPipe,
-                                  CorrectedTextCache correctedTextCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
+                                  CorrectedTextCache correctedTextCache,
+                                  DailyDeutschBotConfiguration botConfiguration) {
+        super(commandsConfiguration, telegramOutputGateway, commandCache, botConfiguration);
         this.outputGateway = telegramOutputGateway;
         this.correctedTextDocumentPipe = correctedTextDocumentPipe;
         this.correctedTextCache = correctedTextCache;
@@ -56,13 +60,21 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
     }
 
     @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
-        final CorrectTextModel correctTextModel = model.map(CorrectTextModel.class);
-        if (correctTextModel.shouldPublish()) {
-            outputGateway.sendPlainMessage(parameters.chatId(), "Publishing...");
-        }
-        correctedTextCache.clear();
-        outputGateway.sendPlainMessage(parameters.chatId(), "Exercise cache evicted...");
+    public Supplier<Boolean> isPresentInCache() {
+        return () -> correctedTextCache.getCorrectedText().isPresent();
+    }
+
+    @Override
+    public Consumer<Long> publish() {
+        return groupId -> {
+            CorrectedTextCache.CorrectedTexContainer correctText = correctedTextCache.getCorrectedText().orElseThrow();
+            outputGateway.sendCorrectedText(groupId, correctText.originalText(), correctText.correctedText());
+        };
+    }
+
+    @Override
+    public Runnable clearCache() {
+        return correctedTextCache::clear;
     }
 
     @Override
@@ -117,6 +129,6 @@ public class CorrectTextExercise extends AbstractCommandProcessor {
         return new CorrectTextModel()
                 .addMapping(TOPIC, CorrectTextModel::setTopic)
                 .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
-                .addMapping(SHOULD_PUBLISH_TEXT_AND_CORRECTION, (model, value) -> model.setShouldPublish(value.contains(APPROVE_PROMPT)));
+                .addMapping(SHOULD_DO, CorrectTextModel::parseValue);
     }
 }

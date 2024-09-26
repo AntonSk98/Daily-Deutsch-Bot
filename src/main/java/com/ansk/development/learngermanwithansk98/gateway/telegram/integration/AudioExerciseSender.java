@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -96,7 +97,12 @@ public class AudioExerciseSender {
         String exercisePart = questionsAndAnswersMessageBlock(listeningExercise.tasks()
                 .tasks()
                 .stream()
-                .collect(Collectors.toMap(ListeningExercise.Task::question, ListeningExercise.Task::answer))
+                .collect(Collectors.toMap(
+                        ListeningExercise.Task::question,
+                        ListeningExercise.Task::answer,
+                        (oldValue, newValue) -> newValue,
+                        LinkedHashMap::new
+                ))
         );
 
         SendMessage questionsAndAnswers = SendMessage.builder().chatId(chatId).text(exercisePart).parseMode("HTML").build();

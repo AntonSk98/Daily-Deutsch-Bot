@@ -6,10 +6,11 @@ import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -71,5 +72,17 @@ public class MapperUtils {
                             : WordInfo.of(wordStr, word.getTranslation());
                 })
                 .toList();
+    }
+
+    /**
+     * Maps a {@link Temporal} object into its pretty printed version for the German locale.
+     *
+     * @param time temporal time
+     * @return pretty-printed time
+     */
+    public static String mapToDateGermanFormat(Temporal time) {
+        DateTimeFormatter germanFormatter = DateTimeFormatter.ofPattern("d. MMMM yyyy", Locale.GERMAN);
+        LocalDate date = LocalDate.of(time.get(ChronoField.YEAR), time.get(ChronoField.MONTH_OF_YEAR), time.get(ChronoField.DAY_OF_MONTH));
+        return date.format(germanFormatter);
     }
 }

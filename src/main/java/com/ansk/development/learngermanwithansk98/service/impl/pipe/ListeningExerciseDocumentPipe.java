@@ -17,6 +17,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Component
 public class ListeningExerciseDocumentPipe extends AbstractObjectToHtmlPipe<ListeningExercise.Document> implements IConverterPipe<ListeningExercise.Document, ExerciseDocument> {
 
+    private final HtmlToPdfPipe htmlToPdfPipe;
 
     /**
      * Constructor.
@@ -27,12 +28,13 @@ public class ListeningExerciseDocumentPipe extends AbstractObjectToHtmlPipe<List
     protected ListeningExerciseDocumentPipe(DailyDeutschBotConfiguration configuration,
                                             SpringTemplateEngine springTemplateEngine) {
         super(configuration, springTemplateEngine);
+        this.htmlToPdfPipe = new HtmlToPdfPipe(configuration);
     }
 
     @Override
     public ExerciseDocument pipe(ListeningExercise.Document exercise) {
         Document html = abstractPipe("listening_exercise_template", "listeningExercise", exercise);
-        PDDocument pdfDocument = new HtmlToPdfPipe().pipe(html);
+        PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
         return new PdfToImagePipe().pipe(pdfDocument);
     }
 }

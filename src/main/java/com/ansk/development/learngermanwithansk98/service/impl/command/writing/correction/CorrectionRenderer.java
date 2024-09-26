@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CorrectionRenderer {
 
     private static final String ADDED_BLOCK_REGEX = "\\+\\+(.*?)\\+\\+";
-    private static final String REMOVED_BLOCK_REGEX = "—(.*?)—";
+    private static final String REMOVED_BLOCK_REGEX = "(?:—|--)(.*?)(?:—|--)";
     private static final String CAPTURED_TEXT = "$1";
 
     private static final String BLOCK_START_HTML = "<span class='%s'>";

@@ -30,7 +30,8 @@ class TelegramMapper {
     static Long chatId(Update update) {
         return Optional.ofNullable(update.getMessage())
                 .map(Message::getChatId)
-                .orElseGet(() -> update.getCallbackQuery().getMessage().getChatId());
+                .or(() -> Optional.ofNullable(update.getCallbackQuery()).map(CallbackQuery::getMessage).map(MaybeInaccessibleMessage::getChatId))
+                .orElseThrow(() -> new IllegalStateException("Could not extract chat id"));
     }
 
     /**

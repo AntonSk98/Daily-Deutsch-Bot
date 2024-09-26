@@ -38,10 +38,9 @@ public abstract class AbstractCommandModel<T> {
         public static final String TOPIC = "topic";
         public static final String TEXT = "text";
         public static final String AUDIO = "audio";
-        public static final String SHOULD_REPHRASE_TEXT = "should_rephrase_text";
+        public static final String SHOULD_DO = "should_do";
         public static final String TRANSCRIPTION = "transcription";
         public static final String CORRECTED_TEXT = "corrected_text";
-        public static final String SHOULD_PUBLISH_TEXT_AND_CORRECTION = "should_publish_text_and_correction";
         public static final String APPROVE_PROMPT = "+";
 
     }
