@@ -1,6 +1,7 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -78,6 +80,34 @@ public class TelegramSenderSupport {
                 .collect(Collectors.joining("\n"));
 
         return String.format(EXERCISE_KEYS_TEMPLATE, questionAndAnswers);
+    }
+
+    /**
+     * Consumer that sends an audio.
+     *
+     * @param chatId      chat id
+     * @param audioStream audio stream
+     * @param audioName   audio name with extension
+     * @param caption     caption
+     * @return consumer that sends an audio
+     */
+    static Consumer<TelegramClient> audioSender(Long chatId, InputStream audioStream, String audioName, String caption) {
+        return telegramClient -> {
+            InputFile audioFile = new InputFile(audioStream, audioName);
+
+            SendAudio sendAudio = SendAudio.builder()
+                    .chatId(chatId)
+                    .audio(audioFile)
+                    .caption(caption)
+                    .parseMode("HTML")
+                    .build();
+
+            try {
+                telegramClient.execute(sendAudio);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException("Error occurred while sending audio exercise.", e);
+            }
+        };
     }
 
     private static SendMediaGroup severalPagesDocuments(Long chatId, List<byte[]> binaryImages, DocumentRenderingParams documentRenderingParams) {

@@ -1,13 +1,15 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.audioSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
 
 /**
  * Component to send writing exercises.
@@ -38,6 +40,14 @@ public class WritingExerciseSender {
                  📌 The corrected version.
             
             🧐 Analyze the differences to sharpen your writing skills!
+            
+            🔹🔹🔹
+            """;
+
+    private static final String CORRECT_TEXT_AUDIO_TEMPLATE = """
+            🔊 <b> Enhance Your Experience!</b>
+            
+            Listen to the AI audio version of the corrected text!
             
             🔹🔹🔹
             """;
@@ -82,5 +92,15 @@ public class WritingExerciseSender {
         );
 
         documentSender(chatId, mergedDocument, documentRendererParams).accept(telegramClient);
+    }
+
+    /**
+     * Sends an audio of the corrected text.
+     *
+     * @param chatId      chat id
+     * @param audioStream audio stream
+     */
+    public void sendCorrectedTextAudio(Long chatId, InputStream audioStream) {
+        audioSender(chatId, audioStream, "writing correction.mp3", CORRECT_TEXT_AUDIO_TEMPLATE).accept(telegramClient);
     }
 }

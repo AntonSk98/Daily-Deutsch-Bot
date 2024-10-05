@@ -47,7 +47,7 @@ public class CorrectionRenderer {
      *
      * @return original text
      */
-    public String getSanitizedOriginalTextSplitByParagraphs() {
+    public String getSanitizedNonCorrectedText() {
         String originalParagraph = toOriginalTextBlock(rawWritingBlock);
         return renderedSanitizer.sanitize(originalParagraph);
     }
@@ -57,9 +57,19 @@ public class CorrectionRenderer {
      *
      * @return corrected text
      */
-    public String getSanitizedCorrectedTextSplitByParagraphs() {
-        String correctedBlock = toCorrectedTextBlock(rawWritingBlock);
+    public String getSanitizedTextWithCorrections() {
+        String correctedBlock = toTextWithCorrectionsBlock(rawWritingBlock);
         return renderedSanitizer.sanitize(correctedBlock);
+    }
+
+    /**
+     * Returns corrected plain text.
+     *
+     * @return plain text
+     */
+    public String getSanitizedCorrectPlainText() {
+        String correctPlainText = toCorrectPlainTextBlock(rawWritingBlock);
+        return renderedSanitizer.sanitize(correctPlainText);
     }
 
     private String toOriginalTextBlock(String paragraph) {
@@ -68,10 +78,16 @@ public class CorrectionRenderer {
         return StringUtils.normalizeSpace(noAdditionAndNoDeletionParagraph);
     }
 
-    private String toCorrectedTextBlock(String paragraph) {
+    private String toTextWithCorrectionsBlock(String paragraph) {
         String withAdditions = RegExUtils.replaceAll(paragraph, ADDED_BLOCK_REGEX, ADDED_BLOCK_HTML + CAPTURED_TEXT + BLOCK_END_HTML);
         String withAdditionsAndDeletions = RegExUtils.replaceAll(withAdditions, REMOVED_BLOCK_REGEX, REMOVED_BLOCK_HTML + CAPTURED_TEXT + BLOCK_END_HTML);
         return StringUtils.normalizeSpace(withAdditionsAndDeletions);
+    }
+
+    private String toCorrectPlainTextBlock(String paragraph) {
+        String noDeletions = RegExUtils.replaceAll(paragraph, REMOVED_BLOCK_REGEX, "");
+        String withCorrectParts = RegExUtils.replaceAll(noDeletions, ADDED_BLOCK_REGEX, CAPTURED_TEXT);
+        return StringUtils.normalizeSpace(withCorrectParts);
     }
 
 }

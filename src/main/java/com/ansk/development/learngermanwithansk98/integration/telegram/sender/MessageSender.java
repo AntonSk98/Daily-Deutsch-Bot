@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

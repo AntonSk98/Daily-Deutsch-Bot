@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.exception;
 
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandExceptionHandler {
     
-    private final ITelegramOutputGateway outputGateway;
+    private final ITelegramClient outputGateway;
 
     /**
      * Constructor.
-     * @param outputGateway See {@link ITelegramOutputGateway}
+     * @param outputGateway See {@link ITelegramClient}
      */
-    public CommandExceptionHandler(ITelegramOutputGateway outputGateway) {
+    public CommandExceptionHandler(ITelegramClient outputGateway) {
         this.outputGateway = outputGateway;
     }
 

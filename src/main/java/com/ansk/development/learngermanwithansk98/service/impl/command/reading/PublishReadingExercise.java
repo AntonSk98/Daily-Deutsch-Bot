@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.reading;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ReadingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractPublishExerciseSupport;
@@ -24,18 +24,18 @@ import static com.ansk.development.learngermanwithansk98.service.model.Command.R
 public class PublishReadingExercise extends AbstractPublishExerciseSupport {
 
     private final ReadingExerciseCache readingExerciseCache;
-    private final ITelegramOutputGateway outputGateway;
+    private final ITelegramClient outputGateway;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param botConfiguration      See {@link DailyDeutschBotConfiguration}
      */
     protected PublishReadingExercise(CommandsConfiguration commandsConfiguration,
-                                     ITelegramOutputGateway telegramOutputGateway,
+                                     ITelegramClient telegramOutputGateway,
                                      CommandCache commandCache,
                                      DailyDeutschBotConfiguration botConfiguration,
                                      ReadingExerciseCache readingExerciseCache) {

@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.rest;
 
-import com.ansk.development.learngermanwithansk98.gateway.telegram.DailyDeutschBotConsumer;
+import com.ansk.development.learngermanwithansk98.integration.telegram.DailyDeutschBotConsumer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

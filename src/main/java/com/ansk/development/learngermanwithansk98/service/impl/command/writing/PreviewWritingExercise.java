@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WritingExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
@@ -20,19 +20,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewWritingExercise extends AbstractCommandProcessor {
 
-    private final ITelegramOutputGateway telegramOutputGateway;
+    private final ITelegramClient telegramOutputGateway;
     private final WritingExerciseCache writingExerciseCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration {@link CommandsConfiguration}
-     * @param telegramOutputGateway {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway {@link ITelegramClient}
      * @param commandCache          {@link CommandCache}
      * @param writingExerciseCache  {@link WritingExerciseCache}
      */
     protected PreviewWritingExercise(CommandsConfiguration commandsConfiguration,
-                                     ITelegramOutputGateway telegramOutputGateway,
+                                     ITelegramClient telegramOutputGateway,
                                      CommandCache commandCache,
                                      WritingExerciseCache writingExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);

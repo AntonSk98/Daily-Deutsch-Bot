@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.questionsAndAnswersMessageBlock;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.questionsAndAnswersMessageBlock;
 
 /**
  * Component to send reading exercises.

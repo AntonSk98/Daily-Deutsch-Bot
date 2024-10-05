@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import com.ansk.development.learngermanwithansk98.exception.CommandExceptionHandler;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.chatId;
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.input;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMapper.chatId;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMapper.input;
 import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 
 

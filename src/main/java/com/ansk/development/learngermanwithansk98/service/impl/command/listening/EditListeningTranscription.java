@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.listening;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
@@ -30,20 +30,20 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
     private static final String SEPARATOR = "\n\n";
 
     private final ListeningExerciseCache listeningExerciseCache;
-    private final ITelegramOutputGateway outputGateway;
+    private final ITelegramClient outputGateway;
     private final ListeningExerciseDocumentPipe documentPipe;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration  See {@link CommandsConfiguration}
-     * @param telegramOutputGateway  See {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway  See {@link ITelegramClient}
      * @param commandCache           See {@link CommandCache}
      * @param listeningExerciseCache See {@link ListeningExerciseCache}
      * @param documentPipe           See {@link ListeningExerciseDocumentPipe}
      */
     protected EditListeningTranscription(CommandsConfiguration commandsConfiguration,
-                                         ITelegramOutputGateway telegramOutputGateway,
+                                         ITelegramClient telegramOutputGateway,
                                          CommandCache commandCache,
                                          ListeningExerciseCache listeningExerciseCache,
                                          ListeningExerciseDocumentPipe documentPipe) {

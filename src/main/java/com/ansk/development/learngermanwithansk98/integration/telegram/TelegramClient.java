@@ -1,7 +1,7 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.integration.*;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.*;
 import com.ansk.development.learngermanwithansk98.service.model.output.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 
 /**
- * Implementation of {@link ITelegramOutputGateway}.
+ * Implementation of {@link ITelegramClient}.
  *
  * @author Anton Skripin
  */
 @Component
-public class TelegramOutputGateway implements ITelegramOutputGateway {
+public class TelegramClient implements ITelegramClient {
 
     private final MessageSender messageSender;
     private final WordCardSender wordCardSender;
@@ -28,8 +28,8 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
      * @param config       See {@link DailyDeutschBotConfiguration}
      * @param objectMapper See {@link ObjectMapper}
      */
-    public TelegramOutputGateway(DailyDeutschBotConfiguration config,
-                                 ObjectMapper objectMapper) {
+    public TelegramClient(DailyDeutschBotConfiguration config,
+                          ObjectMapper objectMapper) {
         var telegramClient = createClient(config.token());
         this.messageSender = new MessageSender(telegramClient, objectMapper);
         this.wordCardSender = new WordCardSender(telegramClient);
@@ -89,8 +89,15 @@ public class TelegramOutputGateway implements ITelegramOutputGateway {
     }
 
     @Override
-    public void sendCorrectedText(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+    public void sendCorrectedText(Long chatId,
+                                  ExerciseDocument originalTextDocument,
+                                  ExerciseDocument correctedTextDocument) {
         writingExerciseSender.sendCorrectedText(chatId, originalTextDocument, correctedTextDocument);
+    }
+
+    @Override
+    public void sendCorrectedTextAudio(Long chatId, InputStream audioStream) {
+        writingExerciseSender.sendCorrectedTextAudio(chatId, audioStream);
     }
 
 

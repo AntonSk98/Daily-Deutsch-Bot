@@ -95,6 +95,11 @@ commands:
             
             ${commands.confirmation.prompt}
           dynamic-prompt: true
+        - key: with_audio
+          prompt: |
+            Voiceover of the text is gonna be generated...
+            
+            ${commands.confirmation.prompt}
     - path: /publish_writing_exercise
       parameters:
         - key: ${commands.confirmation.key}

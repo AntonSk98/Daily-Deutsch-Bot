@@ -2,7 +2,8 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.openai.OpenAiClient;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CorrectedTextCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractPublishExerciseSupport;
@@ -16,10 +17,12 @@ import com.ansk.development.learngermanwithansk98.service.model.output.Corrected
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
 
@@ -31,27 +34,30 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class CorrectTextExercise extends AbstractPublishExerciseSupport {
 
-    private final ITelegramOutputGateway outputGateway;
+    private final ITelegramClient outputGateway;
     private final CorrectedTextDocumentPipe correctedTextDocumentPipe;
     private final CorrectedTextCache correctedTextCache;
+    private final OpenAiClient openAiClient;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration     See {@link CommandsConfiguration}
-     * @param telegramOutputGateway     See {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway     See {@link ITelegramClient}
      * @param correctedTextDocumentPipe See {@link CorrectedTextDocumentPipe}
+     * @param openAiClient              See {@link OpenAiClient}
      */
     protected CorrectTextExercise(CommandsConfiguration commandsConfiguration,
-                                  ITelegramOutputGateway telegramOutputGateway,
+                                  ITelegramClient telegramOutputGateway,
                                   CommandCache commandCache,
                                   CorrectedTextDocumentPipe correctedTextDocumentPipe,
                                   CorrectedTextCache correctedTextCache,
-                                  DailyDeutschBotConfiguration botConfiguration) {
+                                  DailyDeutschBotConfiguration botConfiguration, OpenAiClient openAiClient) {
         super(commandsConfiguration, telegramOutputGateway, commandCache, botConfiguration);
         this.outputGateway = telegramOutputGateway;
         this.correctedTextDocumentPipe = correctedTextDocumentPipe;
         this.correctedTextCache = correctedTextCache;
+        this.openAiClient = openAiClient;
     }
 
     @Override
@@ -68,7 +74,27 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
     public Consumer<Long> publish() {
         return groupId -> {
             CorrectedTextCache.CorrectedTexContainer correctText = correctedTextCache.getCorrectedText().orElseThrow();
-            outputGateway.sendCorrectedText(groupId, correctText.originalText(), correctText.correctedText());
+            outputGateway.sendCorrectedText(
+                    groupId,
+                    correctText.nonCorrectedTextDocument(),
+                    correctText.textWithCorrectionsDocument()
+            );
+        };
+    }
+
+    @Override
+    public Consumer<PublishHookParameters> publishHook() {
+        return publishHookParameters -> {
+            CorrectTextModel correctTextModel = publishHookParameters.model().map(CorrectTextModel.class);
+            if (correctTextModel.isWithAudio()) {
+                outputGateway.sendPlainMessage(publishHookParameters.chatId(), "Generating a voiceover for corrected text...");
+                byte[] voicedCorrectedText = openAiClient.createSpeech(correctedTextCache.getCorrectedText().orElseThrow().correctedText());
+                outputGateway.sendPlainMessage(publishHookParameters.chatId(), "The voiceover is generated... Publishing it as well!");
+                outputGateway.sendCorrectedTextAudio(
+                        publishHookParameters.groupId(),
+                        new ByteArrayInputStream(voicedCorrectedText)
+                );
+            }
         };
     }
 
@@ -93,14 +119,20 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
         List<String> originalParagraphs = inputParagraphs
                 .stream()
                 .map(CorrectionRenderer::create)
-                .map(CorrectionRenderer::getSanitizedOriginalTextSplitByParagraphs)
+                .map(CorrectionRenderer::getSanitizedNonCorrectedText)
                 .toList();
 
         List<String> correctedParagraphs = inputParagraphs
                 .stream()
                 .map(CorrectionRenderer::create)
-                .map(CorrectionRenderer::getSanitizedCorrectedTextSplitByParagraphs)
+                .map(CorrectionRenderer::getSanitizedTextWithCorrections)
                 .toList();
+
+        String correctText = inputParagraphs
+                .stream()
+                .map(CorrectionRenderer::create)
+                .map(CorrectionRenderer::getSanitizedCorrectPlainText)
+                .collect(Collectors.joining("\n"));
 
         CorrectedTextDocumentMetadata originalParagraphsDocumentMetadata = new CorrectedTextDocumentMetadata(
                 correctTextModel.getTopic(),
@@ -115,13 +147,19 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
         );
 
 
-        ExerciseDocument originalTextDocument = correctedTextDocumentPipe.pipe(originalParagraphsDocumentMetadata);
-        ExerciseDocument correctedTextDocument = correctedTextDocumentPipe.pipe(correctedParagraphsDocumentMetadata);
+        ExerciseDocument textWithMistakesDocument = correctedTextDocumentPipe.pipe(originalParagraphsDocumentMetadata);
+        ExerciseDocument textWithMistakesAndCorrectionsDocument = correctedTextDocumentPipe.pipe(correctedParagraphsDocumentMetadata);
 
         outputGateway.sendPlainMessage(parameters.chatId(), "Sending the preview...");
-        outputGateway.sendCorrectedText(parameters.chatId(), originalTextDocument, correctedTextDocument);
+        outputGateway.sendCorrectedText(parameters.chatId(), textWithMistakesDocument, textWithMistakesAndCorrectionsDocument);
 
-        correctedTextCache.saveCorrectedText(new CorrectedTextCache.CorrectedTexContainer(originalTextDocument, correctedTextDocument));
+        var correctedTextContainer = new CorrectedTextCache.CorrectedTexContainer(
+                correctText,
+                textWithMistakesDocument,
+                textWithMistakesAndCorrectionsDocument
+        );
+
+        correctedTextCache.saveCorrectedText(correctedTextContainer);
     }
 
     @Override
@@ -129,6 +167,7 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
         return new CorrectTextModel()
                 .addMapping(TOPIC, CorrectTextModel::setTopic)
                 .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
-                .addMapping(SHOULD_DO, CorrectTextModel::parseValue);
+                .addMapping(SHOULD_DO, CorrectTextModel::parseValue)
+                .addMapping(WITH_AUDIO, CorrectTextModel::withAudio);
     }
 }
