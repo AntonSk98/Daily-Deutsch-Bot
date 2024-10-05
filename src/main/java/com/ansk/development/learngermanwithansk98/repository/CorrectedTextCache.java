@@ -43,9 +43,12 @@ public class CorrectedTextCache {
     /**
      * Container to store the state of the exercise with a corrected text.
      *
-     * @param originalText  original text with mistakes
-     * @param correctedText corrected text with mistakes
+     * @param correctedText               corrected text
+     * @param nonCorrectedTextDocument    original text with mistakes
+     * @param textWithCorrectionsDocument text with highlighted mistakes and highlighted corrections
      */
-    public record CorrectedTexContainer(ExerciseDocument originalText, ExerciseDocument correctedText) {
+    public record CorrectedTexContainer(String correctedText,
+                                        ExerciseDocument nonCorrectedTextDocument,
+                                        ExerciseDocument textWithCorrectionsDocument) {
     }
 }

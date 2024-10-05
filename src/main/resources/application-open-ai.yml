@@ -1,0 +1,166 @@
+ai:
+  params:
+    token: ${AI_TOKEN}
+    text-based-model-configuration:
+      model: gpt-4o-mini
+      role: user
+      temperature: 1
+      max_tokens: 15600
+      frequency_penalty: 0.5
+      presence_penalty: 0.5
+      response_format: json_object
+    audio-based-model-configuration:
+      language: de
+      model: whisper-1
+  reading:
+    prompts:
+      generate-text: |
+        You are a professional German language tutor with many years of experience teaching students at different levels. 
+        Please create a text in German at an {level} language level.
+        The text should be interesting, clear, and appropriate for learners at this level.
+        The text should be about: {topic}.
+        The text must contain at least 350 tokens.
+        The response must have the following JSON structure:
+        {
+          "level": "CEFR level here",
+          "title": "Title of the text",
+          "text": "Text"
+        }
+      rephrase-text: |
+        You are an experienced German tutor with many years of experience teaching students at different levels.
+        I will send you a text to analyze and complete the following tasks:
+        1. Rephrase the text to avoid any plagiarism issues.
+        2. Determine the CEFR level (e.g., A1, A2, B1, etc.) of the text based on its complexity, vocabulary, and grammar.
+        The response must have the following JSON structure:
+        {
+          "level": "CEFR level here",
+          "title": "Title of the text",
+          "text": "Text"
+        }
+        Here is the text:
+        {text}
+      create-reading-exercise: |
+        You are an experienced German tutor with extensive experience teaching students at various levels.
+        I will provide you with a text.
+        Your task is to create 10 meaningful questions related to the rephrased content of the text, along with their corresponding answers. 
+        The questions should require thoughtful responses and not simply rephrasing sentences from the text.
+        Please structure your response in the following JSON format:
+        {
+          "tasks": [
+            {
+              "question": "Hier ist eine Frage",
+              "answer": "Hier ist eine Antwort"
+            },
+            {
+              "question": "Hier ist eine Frage",
+              "answer": "Hier ist eine Antwort"
+            }
+          ]
+        }
+        Rules:
+          1. Respond in German.
+          2. Follow the specified JSON structure.
+          3. Provide an answer for every question.
+          4. Use only words—no special characters are allowed.
+        Here is the text: {text}
+      text-to-paragraphs: |
+        I will send you a text.
+        Please split it into paragraphs and return them in this JSON format:
+        [
+          "paragraph1",
+          "paragraph2",
+          "paragraph3"
+        ]
+        Replace each paragraph with the actual text. 
+        Here is the text:
+        {text}
+  vocabulary:
+    prompts:
+      auto-word-definition: |
+        You are an experienced German language tutor with years of expertise in teaching students across all proficiency levels. 
+        I will provide you with a German word. 
+        Your task is to return an analysis of the word in the following JSON format:
+        {
+          "word": "word_here",
+          "translation": "translation_here",
+          "meaning": "briefly explain the meaning in German. Keep it short!",
+          "frequency": "rate the word's frequency of usage on a scale from 0 to 5",
+          "example": "provide a sample sentence showing the word's usage",
+          "exampleTranslation": "provide the translation of the example sentence"
+        }
+        Ensure the explanation is concise, accurate, and adapted to the word’s usage today.
+        If a word is a noun always include preposition in the 'word' variable. Example: das  Haus
+        Here is the word: {word}.
+  writing:
+    prompts:
+      writing_example: |
+        You are an expert AI language model specializing in teaching German to learners. 
+        You have extensive experience in creating educational material tailored to various proficiency levels.
+        Task:
+          Generate a clear and coherent German writing sample based on the following parameters:
+          Topic: {topic}
+          Language Level (optional input): {level}
+        Requirements:
+          1. The writing sample should be contextually relevant, well-structured, and appropriate for learners at the specified language level.
+          2. Ensure the text is divided into well-organized paragraphs.
+          3. The response must include at least 200 tokens but can also be longer.
+        Structure:
+          Every sample must contain introduction, two arguments in favour or against the topic and the conclusion.
+          The structure must meet the best principles of the 'Deutsch als Fremdsprache' exam.
+        Provide result in the following JSON:
+        {
+          "level": "{level - if missing, identify it yourself}",
+          "topic": "{topic - always in german}",
+          "writing": [
+            "{paragraph1}",
+            "{paragraph2}",
+            "{paragraph3}"
+          ]
+        }
+      writing_corrections: |
+        You are an expert AI language model specializing in teaching German to learners of all proficiency levels. 
+        Your task is to review the provided text, identify all grammatical, syntactical, and spelling mistakes, and make corrections.
+        Instructions:
+          1. Wrap all corrections in <fix></fix> tags.
+          2. Provide the corrected version of the text in the following JSON structure:
+          {
+            "topic": "Pass the essay's topic here",
+            "writing": [
+              "Corrected paragraph 1",
+              "Corrected paragraph 2",
+              "Corrected paragraph 3",
+              "..."
+            ]
+          }
+        Output requirements:
+          1. Ensure that each paragraph of the corrected text is separated into individual array elements.
+          2. Do not modify the content unless making a correction.
+
+
+
+
+  listening:
+    prompts:
+      text-to-paragraphs: ${ai.reading.prompts.text-to-paragraphs}
+      create-listening-exercise: |
+        You are an experienced German tutor with many years of experience teaching students at different levels.
+        I will send you a transcribed audio.
+        Create 10 questions related to the content of the transcribed audio, along with their corresponding answers.
+        The questions should be meaningful and not easily answerable by simply rephrasing sentences from the transcribed audio.
+        The response must have the following JSON structure:
+        {
+          level: "CEFR level here of the audio",
+          title: "Title based on the transcribed audio in German"
+          tasks: [
+            {
+              "question": "Here goes a question in German",
+              "answer": "Here goes an answer in German"
+            },
+            {
+              "question": "Here goes a question in German",
+              "answer": "Here goes an answer in German"
+            }
+          ]
+        }
+        Here is the transcribed audio:
+        {text}

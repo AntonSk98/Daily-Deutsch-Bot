@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.openai;
+package com.ansk.development.learngermanwithansk98.integration.openai;
 
 import com.ansk.development.learngermanwithansk98.config.OpenAIConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,10 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Gateway to communicate with the OpenAI.
@@ -24,10 +21,11 @@ import java.util.Optional;
  * @author Anton Skripin
  */
 @Component
-public class AIGateway {
+public class OpenAiClient {
 
     private static final String TEXT_REQUEST_URL = "https://api.openai.com/v1/chat/completions";
-    private static final String AUDIO_URL = "https://api.openai.com/v1/audio/transcriptions";
+    private static final String TRANSCRIBE_AUDIO_URL = "https://api.openai.com/v1/audio/transcriptions";
+    private static final String CREATE_SPEECH_URL = "https://api.openai.com/v1/audio/speech";
 
     private final RestTemplate restTemplate;
     private final OpenAIConfiguration openAIConfiguration;
@@ -39,8 +37,8 @@ public class AIGateway {
      * @param openAIConfiguration See {@link OpenAIConfiguration}
      * @param objectMapper        See {@link ObjectMapper}
      */
-    public AIGateway(OpenAIConfiguration openAIConfiguration,
-                     ObjectMapper objectMapper) {
+    public OpenAiClient(OpenAIConfiguration openAIConfiguration,
+                        ObjectMapper objectMapper) {
         this.openAIConfiguration = openAIConfiguration;
         this.objectMapper = objectMapper;
         this.restTemplate = new RestTemplate();
@@ -99,15 +97,35 @@ public class AIGateway {
         HttpHeaders headers = headersWithAuth();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-        try {
-            HttpEntity<MultiValueMap<String, Object>> requestEntity = transcribeAudioRequestBody(audioStream, headers);
-            ResponseEntity<Map<String, String>> response = restTemplate.exchange(AUDIO_URL, HttpMethod.POST, requestEntity, new ParameterizedTypeReference<>() {
-            });
-            return Optional.ofNullable(response.getBody()).map(transcription -> transcription.get("text")).orElseThrow();
-        } catch (Exception e) {
-            throw new RuntimeException("Error occurred while transcribing audio", e);
-        }
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = transcribeAudioRequestBody(audioStream, headers);
+        ResponseEntity<Map<String, String>> response = restTemplate.exchange(TRANSCRIBE_AUDIO_URL,
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return Optional.ofNullable(response.getBody()).map(transcription -> transcription.get("text")).orElseThrow();
+    }
 
+    /**
+     * Creates a speech from the submitted text.
+     *
+     * @param text text that is to be converted to speech
+     * @return voiced text as byte array
+     */
+    public byte[] createSpeech(String text) {
+        HttpHeaders headers = headersWithAuth();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> requestBody = createSpeechRequestBody(headers, text);
+        ResponseEntity<byte[]> response = restTemplate.exchange(
+                CREATE_SPEECH_URL,
+                HttpMethod.POST,
+                requestBody,
+                byte[].class
+        );
+
+        return Optional.ofNullable(response.getBody()).orElseThrow();
     }
 
     private HttpHeaders headersWithAuth() {
@@ -116,18 +134,31 @@ public class AIGateway {
         return headers;
     }
 
-    private static HttpEntity<MultiValueMap<String, Object>> transcribeAudioRequestBody(InputStream audioStream, HttpHeaders headers) throws IOException {
-        ByteArrayResource byteArrayResource = new ByteArrayResource(audioStream.readAllBytes()) {
-            @Override
-            public String getFilename() {
-                return "audio.mp3";
-            }
-        };
+    private static HttpEntity<MultiValueMap<String, Object>> transcribeAudioRequestBody(InputStream audioStream, HttpHeaders headers) {
+        try {
+            ByteArrayResource byteArrayResource = new ByteArrayResource(audioStream.readAllBytes()) {
+                @Override
+                public String getFilename() {
+                    return "audio.mp3";
+                }
+            };
 
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", byteArrayResource);
-        body.add("model", "whisper-1");
-        body.add("language", "de");
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", byteArrayResource);
+            body.add("model", "whisper-1");
+            body.add("language", "de");
+
+            return new HttpEntity<>(body, headers);
+        } catch (IOException e) {
+            throw new RuntimeException("Error occurred while creating an audio stream that is to be transcribed", e);
+        }
+    }
+
+    private HttpEntity<Map<String, String>> createSpeechRequestBody(HttpHeaders headers, String text) {
+        Map<String, String> body = new HashMap<>();
+        body.put("model", "tts-1");
+        body.put("input", text);
+        body.put("voice", "shimmer");
 
         return new HttpEntity<>(body, headers);
     }

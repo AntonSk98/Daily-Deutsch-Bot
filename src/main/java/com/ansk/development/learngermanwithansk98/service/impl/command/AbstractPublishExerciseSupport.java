@@ -2,7 +2,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.command;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandConfirmationModel;
@@ -23,18 +23,18 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
 
 
     private final Long groupId;
-    private final ITelegramOutputGateway outputGateway;
+    private final ITelegramClient outputGateway;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param botConfiguration      See {@link DailyDeutschBotConfiguration}
      */
     protected AbstractPublishExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                             ITelegramOutputGateway telegramOutputGateway,
+                                             ITelegramClient telegramOutputGateway,
                                              CommandCache commandCache,
                                              DailyDeutschBotConfiguration botConfiguration) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);
@@ -63,6 +63,17 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
      */
     public abstract Runnable clearCache();
 
+    /**
+     * Extension point that can be used to extend the publishing logic.
+     * The default implementation does nothing.
+     *
+     * @return consumer that extends the publish action
+     */
+    public Consumer<PublishHookParameters> publishHook() {
+        return publishHookParameters -> {
+        };
+    }
+
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         IConfirmationModel confirmationModel = model.map(IConfirmationModel.class);
@@ -79,6 +90,7 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
 
         outputGateway.sendPlainMessage(parameters.chatId(), "Publishing...");
         publish().accept(groupId);
+        publishHook().accept(new PublishHookParameters(groupId, parameters.chatId(), model));
         outputGateway.sendPlainMessage(parameters.chatId(), "Published!");
         clearCache().run();
         outputGateway.sendPlainMessage(parameters.chatId(), "Cache is cleaned");
@@ -89,5 +101,15 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
         return new CommandConfirmationModel()
                 .init()
                 .addMapping(SHOULD_DO, CommandConfirmationModel::parseValue);
+    }
+
+    /**
+     * Encapsulates parameters that are exposed to the specific command handler to provide a publishing hook.
+     * @param groupId group id
+     * @param chatId chat id
+     * @param model completed command modek
+     */
+    public record PublishHookParameters(Long groupId, Long chatId, AbstractCommandModel<?> model) {
+
     }
 }

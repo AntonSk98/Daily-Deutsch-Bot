@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import com.ansk.development.learngermanwithansk98.service.filter.FilterParameters;
 import com.ansk.development.learngermanwithansk98.service.filter.IFilter;
@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.input;
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.userId;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMapper.input;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMapper.userId;
 
 /**
  * A component that applies a chain of filters to a given input received from {@link DailyDeutschBotConsumer}.

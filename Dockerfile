@@ -8,8 +8,5 @@ WORKDIR /app
 COPY target/daily-deutsch-bot*.jar /app/daily-deutsch-bot.jar
 COPY target/classes/static /app/static
 
-# Expose the application's port (adjust if necessary)
-EXPOSE 8080
-
 # Run the JAR file
 ENTRYPOINT ["java", "-jar", "/app/daily-deutsch-bot.jar"]

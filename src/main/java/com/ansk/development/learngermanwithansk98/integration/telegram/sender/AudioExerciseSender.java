@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.questionsAndAnswersMessageBlock;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.questionsAndAnswersMessageBlock;
 
 /**
  * Sends listening exercises with audio and documents to Telegram.

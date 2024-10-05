@@ -1,5 +1,9 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import org.apache.commons.lang3.StringUtils;
+
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.APPROVE_PROMPT;
+
 /**
  * Model that contains input parameters in order to create a text with its corrected version.
  *
@@ -8,6 +12,7 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
 public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> implements IConfirmationModel {
     private String topic;
     private String textWithCorrections;
+    private boolean withAudio;
     private final CommandConfirmationModel confirmationModel = new CommandConfirmationModel();
 
     /**
@@ -44,6 +49,24 @@ public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel> imp
      */
     public void setTextWithCorrections(String textWithCorrections) {
         this.textWithCorrections = textWithCorrections;
+    }
+
+    /**
+     * Getter for {@link #withAudio}.
+     *
+     * @return {@link #withAudio}
+     */
+    public boolean isWithAudio() {
+        return withAudio;
+    }
+
+    /**
+     * Setter for {@link #withAudio}.
+     *
+     * @param value {@link #withAudio}
+     */
+    public void withAudio(String value) {
+        this.withAudio = StringUtils.isNotEmpty(value) && value.contains(APPROVE_PROMPT);
     }
 
     @Override

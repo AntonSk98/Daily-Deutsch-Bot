@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import org.telegram.telegrambots.meta.api.objects.Audio;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

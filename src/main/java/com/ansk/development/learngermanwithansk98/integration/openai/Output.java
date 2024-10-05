@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.openai;
+package com.ansk.development.learngermanwithansk98.integration.openai;
 
 import java.util.List;
 

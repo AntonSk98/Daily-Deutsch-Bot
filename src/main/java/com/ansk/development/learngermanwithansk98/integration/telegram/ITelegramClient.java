@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.*;
 import okhttp3.OkHttpClient;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Anton Skripin
  */
-public interface ITelegramOutputGateway {
+public interface ITelegramClient {
 
     /**
      * Sends a plain text message to the specified chat.
@@ -121,5 +121,15 @@ public interface ITelegramOutputGateway {
      * @param originalTextDocument  documents with the original text
      * @param correctedTextDocument document with the corrected text
      */
-    void sendCorrectedText(Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument);
+    void sendCorrectedText(Long chatId,
+                           ExerciseDocument originalTextDocument,
+                           ExerciseDocument correctedTextDocument);
+
+    /**
+     * Sends an audio of the corrected text
+     *
+     * @param chatId               chat id
+     * @param audioStream audio stream
+     */
+    void sendCorrectedTextAudio(Long chatId, InputStream audioStream);
 }

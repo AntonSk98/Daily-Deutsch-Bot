@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram;
+package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
 import com.ansk.development.learngermanwithansk98.exception.CommandExceptionHandler;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.TelegramMapper.chatId;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMapper.chatId;
 
 /**
  * A consumer class for handling updates in a single-threaded, long-polling manner.

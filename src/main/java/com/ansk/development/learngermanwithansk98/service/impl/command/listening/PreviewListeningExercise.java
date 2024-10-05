@@ -1,7 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.listening;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.gateway.telegram.ITelegramOutputGateway;
+import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.ListeningExerciseCache;
 import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractCommandProcessor;
@@ -20,19 +20,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewListeningExercise extends AbstractCommandProcessor {
 
-    private final ITelegramOutputGateway telegramOutputGateway;
+    private final ITelegramClient telegramOutputGateway;
     private final ListeningExerciseCache listeningExerciseCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration  See {@link CommandsConfiguration}
-     * @param telegramOutputGateway  See {@link ITelegramOutputGateway}
+     * @param telegramOutputGateway  See {@link ITelegramClient}
      * @param commandCache           See {@link CommandCache}
      * @param listeningExerciseCache See {@link ListeningExerciseCache}
      */
     protected PreviewListeningExercise(CommandsConfiguration commandsConfiguration,
-                                       ITelegramOutputGateway telegramOutputGateway,
+                                       ITelegramClient telegramOutputGateway,
                                        CommandCache commandCache,
                                        ListeningExerciseCache listeningExerciseCache) {
         super(commandsConfiguration, telegramOutputGateway, commandCache);

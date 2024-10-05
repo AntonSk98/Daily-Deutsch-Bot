@@ -1,4 +1,4 @@
-package com.ansk.development.learngermanwithansk98.gateway.telegram.integration;
+package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import org.springframework.util.CollectionUtils;
@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.Optional;
 
-import static com.ansk.development.learngermanwithansk98.gateway.telegram.integration.TelegramSenderSupport.documentSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
 
 /**
  * Component to send a card with words.
@@ -19,6 +19,8 @@ public class WordCardSender {
             ⭐️ #Words
             
             📝 Expand your vocabulary with these new words! ⬆️
+            
+            🔹🔹🔹
             """;
 
     private final TelegramClient telegramClient;
