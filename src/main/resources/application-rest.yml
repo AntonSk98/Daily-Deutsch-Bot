@@ -1,0 +1,5 @@
+rest:
+  internal:
+    security:
+      username: ${REST_INTERNAL_SECURITY_USERNAME}
+      password: ${REST_INTERNAL_SECURITY_PASSWORD}

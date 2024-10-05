@@ -1,0 +1,114 @@
+commands:
+  confirmation:
+    key: should_do
+    prompt: |
+      Would you like to perform this action?
+        ✅ Type '+' to approve
+        ❌ Type any other symbol to decline
+  command-definition:
+    - path: /new_word
+      with-navigation: true
+      parameters:
+        - key: word
+          required: true
+          prompt: write a new word
+        - key: translation
+          required: true
+          prompt: write a translation
+        - key: meaning
+          prompt: what does this word mean?
+        - key: forms
+          prompt: write any forms of this word separated by . without spaces
+        - key: frequency
+          prompt: how frequent is this word
+        - key: example
+          prompt: give me an example
+        - key: example_translation
+          prompt: write translation for the example
+    - path: /cached_words
+    - path: /clear_word_card
+    - path: /delete_word
+      parameters:
+        - key: word_reference
+          prompt: please provide a unique word reference
+    - path: /preview_word_card
+    - path: /publish_word_card
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
+    - path: /generate_reading_exercise
+      parameters:
+        - key: level
+          prompt: please enter the level of the text based on the CEFR level
+        - key: topic
+          prompt: please provide the topic of the text
+    - path: /create_reading_exercise
+      parameters:
+        - key: text
+          prompt: please provide a text to create reading exercise for
+        - key: ${commands.confirmation.key}
+          prompt: |
+            Text is gonna be rephrased.
+            
+            ${commands.confirmation.prompt}
+    - path: /cached_reading_exercise
+    - path: /publish_reading_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: |
+            Reading exercise is gonna be published.
+            
+            ${commands.confirmation.prompt}
+    - path: /ai_new_word
+      parameters:
+        - key: word
+          prompt: please provide a word and AI will fill out the word definition
+    - path: /writing_with_example
+      with-navigation: true
+      parameters:
+        - key: level
+          prompt: please provide the level of writing exercise
+        - key: topic
+          required: true
+          prompt: please provide the topic for writing exercise
+    - path: /correct_text
+      parameters:
+        - key: topic
+          prompt: provide a topic
+        - key: corrected_text
+          prompt: |
+            please provide the text with corrections:
+              🔹 any removed blocks must be wrapped with --abc--- symbols.
+              🔹 any added blocks must be wrapped with ++abc++ symbols.
+              🔹 any paragraph must be separated by empty line
+        - key: ${commands.confirmation.key}
+          prompt: |
+            The following exercise is gonna be published...
+            
+            ${commands.confirmation.prompt}
+          dynamic-prompt: true
+        - key: with_audio
+          prompt: |
+            Voiceover of the text is gonna be generated...
+            
+            ${commands.confirmation.prompt}
+    - path: /publish_writing_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
+
+    - path: /preview_writing_exercise
+    - path: /listening_exercise
+      parameters:
+        - key: audio
+          prompt: please provide audio
+    - path: /preview_listening_exercise
+    - path: /listening_edit_transcription
+      parameters:
+        - key: transcription
+          prompt: feel free to edit the transcription of the audio
+          dynamic-prompt: true
+    - path: /publish_listening_exercise
+      parameters:
+        - key: ${commands.confirmation.key}
+          prompt: ${commands.confirmation.prompt}
