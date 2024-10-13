@@ -20,23 +20,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewWritingExercise extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WritingExerciseCache writingExerciseCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration {@link CommandsConfiguration}
-     * @param telegramOutputGateway {@link ITelegramClient}
+     * @param telegramClient {@link ITelegramClient}
      * @param commandCache          {@link CommandCache}
      * @param writingExerciseCache  {@link WritingExerciseCache}
      */
     protected PreviewWritingExercise(CommandsConfiguration commandsConfiguration,
-                                     ITelegramClient telegramOutputGateway,
+                                     ITelegramClient telegramClient,
                                      CommandCache commandCache,
                                      WritingExerciseCache writingExerciseCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.writingExerciseCache = writingExerciseCache;
     }
 
@@ -48,8 +48,8 @@ public class PreviewWritingExercise extends AbstractCommandProcessor {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         writingExerciseCache.cachedWritingExercise().ifPresentOrElse(
-                writingExercise -> telegramOutputGateway.sendWritingExercise(parameters.chatId(), writingExercise),
-                () -> telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No writing exercise in cache.")
+                writingExercise -> telegramClient.sendWritingExercise(parameters.chatId(), writingExercise),
+                () -> telegramClient.sendPlainMessage(parameters.chatId(), "No writing exercise in cache.")
         );
     }
 

@@ -28,23 +28,23 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 public class GetCachedWords extends AbstractCommandProcessor {
 
     private final WordCache wordCache;
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      */
     protected GetCachedWords(CommandsConfiguration commandsConfiguration,
-                             ITelegramClient telegramOutputGateway,
+                             ITelegramClient telegramClient,
                              CommandCache commandCache,
                              WordCache wordCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        super(commandsConfiguration, telegramClient, commandCache);
         this.wordCache = wordCache;
-        this.telegramOutputGateway = telegramOutputGateway;
+        this.telegramClient = telegramClient;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class GetCachedWords extends AbstractCommandProcessor {
         Collection<WordInfo> wordInfoCollection = map(wordCache.getWords());
         String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
         String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), message);
+        telegramClient.sendPlainMessage(parameters.chatId(), message);
     }
 
     @Override

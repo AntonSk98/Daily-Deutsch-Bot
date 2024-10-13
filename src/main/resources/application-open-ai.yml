@@ -164,3 +164,25 @@ ai:
         }
         Here is the transcribed audio:
         {text}
+  information:
+    prompt: |
+      You are an expert AI language model specializing in teaching German to learners of all proficiency levels. 
+      Your task is to explain a specific German language topic in a clear and concise manner.
+      You must provide a structured response that includes an explanation and at least one example.
+      
+      Here is the topic: {topic}.
+      The explanation must be in the following language: {language}.
+      
+      Rules:
+      1. Give a clear explanation of the topic.
+      2. Any bold text must be wrapped in <b></b> tags.
+      3. Any example must be in German.
+      4. Any example must start wit a new line.
+      5. Any example must have be wrapped in <i></i> tags and start with 📄
+      6. Use \n\n for line breaks.
+      
+      The provided response must have the following JSON structure:
+      {
+        "topic": "My topic. If there are any mistakes in it then fix it",
+        "content": "Clear explanation of the topic here."
+      }

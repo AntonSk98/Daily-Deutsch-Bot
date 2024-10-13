@@ -29,17 +29,17 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param botConfiguration      See {@link DailyDeutschBotConfiguration}
      */
     protected AbstractPublishExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                             ITelegramClient telegramOutputGateway,
+                                             ITelegramClient telegramClient,
                                              CommandCache commandCache,
                                              DailyDeutschBotConfiguration botConfiguration) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        super(commandsConfiguration, telegramClient, commandCache);
         this.groupId = botConfiguration.groupId();
-        this.outputGateway = telegramOutputGateway;
+        this.outputGateway = telegramClient;
     }
 
     /**

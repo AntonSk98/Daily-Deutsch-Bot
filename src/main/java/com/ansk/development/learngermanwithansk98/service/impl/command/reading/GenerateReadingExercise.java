@@ -26,7 +26,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class GenerateReadingExercise extends ReadingExerciseSupport {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final OpenAiClient openAiClient;
     private final ReadingPromptsConfiguration promptsConfiguration;
 
@@ -34,7 +34,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
      * Constructor.
      *
      * @param commandsConfiguration       See {@link CommandsConfiguration}
-     * @param telegramOutputGateway       See {@link ITelegramClient}
+     * @param telegramClient       See {@link ITelegramClient}
      * @param commandCache                See {@link CommandCache}
      * @param openAiClient                   See {@link OpenAiClient}
      * @param promptsConfiguration        See {@link ReadingPromptsConfiguration}
@@ -42,14 +42,14 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
      * @param readingExerciseCache        See {@link ReadingExerciseCache}
      */
     protected GenerateReadingExercise(CommandsConfiguration commandsConfiguration,
-                                      ITelegramClient telegramOutputGateway,
+                                      ITelegramClient telegramClient,
                                       CommandCache commandCache,
                                       OpenAiClient openAiClient,
                                       ReadingPromptsConfiguration promptsConfiguration,
                                       ReadingExerciseDocumentPipe readingExerciseDocumentPipe,
                                       ReadingExerciseCache readingExerciseCache) {
         super(commandsConfiguration,
-                telegramOutputGateway,
+                telegramClient,
                 commandCache,
                 openAiClient,
                 promptsConfiguration,
@@ -57,7 +57,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
                 readingExerciseCache);
 
         this.openAiClient = openAiClient;
-        this.telegramOutputGateway = telegramOutputGateway;
+        this.telegramClient = telegramClient;
         this.promptsConfiguration = promptsConfiguration;
     }
 
@@ -81,7 +81,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
     }
 
     private ReadingExercise.TextOutput generateText(CommandParameters parameters, ReadingExerciseModel readingExerciseModel) {
-        telegramOutputGateway.sendPlainMessage(
+        telegramClient.sendPlainMessage(
                 parameters.chatId(),
                 String.format(
                         "Generating a text for level: %s. Topic of the text is '%s'",
@@ -94,7 +94,7 @@ public class GenerateReadingExercise extends ReadingExerciseSupport {
                 .resolveVariable(TOPIC, readingExerciseModel.getTopic());
 
         var generatedText = openAiClient.sendRequest(generateText.getPrompt(), ReadingExercise.TextOutput.class);
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The text is generated.");
+        telegramClient.sendPlainMessage(parameters.chatId(), "The text is generated.");
         return generatedText;
     }
 }

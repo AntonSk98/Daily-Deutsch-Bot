@@ -24,7 +24,7 @@ public class GenerateWritingExercise extends WritingExerciseSupport {
      * Constructor.
      *
      * @param commandsConfiguration       See {@link CommandsConfiguration}
-     * @param telegramOutputGateway       See {@link ITelegramClient}
+     * @param telegramClient       See {@link ITelegramClient}
      * @param commandCache                See {@link CommandCache}
      * @param OpenAiClient                   See {@link OpenAiClient}
      * @param promptsConfiguration        See {@link WritingPromptsConfiguration}
@@ -32,14 +32,14 @@ public class GenerateWritingExercise extends WritingExerciseSupport {
      * @param writingExerciseCache        See {@link WritingExerciseCache}
      */
     protected GenerateWritingExercise(CommandsConfiguration commandsConfiguration,
-                                      ITelegramClient telegramOutputGateway,
+                                      ITelegramClient telegramClient,
                                       CommandCache commandCache,
                                       OpenAiClient OpenAiClient,
                                       WritingPromptsConfiguration promptsConfiguration,
                                       WritingExerciseDocumentPipe writingExerciseDocumentPipe,
                                       WritingExerciseCache writingExerciseCache) {
         super(commandsConfiguration,
-                telegramOutputGateway,
+                telegramClient,
                 commandCache,
                 OpenAiClient,
                 promptsConfiguration,
