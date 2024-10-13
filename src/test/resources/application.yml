@@ -4,3 +4,5 @@ rest.internal.security:
   password: password
 
 spring.main.allow-bean-definition-overriding: true
+
+ai.information.prompt: mocked
