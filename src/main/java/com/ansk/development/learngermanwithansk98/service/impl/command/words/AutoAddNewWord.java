@@ -26,7 +26,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class AutoAddNewWord extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final OpenAiClient OpenAiClient;
     private final WordCardPromptsConfiguration promptsConfiguration;
     private final WordCache wordCache;
@@ -35,20 +35,20 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param OpenAiClient             See {@link OpenAiClient}
      * @param promptsConfiguration  See {@link WordCardPromptsConfiguration}
      * @param wordCache             See {@link WordCache}
      */
     protected AutoAddNewWord(CommandsConfiguration commandsConfiguration,
-                             ITelegramClient telegramOutputGateway,
+                             ITelegramClient telegramClient,
                              CommandCache commandCache,
                              OpenAiClient OpenAiClient,
                              WordCardPromptsConfiguration promptsConfiguration,
                              WordCache wordCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.OpenAiClient = OpenAiClient;
         this.promptsConfiguration = promptsConfiguration;
         this.wordCache = wordCache;
@@ -63,13 +63,13 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         AutoWordCompletionModel autoWordCompletionModel = model.map(AutoWordCompletionModel.class);
 
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
         GenericPromptTemplate autoDefineWord = new GenericPromptTemplate(promptsConfiguration.autoWordDefinition())
                 .resolveVariable(WORD, autoWordCompletionModel.getWord());
         var word = OpenAiClient.sendRequest(autoDefineWord.getPrompt(), Word.class);
         wordCache.addWord(word);
 
-        telegramOutputGateway.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
+        telegramClient.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
     }
 
     @Override

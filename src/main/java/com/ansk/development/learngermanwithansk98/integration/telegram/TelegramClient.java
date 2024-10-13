@@ -100,5 +100,10 @@ public class TelegramClient implements ITelegramClient {
         writingExerciseSender.sendCorrectedTextAudio(chatId, audioStream);
     }
 
+    @Override
+    public void sendInformationPost(Long chatId, InformationPostModel informationPost) {
+        messageSender.sendInformationPost(chatId, informationPost);
+    }
+
 
 }

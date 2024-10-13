@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 public class PreviewCachedWords extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WordCache wordCache;
     private final CardToImagesConverterPipe converterPipe;
 
@@ -34,18 +34,18 @@ public class PreviewCachedWords extends AbstractCommandProcessor {
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      * @param converterPipe         See {@link CardToImagesConverterPipe}
      */
     protected PreviewCachedWords(CommandsConfiguration commandsConfiguration,
-                                 ITelegramClient telegramOutputGateway,
+                                 ITelegramClient telegramClient,
                                  CommandCache commandCache,
                                  WordCache wordCache,
                                  CardToImagesConverterPipe converterPipe) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.wordCache = wordCache;
         this.converterPipe = converterPipe;
     }
@@ -60,17 +60,17 @@ public class PreviewCachedWords extends AbstractCommandProcessor {
         List<Word> wordsInCache = wordCache.getWords();
 
         if (CollectionUtils.isEmpty(wordsInCache)) {
-            telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No words added in cache yet!");
+            telegramClient.sendPlainMessage(parameters.chatId(), "No words added in cache yet!");
             return;
         }
 
         WordCard previewWordCard = new WordCard("preview", wordsInCache);
 
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Please wait...I am preparing the preview...");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Please wait...I am preparing the preview...");
 
         ExerciseDocument exerciseDocument = converterPipe.pipe(previewWordCard);
 
-        telegramOutputGateway.sendWordCard(parameters.chatId(), exerciseDocument);
+        telegramClient.sendWordCard(parameters.chatId(), exerciseDocument);
     }
 
     @Override

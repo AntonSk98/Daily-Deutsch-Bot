@@ -128,8 +128,16 @@ public interface ITelegramClient {
     /**
      * Sends an audio of the corrected text
      *
-     * @param chatId               chat id
+     * @param chatId      chat id
      * @param audioStream audio stream
      */
     void sendCorrectedTextAudio(Long chatId, InputStream audioStream);
+
+    /**
+     * Sends information post.
+     *
+     * @param chatId          chat id
+     * @param informationPost information post
+     */
+    void sendInformationPost(Long chatId, InformationPostModel informationPost);
 }

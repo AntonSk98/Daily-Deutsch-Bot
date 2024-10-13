@@ -20,23 +20,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewListeningExercise extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final ListeningExerciseCache listeningExerciseCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration  See {@link CommandsConfiguration}
-     * @param telegramOutputGateway  See {@link ITelegramClient}
+     * @param telegramClient  See {@link ITelegramClient}
      * @param commandCache           See {@link CommandCache}
      * @param listeningExerciseCache See {@link ListeningExerciseCache}
      */
     protected PreviewListeningExercise(CommandsConfiguration commandsConfiguration,
-                                       ITelegramClient telegramOutputGateway,
+                                       ITelegramClient telegramClient,
                                        CommandCache commandCache,
                                        ListeningExerciseCache listeningExerciseCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.listeningExerciseCache = listeningExerciseCache;
     }
 
@@ -48,8 +48,8 @@ public class PreviewListeningExercise extends AbstractCommandProcessor {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         listeningExerciseCache.cachedListeningExercise().ifPresentOrElse(
-                listeningExercise -> telegramOutputGateway.sendListeningExercise(parameters.chatId(), listeningExercise),
-                () -> telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No listening exercise in cache")
+                listeningExercise -> telegramClient.sendListeningExercise(parameters.chatId(), listeningExercise),
+                () -> telegramClient.sendPlainMessage(parameters.chatId(), "No listening exercise in cache")
         );
     }
 

@@ -27,7 +27,7 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 @Service
 public class PublishWordCard extends AbstractPublishExerciseSupport {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WordCache wordCache;
     private final CardToImagesConverterPipe converterPipe;
 
@@ -35,17 +35,17 @@ public class PublishWordCard extends AbstractPublishExerciseSupport {
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      */
     protected PublishWordCard(CommandsConfiguration commandsConfiguration,
-                              ITelegramClient telegramOutputGateway,
+                              ITelegramClient telegramClient,
                               CommandCache commandCache,
                               DailyDeutschBotConfiguration botConfiguration,
                               WordCache wordCache,
                               CardToImagesConverterPipe converterPipe) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache, botConfiguration);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache, botConfiguration);
+        this.telegramClient = telegramClient;
         this.wordCache = wordCache;
         this.converterPipe = converterPipe;
     }
@@ -65,7 +65,7 @@ public class PublishWordCard extends AbstractPublishExerciseSupport {
         return groupId -> {
             WordCard previewWordCard = new WordCard(mapToDateGermanFormat(LocalDate.now()), wordCache.getWords());
             ExerciseDocument wordCardDocumentToPublish = converterPipe.pipe(previewWordCard);
-            telegramOutputGateway.sendWordCard(groupId, wordCardDocumentToPublish);
+            telegramClient.sendWordCard(groupId, wordCardDocumentToPublish);
         };
     }
 

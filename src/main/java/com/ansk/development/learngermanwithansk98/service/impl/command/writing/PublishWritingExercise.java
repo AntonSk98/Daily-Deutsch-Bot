@@ -30,18 +30,18 @@ public class PublishWritingExercise extends AbstractPublishExerciseSupport {
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param botConfiguration      See {@link WritingExerciseCache}
      */
     protected PublishWritingExercise(CommandsConfiguration commandsConfiguration,
-                                     ITelegramClient telegramOutputGateway,
+                                     ITelegramClient telegramClient,
                                      CommandCache commandCache,
                                      DailyDeutschBotConfiguration botConfiguration,
                                      WritingExerciseCache writingExerciseCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache, botConfiguration);
+        super(commandsConfiguration, telegramClient, commandCache, botConfiguration);
         this.writingExerciseCache = writingExerciseCache;
-        this.outputGateway = telegramOutputGateway;
+        this.outputGateway = telegramClient;
     }
 
     @Override

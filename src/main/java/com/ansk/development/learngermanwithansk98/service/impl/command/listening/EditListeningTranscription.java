@@ -37,19 +37,19 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
      * Constructor.
      *
      * @param commandsConfiguration  See {@link CommandsConfiguration}
-     * @param telegramOutputGateway  See {@link ITelegramClient}
+     * @param telegramClient  See {@link ITelegramClient}
      * @param commandCache           See {@link CommandCache}
      * @param listeningExerciseCache See {@link ListeningExerciseCache}
      * @param documentPipe           See {@link ListeningExerciseDocumentPipe}
      */
     protected EditListeningTranscription(CommandsConfiguration commandsConfiguration,
-                                         ITelegramClient telegramOutputGateway,
+                                         ITelegramClient telegramClient,
                                          CommandCache commandCache,
                                          ListeningExerciseCache listeningExerciseCache,
                                          ListeningExerciseDocumentPipe documentPipe) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
+        super(commandsConfiguration, telegramClient, commandCache);
         this.listeningExerciseCache = listeningExerciseCache;
-        this.outputGateway = telegramOutputGateway;
+        this.outputGateway = telegramClient;
         this.documentPipe = documentPipe;
     }
 

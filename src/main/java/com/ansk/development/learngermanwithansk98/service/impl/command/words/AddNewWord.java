@@ -23,23 +23,23 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class AddNewWord extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WordCache wordCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      */
     protected AddNewWord(CommandsConfiguration commandsConfiguration,
-                         ITelegramClient telegramOutputGateway,
+                         ITelegramClient telegramClient,
                          CommandCache commandCache,
                          WordCache wordCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.wordCache = wordCache;
     }
 
@@ -51,7 +51,7 @@ public class AddNewWord extends AbstractCommandProcessor {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         wordCache.addWord(model.map(Word.class));
-        telegramOutputGateway.sendMessageWithPayload(parameters.chatId(), "Word saved to cache!", model);
+        telegramClient.sendMessageWithPayload(parameters.chatId(), "Word saved to cache!", model);
     }
 
     @Override

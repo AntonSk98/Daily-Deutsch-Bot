@@ -20,23 +20,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class PreviewReadingExercise extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final ReadingExerciseCache readingExerciseCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param readingExerciseCache  See {@link ReadingExerciseCache}
      */
     protected PreviewReadingExercise(CommandsConfiguration commandsConfiguration,
-                                     ITelegramClient telegramOutputGateway,
+                                     ITelegramClient telegramClient,
                                      CommandCache commandCache,
                                      ReadingExerciseCache readingExerciseCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.readingExerciseCache = readingExerciseCache;
     }
 
@@ -49,11 +49,11 @@ public class PreviewReadingExercise extends AbstractCommandProcessor {
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         readingExerciseCache.cachedReadingExercise().ifPresentOrElse(
                 readingExercise -> {
-                    telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Preparing reading exercise for preview");
-                    telegramOutputGateway.sendReadingExercise(parameters.chatId(), readingExercise);
+                    telegramClient.sendPlainMessage(parameters.chatId(), "Preparing reading exercise for preview");
+                    telegramClient.sendReadingExercise(parameters.chatId(), readingExercise);
 
                 },
-                () -> telegramOutputGateway.sendPlainMessage(parameters.chatId(), "No reading exercise is in cache currently")
+                () -> telegramClient.sendPlainMessage(parameters.chatId(), "No reading exercise is in cache currently")
         );
     }
 

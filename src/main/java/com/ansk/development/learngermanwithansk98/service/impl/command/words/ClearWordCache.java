@@ -19,23 +19,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClearWordCache extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WordCache wordCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      */
     protected ClearWordCache(CommandsConfiguration commandsConfiguration,
-                             ITelegramClient telegramOutputGateway,
+                             ITelegramClient telegramClient,
                              CommandCache commandCache,
                              WordCache wordCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.wordCache = wordCache;
     }
 
@@ -47,7 +47,7 @@ public class ClearWordCache extends AbstractCommandProcessor {
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
         wordCache.cleanCache();
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Word cache has been successfully cleared.");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Word cache has been successfully cleared.");
     }
 
     @Override
