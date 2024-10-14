@@ -42,6 +42,7 @@ public abstract class AbstractCommandModel<T> {
         public static final String TRANSCRIPTION = "transcription";
         public static final String CORRECTED_TEXT = "corrected_text";
         public static final String WITH_AUDIO = "with_audio";
+        public static final String LANGUAGE = "language";
         public static final String APPROVE_PROMPT = "+";
 
     }

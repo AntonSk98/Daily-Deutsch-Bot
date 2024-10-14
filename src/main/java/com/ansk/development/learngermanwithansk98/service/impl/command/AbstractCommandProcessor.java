@@ -20,21 +20,21 @@ import java.util.ListIterator;
 public abstract class AbstractCommandProcessor implements ICommandProcessor {
 
     private final CommandsConfiguration commandsConfiguration;
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final CommandCache commandCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      */
     protected AbstractCommandProcessor(CommandsConfiguration commandsConfiguration,
-                                       ITelegramClient telegramOutputGateway,
+                                       ITelegramClient telegramClient,
                                        CommandCache commandCache) {
         this.commandsConfiguration = commandsConfiguration;
-        this.telegramOutputGateway = telegramOutputGateway;
+        this.telegramClient = telegramClient;
         this.commandCache = commandCache;
     }
 
@@ -80,10 +80,10 @@ public abstract class AbstractCommandProcessor implements ICommandProcessor {
             provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
         }
         if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
-            telegramOutputGateway.sendMessageWithNavigation(commandParameters.chatId(), prompt);
+            telegramClient.sendMessageWithNavigation(commandParameters.chatId(), prompt);
             return;
         }
-        telegramOutputGateway.sendPlainMessage(commandParameters.chatId(), prompt);
+        telegramClient.sendPlainMessage(commandParameters.chatId(), prompt);
 
     }
 

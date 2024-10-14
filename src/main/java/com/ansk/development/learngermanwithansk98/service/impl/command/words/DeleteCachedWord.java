@@ -27,23 +27,23 @@ import static java.lang.String.format;
 @Service
 public class DeleteCachedWord extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final WordCache wordCache;
 
     /**
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramOutputGateway See {@link ITelegramClient}
+     * @param telegramClient See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      */
     protected DeleteCachedWord(CommandsConfiguration commandsConfiguration,
-                               ITelegramClient telegramOutputGateway,
+                               ITelegramClient telegramClient,
                                CommandCache commandCache,
                                WordCache wordCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.wordCache = wordCache;
     }
 
@@ -69,11 +69,11 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
                             wordCache.deleteWord(word);
                             String message = "Successfully deleted the word '%s'";
                             String deletedWord = model.map(ToBeDeletedWord.class).getWordReference();
-                            telegramOutputGateway.sendPlainMessage(parameters.chatId(), format(message, deletedWord));
+                            telegramClient.sendPlainMessage(parameters.chatId(), format(message, deletedWord));
                         },
                         () -> {
                             String message = "Word '%s' not present in cache";
-                            telegramOutputGateway.sendPlainMessage(parameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
+                            telegramClient.sendPlainMessage(parameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
                         });
     }
 

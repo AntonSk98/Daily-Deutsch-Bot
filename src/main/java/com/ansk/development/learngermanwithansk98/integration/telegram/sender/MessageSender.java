@@ -1,5 +1,6 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
+import com.ansk.development.learngermanwithansk98.service.model.output.InformationPostModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -121,6 +122,38 @@ public class MessageSender {
 
         } catch (TelegramApiException e) {
             throw new IllegalStateException("Unexpected error occurred while sending an error", e);
+        }
+    }
+
+    /**
+     * Sends information post.
+     *
+     * @param chatId          chat id
+     * @param informationPost information post
+     */
+    public void sendInformationPost(Long chatId, InformationPostModel informationPost) {
+        final String informationPostTemplate = """
+                🔍 🧐  <b>%s</b>
+                
+                3️⃣... 2️⃣... 1️⃣...  ✍️
+                
+                %s
+                
+                🔹🔹🔹
+                """;
+
+        SendMessage sendMessage = SendMessage
+                .builder()
+                .chatId(chatId)
+                .text(String.format(informationPostTemplate, informationPost.topic(), informationPost.content()))
+                .parseMode("HTML")
+                .build();
+
+        try {
+            telegramClient.execute(sendMessage);
+
+        } catch (TelegramApiException e) {
+            throw new IllegalStateException("Unexpected error occurred while sending information post", e);
         }
     }
 }

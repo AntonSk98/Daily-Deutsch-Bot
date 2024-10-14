@@ -96,7 +96,6 @@ commands:
       parameters:
         - key: ${commands.confirmation.key}
           prompt: ${commands.confirmation.prompt}
-
     - path: /preview_writing_exercise
     - path: /listening_exercise
       parameters:
@@ -112,3 +111,15 @@ commands:
       parameters:
         - key: ${commands.confirmation.key}
           prompt: ${commands.confirmation.prompt}
+    - path: /dynamic_info
+      parameters:
+        - key: topic
+          prompt: please write a topic that bothers you
+        - key: language
+          prompt: please specify the language of the answer
+        - key: ${commands.confirmation.key}
+          prompt: |
+            The following post is about to be published.
+            
+            ${commands.confirmation.prompt}
+          dynamic-prompt: true

@@ -25,7 +25,7 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  */
 public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramOutputGateway;
+    private final ITelegramClient telegramClient;
     private final OpenAiClient openAiClient;
     private final ReadingPromptsConfiguration promptsConfiguration;
     private final ReadingExerciseDocumentPipe readingExerciseDocumentPipe;
@@ -35,7 +35,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
      * Constructor.
      *
      * @param commandsConfiguration       See {@link CommandsConfiguration}
-     * @param telegramOutputGateway       See {@link ITelegramClient}
+     * @param telegramClient       See {@link ITelegramClient}
      * @param commandCache                See {@link CommandCache}
      * @param openAiClient                   See {@link OpenAiClient}
      * @param promptsConfiguration        See {@link ReadingPromptsConfiguration}
@@ -43,14 +43,14 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
      * @param readingExerciseCache        See {@link ReadingExerciseCache}
      */
     protected ReadingExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                     ITelegramClient telegramOutputGateway,
+                                     ITelegramClient telegramClient,
                                      CommandCache commandCache,
                                      OpenAiClient openAiClient,
                                      ReadingPromptsConfiguration promptsConfiguration,
                                      ReadingExerciseDocumentPipe readingExerciseDocumentPipe,
                                      ReadingExerciseCache readingExerciseCache) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache);
-        this.telegramOutputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache);
+        this.telegramClient = telegramClient;
         this.openAiClient = openAiClient;
         this.promptsConfiguration = promptsConfiguration;
         this.readingExerciseDocumentPipe = readingExerciseDocumentPipe;
@@ -89,7 +89,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
 
         readingExerciseCache.saveReadingExercise(readingExercise);
 
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Reading exercise saved in cache!");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Reading exercise saved in cache!");
     }
 
     /**
@@ -100,11 +100,11 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
      * @return reading exercise tasks
      */
     public ReadingExercise.ReadingTasks generateTasks(CommandParameters parameters, ReadingExercise.TextOutput text) {
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Creating reading exercise...");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Creating reading exercise...");
         GenericPromptTemplate createExercise = new GenericPromptTemplate(promptsConfiguration.createReadingExercise())
                 .resolveVariable(TEXT, text.text());
         var tasks = openAiClient.sendRequest(createExercise.getPrompt(), ReadingExercise.ReadingTasks.class);
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "The exercise is generated.");
+        telegramClient.sendPlainMessage(parameters.chatId(), "The exercise is generated.");
         return tasks;
     }
 
@@ -116,7 +116,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
      * @return paragraphs
      */
     public ReadingExercise.Paragraphs mapToParagraphs(CommandParameters parameters, ReadingExercise.TextOutput text) {
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Splitting the text into paragraphs....");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Splitting the text into paragraphs....");
         GenericPromptTemplate textToParagraphsPrompt = new GenericPromptTemplate(promptsConfiguration.textToParagraphs())
                 .resolveVariable(TEXT, text.text());
         return openAiClient.sendRequest(textToParagraphsPrompt.getPrompt(), ReadingExercise.Paragraphs.class);
@@ -135,7 +135,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
                                                              ReadingExercise.TextOutput text,
                                                              ReadingExercise.Paragraphs paragraphs,
                                                              ReadingExercise.ReadingTasks tasks) {
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Generating a document object.");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Generating a document object.");
         return new ReadingExercise.Document(
                 text.level(),
                 text.title(),
@@ -152,7 +152,7 @@ public abstract class ReadingExerciseSupport extends AbstractCommandProcessor {
      * @return exercise document
      */
     public ExerciseDocument pipeDocument(CommandParameters parameters, ReadingExercise.Document documentMetadata) {
-        telegramOutputGateway.sendPlainMessage(parameters.chatId(), "Piping the document into media files...");
+        telegramClient.sendPlainMessage(parameters.chatId(), "Piping the document into media files...");
         return readingExerciseDocumentPipe.pipe(documentMetadata);
     }
 }

@@ -43,18 +43,18 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
      * Constructor.
      *
      * @param commandsConfiguration     See {@link CommandsConfiguration}
-     * @param telegramOutputGateway     See {@link ITelegramClient}
+     * @param telegramClient     See {@link ITelegramClient}
      * @param correctedTextDocumentPipe See {@link CorrectedTextDocumentPipe}
      * @param openAiClient              See {@link OpenAiClient}
      */
     protected CorrectTextExercise(CommandsConfiguration commandsConfiguration,
-                                  ITelegramClient telegramOutputGateway,
+                                  ITelegramClient telegramClient,
                                   CommandCache commandCache,
                                   CorrectedTextDocumentPipe correctedTextDocumentPipe,
                                   CorrectedTextCache correctedTextCache,
                                   DailyDeutschBotConfiguration botConfiguration, OpenAiClient openAiClient) {
-        super(commandsConfiguration, telegramOutputGateway, commandCache, botConfiguration);
-        this.outputGateway = telegramOutputGateway;
+        super(commandsConfiguration, telegramClient, commandCache, botConfiguration);
+        this.outputGateway = telegramClient;
         this.correctedTextDocumentPipe = correctedTextDocumentPipe;
         this.correctedTextCache = correctedTextCache;
         this.openAiClient = openAiClient;
