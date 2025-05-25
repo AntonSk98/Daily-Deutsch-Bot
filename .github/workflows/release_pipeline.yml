@@ -42,7 +42,7 @@ jobs:
             docker rm "${{ secrets.CONTAINER_NAME }}" || true
             docker rmi "${{ secrets.CONTAINER_NAME }}":latest || true
             docker load -i /home/ubuntu/daily-deutsch-bot/daily-deutsch-app.tar
-            docker run -d --network host --name "${{ secrets.CONTAINER_NAME }}" \
+            docker run -d --network host --restart unless-stopped --name "${{ secrets.CONTAINER_NAME }}" \
               -e AI_TOKEN="${{ secrets.AI_TOKEN }}" \
               -e GROUP_ID="${{ secrets.GROUP_ID}}" \
               -e REST_INTERNAL_SECURITY_USERNAME="${{ secrets.REST_INTERNAL_SECURITY_USERNAME }}" \
