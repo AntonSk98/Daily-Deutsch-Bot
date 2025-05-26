@@ -30,18 +30,31 @@ jobs:
         run: |
           docker save "${{ secrets.CONTAINER_NAME }}":latest -o daily-deutsch-app.tar
 
-      - name: SSH into remote server and deploy latest state
+      - name: Save the private SSH key to a file
         run: |
-          # Save the private SSH key to a file
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > oracle_access_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > oracle_access_key.pem
           chmod 600 oracle_access_key.pem
-          
+
+      - name: Copy image tar to remote server
+        run: |
           scp -i oracle_access_key.pem -o StrictHostKeyChecking=no daily-deutsch-app.tar "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}":/home/ubuntu/daily-deutsch-bot
+
+      - name: Deploy Docker container on remote
+        run: |
           ssh -i oracle_access_key.pem -o StrictHostKeyChecking=no "${{ secrets.REMOTE_USER}}"@"${{ secrets.REMOTE_ADDRESS}}" << 'EOF'
+            echo "[INFO] Stopping existing container..."
             docker stop "${{ secrets.CONTAINER_NAME }}" || true
+          
+            echo "[INFO] Removing existing container..."
             docker rm "${{ secrets.CONTAINER_NAME }}" || true
+          
+            echo "[INFO] Removing old image..."
             docker rmi "${{ secrets.CONTAINER_NAME }}":latest || true
+          
+            echo "[INFO] Loading new Docker image..."
             docker load -i /home/ubuntu/daily-deutsch-bot/daily-deutsch-app.tar
+          
+            echo "[INFO] Starting new container..."
             docker run -d --network host --restart unless-stopped --name "${{ secrets.CONTAINER_NAME }}" \
               -e AI_TOKEN="${{ secrets.AI_TOKEN }}" \
               -e GROUP_ID="${{ secrets.GROUP_ID}}" \
