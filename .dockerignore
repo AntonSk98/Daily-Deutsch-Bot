@@ -1,0 +1,21 @@
+# Maven build artifacts
+target/
+*.jar
+
+# Git
+.git
+.gitignore
+
+# IDE config
+*.iml
+.idea/
+.vscode/
+
+# Build output
+*.log
+*.tar
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db

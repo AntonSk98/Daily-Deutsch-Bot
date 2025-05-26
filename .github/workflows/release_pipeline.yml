@@ -19,9 +19,6 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Building the DailyDeutsch Bot
-        run: ./mvnw clean package
-
       - name: Build Docker image
         run: |
           docker build -t "${{ secrets.CONTAINER_NAME }}":latest .

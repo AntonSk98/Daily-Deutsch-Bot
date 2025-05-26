@@ -1,12 +1,16 @@
-# Use an official OpenJDK runtime as a parent image
-FROM eclipse-temurin:21-jdk
-
-# Set the working directory inside the container
+# ---- Stage 1: Build ----
+FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 
-# Copy the JAR file from the target folder into the container
-COPY target/daily-deutsch-bot*.jar /app/daily-deutsch-bot.jar
-COPY target/classes/static /app/static
+# Copy source and build with Maven
+COPY . .
+RUN ./mvnw clean package
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "/app/daily-deutsch-bot.jar"]
+# ---- Stage 2: Run ----
+FROM eclipse-temurin:21-jre AS runtime
+WORKDIR /app
+
+# Copy only the fat jar to the final image
+COPY --from=builder /app/target/daily-deutsch-bot*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
