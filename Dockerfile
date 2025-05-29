@@ -10,7 +10,13 @@ RUN ./mvnw clean package
 FROM eclipse-temurin:21-jre AS runtime
 WORKDIR /app
 
-# Copy only the fat jar to the final image
+# Copy the jar
 COPY --from=builder /app/target/daily-deutsch-bot*.jar app.jar
+
+# Copy font resources from source to a known path
+COPY --from=builder /app/src/main/resources/static /app/static
+
+# Make fonts accessible
+ENV FONT_FOLDER=/app/fonts
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -46,7 +46,6 @@ public class HtmlToPdfPipe implements IConverterPipe<Document, PDDocument> {
             // Set up font resolver to use Helvetica
             FontProvider fontProvider = new DefaultFontProvider(false, false, false);
             fontProvider.addDirectory(fontsFolder);
-            System.out.println(fontsFolder);
 
             HtmlConverter.convertToPdf(htmlInputStream, pdfDocument, new ConverterProperties().setFontProvider(fontProvider));
 
