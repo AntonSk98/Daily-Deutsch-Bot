@@ -10,8 +10,10 @@ import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCo
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.ToBeDeletedWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
@@ -34,7 +36,7 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
      * Constructor.
      *
      * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramClient See {@link ITelegramClient}
+     * @param telegramClient        See {@link ITelegramClient}
      * @param commandCache          See {@link CommandCache}
      * @param wordCache             See {@link WordCache}
      */
@@ -54,27 +56,20 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+        final String wordReference = model.map(ToBeDeletedWord.class).getWordReference();
         map(wordCache.getWords())
+                .entrySet()
                 .stream()
-                .map(wordInfo -> wordInfo.findByReference(model.map(ToBeDeletedWord.class).getWordReference()))
-                .flatMap(Optional::stream)
-                .map(wordInfo -> wordCache.getWords()
-                        .stream()
-                        .filter(word -> word.getWord().equals(wordInfo.word()))
-                        .filter(word -> word.getTranslation().equals(wordInfo.translation()))
-                        .findFirst())
-                .flatMap(Optional::stream)
+                .filter(word -> word.getKey().findByReference(wordReference).isPresent())
                 .findFirst()
                 .ifPresentOrElse(word -> {
-                            wordCache.deleteWord(word);
-                            String message = "Successfully deleted the word '%s'";
-                            String deletedWord = model.map(ToBeDeletedWord.class).getWordReference();
-                            telegramClient.sendPlainMessage(parameters.chatId(), format(message, deletedWord));
-                        },
-                        () -> {
-                            String message = "Word '%s' not present in cache";
-                            telegramClient.sendPlainMessage(parameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
-                        });
+                    wordCache.deleteWord(word.getValue());
+                    String message = "Successfully deleted the word '%s'";
+                    telegramClient.sendPlainMessage(parameters.chatId(), format(message, wordReference));
+                }, () -> {
+                    String message = "Word '%s' not present in cache";
+                    telegramClient.sendPlainMessage(parameters.chatId(), format(message, model.map(ToBeDeletedWord.class).getWordReference()));
+                });
     }
 
     @Override

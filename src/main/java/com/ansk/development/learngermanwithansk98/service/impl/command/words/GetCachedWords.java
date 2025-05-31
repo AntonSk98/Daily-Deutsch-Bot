@@ -54,7 +54,7 @@ public class GetCachedWords extends AbstractCommandProcessor {
 
     @Override
     public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
-        Collection<WordInfo> wordInfoCollection = map(wordCache.getWords());
+        Collection<WordInfo> wordInfoCollection = map(wordCache.getWords()).keySet();
         String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
         String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
         telegramClient.sendPlainMessage(parameters.chatId(), message);

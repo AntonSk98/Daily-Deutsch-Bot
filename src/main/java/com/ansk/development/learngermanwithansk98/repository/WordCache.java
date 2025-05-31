@@ -38,14 +38,12 @@ public class WordCache {
     }
 
     /**
-     * Deletes a cached word by ignoring test case.
+     * Deletes a cached word.
      *
      * @param word word to be removed
      */
     public void deleteWord(Word word) {
-        words = words.stream()
-                .filter(cachedWord -> !StringUtils.equalsIgnoreCase(cachedWord.getWord(), word.getWord()))
-                .collect(Collectors.toCollection(ArrayList::new));
+        words.remove(word);
     }
 
     /**

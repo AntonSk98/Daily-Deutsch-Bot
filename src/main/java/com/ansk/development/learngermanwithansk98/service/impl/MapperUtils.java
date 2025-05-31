@@ -46,32 +46,33 @@ public class MapperUtils {
     }
 
     /**
-     * Maps the collection of {@link Word} to the projection collection of {@link WordInfo}.
+     * Maps a collection of {@link Word} objects to a map where the key is a corresponding {@link WordInfo}
+     * and the value is the original {@link Word}. When the same word appears multiple times,
+     * each occurrence is indexed in the {@link WordInfo}.
      *
-     * @param words words
-     * @return projection collections
+     * @param words the collection of {@link Word} to map
+     * @return a map from {@link WordInfo} to {@link Word}, preserving insertion order
      */
-    public static Collection<WordInfo> map(Collection<Word> words) {
-        Map<String, Long> wordToTotalOccurrences = words
-                .stream()
-                .map(Word::getWord)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    public static Map<WordInfo, Word> map(Collection<Word> words) {
+        Map<String, Long> totalOccurrences = words.stream()
+                .collect(Collectors.groupingBy(Word::getWord, Collectors.counting()));
 
-        Map<String, Long> wordToCurrentIndex = new HashMap<>();
+        Map<String, Long> currentIndex = new HashMap<>();
+        Map<WordInfo, Word> result = new LinkedHashMap<>();
 
-        return words
-                .stream()
-                .map(word -> {
-                    String wordStr = word.getWord();
-                    long currentIndex = wordToCurrentIndex.getOrDefault(wordStr, 0L) + 1;
-                    wordToCurrentIndex.put(wordStr, currentIndex);
+        for (Word word : words) {
+            String wordString = word.getWord();
+            long index = currentIndex.merge(wordString, 1L, Long::sum);
+            long total = totalOccurrences.get(wordString);
 
-                    long totalOccurrences = wordToTotalOccurrences.getOrDefault(wordStr, 0L);
-                    return totalOccurrences > 1
-                            ? WordInfo.of(currentIndex, wordStr, word.getTranslation())
-                            : WordInfo.of(wordStr, word.getTranslation());
-                })
-                .toList();
+            WordInfo info = total > 1
+                    ? WordInfo.of(index, wordString, word.getTranslation())
+                    : WordInfo.of(wordString, word.getTranslation());
+
+            result.put(info, word);
+        }
+
+        return result;
     }
 
     /**
