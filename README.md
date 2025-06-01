@@ -7,16 +7,16 @@
 ---
 
 ## 📚 Table of Contents
-1. [🧠 Word Cards](#1-word-cards)
-2. [📖 Reading Exercise](#2-reading-exercise)
-3. [✍️ Writing Exercise](#3-writing-exercise)
-4. [🛠 Writing Correction](#4-writing-exercise-text-and-correction)
-5. [🎧 Listening Exercise](#5-listening-exercise)
-6. [💡 Dynamic Info](#6-dynamic-information)
-7. [🧾 API Summary](#7-api-summary)
-8. [💻 For Developers](#8-for-developers)  
-   8.1. [🚀 Starting the Bot](#81-starting-the-bot)  
-   8.2. [📦 Deploying the Bot](#82-deploying-the-bot)
+1. [🧠 Word Cards](#1--word-cards)
+2. [📖 Reading Exercise](#2--reading-exercise)
+3. [✍️ Writing Exercise](#3--writing-exercise)
+4. [🛠 Writing Correction](#4--writing-correction)
+5. [🎧 Listening Exercise](#5--listening-exercise)
+6. [💡 Dynamic Info](#6--dynamic-information)
+7. [🧾 API Summary](#7--api-summary)
+8. [💻 For Developers](#8--for-developers)  
+   8.1. [🚀 Starting the Bot](#81--starting-the-bot)  
+   8.2. [📦 Deploying the Bot](#82--deploying-the-bot)
 
 ---
 
