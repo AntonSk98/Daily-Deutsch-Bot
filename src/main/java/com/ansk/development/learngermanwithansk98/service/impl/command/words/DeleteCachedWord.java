@@ -10,11 +10,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCo
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.ToBeDeletedWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
-import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.Optional;
 
 import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 import static com.ansk.development.learngermanwithansk98.service.model.Command.DELETE_WORD;
