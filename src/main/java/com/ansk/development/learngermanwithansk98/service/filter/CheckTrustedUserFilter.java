@@ -14,16 +14,15 @@ import org.springframework.stereotype.Component;
 @Order(1000)
 public class CheckTrustedUserFilter implements IFilter {
 
+  @Value("${bot.verified-user}")
+  private long verifiedUser;
 
-    @Value("${bot.verified-user}")
-    private long verifiedUser;
-
-    @Override
-    public void filter(FilterParameters parameters) {
-        if (parameters.userId().equals(verifiedUser)) {
-            return;
-        }
-
-        throw new NotTrustedUserException("Access denied.");
+  @Override
+  public void filter(FilterParameters parameters) {
+    if (parameters.userId().equals(verifiedUser)) {
+      return;
     }
+
+    throw new NotTrustedUserException("Access denied.");
+  }
 }

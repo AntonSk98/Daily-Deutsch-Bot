@@ -7,12 +7,12 @@ package com.ansk.development.learngermanwithansk98.exception;
  */
 public class NotTrustedUserException extends RuntimeException {
 
-    /**
-     * Constructor.
-     *
-     * @param message message
-     */
-    public NotTrustedUserException(String message) {
-        super(message);
-    }
+  /**
+   * Constructor.
+   *
+   * @param message message
+   */
+  public NotTrustedUserException(String message) {
+    super(message);
+  }
 }

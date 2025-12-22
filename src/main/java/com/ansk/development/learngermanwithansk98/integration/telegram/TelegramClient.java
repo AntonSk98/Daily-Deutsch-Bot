@@ -1,12 +1,20 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram;
 
-import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
-import com.ansk.development.learngermanwithansk98.integration.telegram.sender.*;
-import com.ansk.development.learngermanwithansk98.service.model.output.*;
+import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.AudioExerciseSender;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.MessageSender;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.ReadingExerciseSender;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.WordCardSender;
+import com.ansk.development.learngermanwithansk98.integration.telegram.sender.WritingExerciseSender;
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
+import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
+import com.ansk.development.learngermanwithansk98.service.model.output.InformationPostModel;
+import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
+import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Component;
-
 import java.io.InputStream;
+import org.springframework.stereotype.Component;
 
 /**
  * Implementation of {@link ITelegramClient}.
@@ -16,94 +24,91 @@ import java.io.InputStream;
 @Component
 public class TelegramClient implements ITelegramClient {
 
-    private final MessageSender messageSender;
-    private final WordCardSender wordCardSender;
-    private final ReadingExerciseSender readingExerciseSender;
-    private final WritingExerciseSender writingExerciseSender;
-    private final AudioExerciseSender audioExerciseSender;
+  private final MessageSender messageSender;
+  private final WordCardSender wordCardSender;
+  private final ReadingExerciseSender readingExerciseSender;
+  private final WritingExerciseSender writingExerciseSender;
+  private final AudioExerciseSender audioExerciseSender;
 
-    /**
-     * Constructor.
-     *
-     * @param config       See {@link DailyDeutschBotConfiguration}
-     * @param objectMapper See {@link ObjectMapper}
-     */
-    public TelegramClient(DailyDeutschBotConfiguration config,
-                          ObjectMapper objectMapper) {
-        var telegramClient = createClient(config.token());
-        this.messageSender = new MessageSender(telegramClient, objectMapper);
-        this.wordCardSender = new WordCardSender(telegramClient);
-        this.readingExerciseSender = new ReadingExerciseSender(telegramClient);
-        this.writingExerciseSender = new WritingExerciseSender(telegramClient);
-        this.audioExerciseSender = new AudioExerciseSender(telegramClient, config.token());
-    }
+  /**
+   * Constructor.
+   *
+   * @param config See {@link BotConfigurationProperties}
+   * @param objectMapper See {@link ObjectMapper}
+   */
+  public TelegramClient(BotConfigurationProperties config, ObjectMapper objectMapper) {
+    var telegramClient = createClient(config.token());
+    this.messageSender = new MessageSender(telegramClient, objectMapper);
+    this.wordCardSender = new WordCardSender(telegramClient);
+    this.readingExerciseSender = new ReadingExerciseSender(telegramClient);
+    this.writingExerciseSender = new WritingExerciseSender(telegramClient);
+    this.audioExerciseSender = new AudioExerciseSender(telegramClient, config.token());
+  }
 
-    @Override
-    public void sendPlainMessage(Long chatId, String message) {
-        messageSender.sendPlainMessage(chatId, message);
-    }
+  @Override
+  public void sendPlainMessage(Long chatId, String message) {
+    messageSender.sendPlainMessage(chatId, message);
+  }
 
-    @Override
-    public void sendMessageWithNavigation(Long chatId, String message) {
-        messageSender.sendMessageWithNavigation(chatId, message);
-    }
+  @Override
+  public void sendMessageWithNavigation(Long chatId, String message) {
+    messageSender.sendMessageWithNavigation(chatId, message);
+  }
 
-    @Override
-    public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
-        messageSender.sendErrorMessage(chatId, clazz, message);
-    }
+  @Override
+  public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
+    messageSender.sendErrorMessage(chatId, clazz, message);
+  }
 
-    @Override
-    public <T> void sendMessageWithPayload(Long chatId, String message, T payload) {
-        messageSender.sendMessageWithPayload(chatId, message, payload);
-    }
+  @Override
+  public <T> void sendMessageWithPayload(Long chatId, String message, T payload) {
+    messageSender.sendMessageWithPayload(chatId, message, payload);
+  }
 
-    @Override
-    public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
-        wordCardSender.sendWordCard(chatId, exerciseDocument);
-    }
+  @Override
+  public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
+    wordCardSender.sendWordCard(chatId, exerciseDocument);
+  }
 
-    @Override
-    public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
-        readingExerciseSender.sendReadingExercise(chatId, readingExercise);
-    }
+  @Override
+  public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
+    readingExerciseSender.sendReadingExercise(chatId, readingExercise);
+  }
 
-    @Override
-    public void sendWritingExercise(Long chatId, WritingExercise writingExercise) {
-        writingExerciseSender.sendWritingExercise(chatId, writingExercise);
-    }
+  @Override
+  public void sendWritingExercise(Long chatId, WritingExercise writingExercise) {
+    writingExerciseSender.sendWritingExercise(chatId, writingExercise);
+  }
 
-    @Override
-    public InputStream streamAudio(String audioId) {
-        return audioExerciseSender.streamAudio(audioId);
-    }
+  @Override
+  public InputStream streamAudio(String audioId) {
+    return audioExerciseSender.streamAudio(audioId);
+  }
 
-    @Override
-    public void sendListeningExercise(Long chatId, ListeningExercise listeningExercise) {
-        audioExerciseSender.sendListeningExercise(chatId, listeningExercise);
-    }
+  @Override
+  public void sendListeningExercise(Long chatId, ListeningExercise listeningExercise) {
+    audioExerciseSender.sendListeningExercise(chatId, listeningExercise);
+  }
 
-    @Override
-    public void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt dynamicPrompt) {
-        audioExerciseSender.sendPromptToEditListeningExercise(chatId, dynamicPrompt);
-    }
+  @Override
+  public void sendPromptToEditListeningExercise(
+      Long chatId, EditListeningExercisePrompt dynamicPrompt) {
+    audioExerciseSender.sendPromptToEditListeningExercise(chatId, dynamicPrompt);
+  }
 
-    @Override
-    public void sendCorrectedText(Long chatId,
-                                  ExerciseDocument originalTextDocument,
-                                  ExerciseDocument correctedTextDocument) {
-        writingExerciseSender.sendCorrectedText(chatId, originalTextDocument, correctedTextDocument);
-    }
+  @Override
+  public void sendCorrectedText(
+      Long chatId, ExerciseDocument originalTextDocument, ExerciseDocument correctedTextDocument) {
+    writingExerciseSender.sendCorrectedText(chatId, originalTextDocument, correctedTextDocument);
+  }
 
-    @Override
-    public void sendCorrectedTextAudio(Long chatId, InputStream audioStream) {
-        writingExerciseSender.sendCorrectedTextAudio(chatId, audioStream);
-    }
+  @Override
+  public void sendCorrectedTextAudio(Long chatId, InputStream audioStream) {
+    writingExerciseSender.sendCorrectedTextAudio(chatId, audioStream);
+  }
 
-    @Override
-    public void sendInformationPost(Long chatId, InformationPostModel informationPost) {
-        messageSender.sendInformationPost(chatId, informationPost);
-    }
-
-
+  @Override
+  public void sendInformationPost(Long chatId, InformationPostModel informationPost) {
+    messageSender.sendInformationPost(chatId, informationPost);
+  }
 }

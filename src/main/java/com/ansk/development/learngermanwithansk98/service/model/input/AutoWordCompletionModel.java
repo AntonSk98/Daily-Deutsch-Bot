@@ -10,28 +10,28 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
  */
 public class AutoWordCompletionModel extends AbstractCommandModel<AutoWordCompletionModel> {
 
-    private String word;
+  private String word;
 
-    /**
-     * Getter for {@link #word}.
-     *
-     * @return {@link #word}
-     */
-    public String getWord() {
-        return word;
-    }
+  /**
+   * Getter for {@link #word}.
+   *
+   * @return {@link #word}
+   */
+  public String getWord() {
+    return word;
+  }
 
-    /**
-     * Setter for {@link #word}.
-     *
-     * @param word {@link #word}
-     */
-    public void setWord(String word) {
-        this.word = word;
-    }
+  /**
+   * Setter for {@link #word}.
+   *
+   * @param word {@link #word}
+   */
+  public void setWord(String word) {
+    this.word = word;
+  }
 
-    @Override
-    public AbstractCommandModel<AutoWordCompletionModel> init() {
-        return new AutoWordCompletionModel();
-    }
+  @Override
+  public AbstractCommandModel<AutoWordCompletionModel> init() {
+    return new AutoWordCompletionModel();
+  }
 }

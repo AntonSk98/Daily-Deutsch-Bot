@@ -74,7 +74,7 @@ ai:
         Replace each paragraph with the actual text. 
         Here is the text:
         {text}
-  vocabulary:
+  flashcard:
     prompts:
       auto-word-definition: |
         You are an experienced German language tutor with years of expertise in teaching students across all proficiency levels. 

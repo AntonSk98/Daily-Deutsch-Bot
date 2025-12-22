@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
-import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
+import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
@@ -10,29 +10,33 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 /**
- * Defines what {@link IConverterPipe}s and in which order must be applied to transform a {@link WordCard} to {@link ExerciseDocument}.
+ * Defines what {@link IConverterPipe}s and in which order must be applied to transform a {@link
+ * WordCard} to {@link ExerciseDocument}.
  *
  * @author Anton Skripin
  */
 @Service
-public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard> implements IConverterPipe<WordCard, ExerciseDocument> {
+public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard>
+    implements IConverterPipe<WordCard, ExerciseDocument> {
 
-    private final HtmlToPdfPipe htmlToPdfPipe;
-    /**
-     * Constructor.
-     *
-     * @param configuration        See {@link DailyDeutschBotConfiguration}
-     * @param springTemplateEngine See {@link SpringTemplateEngine}
-     */
-    protected CardToImagesConverterPipe(DailyDeutschBotConfiguration configuration, SpringTemplateEngine springTemplateEngine) {
-        super(configuration, springTemplateEngine);
-        htmlToPdfPipe = new HtmlToPdfPipe(configuration);
-    }
+  private final HtmlToPdfPipe htmlToPdfPipe;
 
-    @Override
-    public ExerciseDocument pipe(WordCard wordCard) {
-        Document html = abstractPipe("vocab_template", "wordCard", wordCard);
-        PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
-        return new PdfToImagePipe().pipe(pdfDocument);
-    }
+  /**
+   * Constructor.
+   *
+   * @param configuration See {@link BotConfigurationProperties}
+   * @param springTemplateEngine See {@link SpringTemplateEngine}
+   */
+  protected CardToImagesConverterPipe(
+      BotConfigurationProperties configuration, SpringTemplateEngine springTemplateEngine) {
+    super(configuration, springTemplateEngine);
+    htmlToPdfPipe = new HtmlToPdfPipe(configuration);
+  }
+
+  @Override
+  public ExerciseDocument pipe(WordCard wordCard) {
+    Document html = abstractPipe("vocab_template", "wordCard", wordCard);
+    PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
+    return new PdfToImagePipe().pipe(pdfDocument);
+  }
 }

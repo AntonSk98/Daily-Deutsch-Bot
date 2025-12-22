@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InformationPostCache {
-    private InformationPostModel informationPost;
+  private InformationPostModel informationPost;
 
-    public void saveInformationPost(InformationPostModel informationPost) {
-        this.informationPost = informationPost;
-    }
+  public void saveInformationPost(InformationPostModel informationPost) {
+    this.informationPost = informationPost;
+  }
 
-    public InformationPostModel getInformationPost() {
-        return informationPost;
-    }
+  public InformationPostModel getInformationPost() {
+    return informationPost;
+  }
 
-    public void clear() {
-        informationPost = null;
-    }
+  public void clear() {
+    informationPost = null;
+  }
 }

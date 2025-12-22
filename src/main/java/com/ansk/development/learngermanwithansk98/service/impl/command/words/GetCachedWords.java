@@ -1,6 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
-import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
+import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
+
+import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.WordCache;
@@ -11,13 +13,10 @@ import com.ansk.development.learngermanwithansk98.service.model.input.CommandPar
 import com.ansk.development.learngermanwithansk98.service.model.input.NoParamModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
-
-import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 /**
  * Service that returns currently cached {@link Word}s.
@@ -27,41 +26,43 @@ import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtil
 @Service
 public class GetCachedWords extends AbstractCommandProcessor {
 
-    private final WordCache wordCache;
-    private final ITelegramClient telegramClient;
+  private final WordCache wordCache;
+  private final ITelegramClient telegramClient;
 
-    /**
-     * Constructor.
-     *
-     * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramClient See {@link ITelegramClient}
-     * @param commandCache          See {@link CommandCache}
-     * @param wordCache             See {@link WordCache}
-     */
-    protected GetCachedWords(CommandsConfiguration commandsConfiguration,
-                             ITelegramClient telegramClient,
-                             CommandCache commandCache,
-                             WordCache wordCache) {
-        super(commandsConfiguration, telegramClient, commandCache);
-        this.wordCache = wordCache;
-        this.telegramClient = telegramClient;
-    }
+  /**
+   * Constructor.
+   *
+   * @param commandsConfiguration See {@link CommandsConfigurationProperties}
+   * @param telegramClient See {@link ITelegramClient}
+   * @param commandCache See {@link CommandCache}
+   * @param wordCache See {@link WordCache}
+   */
+  protected GetCachedWords(
+      CommandsConfigurationProperties commandsConfiguration,
+      ITelegramClient telegramClient,
+      CommandCache commandCache,
+      WordCache wordCache) {
+    super(commandsConfiguration, telegramClient, commandCache);
+    this.wordCache = wordCache;
+    this.telegramClient = telegramClient;
+  }
 
-    @Override
-    public Command supportedCommand() {
-        return Command.GET_WORDS;
-    }
+  @Override
+  public Command supportedCommand() {
+    return Command.GET_WORDS;
+  }
 
-    @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
-        Collection<WordInfo> wordInfoCollection = map(wordCache.getWords()).keySet();
-        String wordInfoString = wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
-        String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
-        telegramClient.sendPlainMessage(parameters.chatId(), message);
-    }
+  @Override
+  public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+    Collection<WordInfo> wordInfoCollection = map(wordCache.getWords()).keySet();
+    String wordInfoString =
+        wordInfoCollection.stream().map(WordInfo::prettyPrint).collect(Collectors.joining("\n"));
+    String message = StringUtils.isEmpty(wordInfoString) ? "No words in cache yet" : wordInfoString;
+    telegramClient.sendPlainMessage(parameters.chatId(), message);
+  }
 
-    @Override
-    public AbstractCommandModel<?> supportedModelWithMapping() {
-        return new NoParamModel();
-    }
+  @Override
+  public AbstractCommandModel<?> supportedModelWithMapping() {
+    return new NoParamModel();
+  }
 }

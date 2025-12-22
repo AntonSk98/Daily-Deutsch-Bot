@@ -1,7 +1,10 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
-import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.config.WritingPromptsConfiguration;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
+
+import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
+import com.ansk.development.learngermanwithansk98.config.WritingPrompts;
 import com.ansk.development.learngermanwithansk98.integration.openai.OpenAiClient;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
@@ -15,9 +18,6 @@ import com.ansk.development.learngermanwithansk98.service.model.input.WritingExe
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.WritingExercise;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
-
 /**
  * Utility class to generate writing exercise.
  *
@@ -25,77 +25,82 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
  */
 public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramClient;
-    private final OpenAiClient OpenAiClient;
-    private final WritingPromptsConfiguration promptsConfiguration;
-    private final WritingExerciseDocumentPipe writingExerciseDocumentPipe;
-    private final WritingExerciseCache writingExerciseCache;
+  private final ITelegramClient telegramClient;
+  private final OpenAiClient OpenAiClient;
+  private final WritingPrompts promptsConfiguration;
+  private final WritingExerciseDocumentPipe writingExerciseDocumentPipe;
+  private final WritingExerciseCache writingExerciseCache;
 
-    /**
-     * Constructor.
-     *
-     * @param commandsConfiguration       See {@link CommandsConfiguration}
-     * @param telegramClient       See {@link ITelegramClient}
-     * @param commandCache                See {@link CommandCache}
-     * @param OpenAiClient                   See {@link OpenAiClient}
-     * @param promptsConfiguration        See {@link WritingPromptsConfiguration}
-     * @param writingExerciseDocumentPipe See {@link WritingExerciseDocumentPipe}
-     * @param writingExerciseCache        See {@link WritingExerciseCache}
-     */
-    protected WritingExerciseSupport(CommandsConfiguration commandsConfiguration,
-                                     ITelegramClient telegramClient,
-                                     CommandCache commandCache,
-                                     OpenAiClient OpenAiClient,
-                                     WritingPromptsConfiguration promptsConfiguration,
-                                     WritingExerciseDocumentPipe writingExerciseDocumentPipe,
-                                     WritingExerciseCache writingExerciseCache) {
-        super(commandsConfiguration, telegramClient, commandCache);
-        this.telegramClient = telegramClient;
-        this.OpenAiClient = OpenAiClient;
-        this.promptsConfiguration = promptsConfiguration;
-        this.writingExerciseDocumentPipe = writingExerciseDocumentPipe;
-        this.writingExerciseCache = writingExerciseCache;
-    }
+  /**
+   * Constructor.
+   *
+   * @param commandsConfiguration See {@link CommandsConfigurationProperties}
+   * @param telegramClient See {@link ITelegramClient}
+   * @param commandCache See {@link CommandCache}
+   * @param OpenAiClient See {@link OpenAiClient}
+   * @param promptsConfiguration See {@link WritingPrompts}
+   * @param writingExerciseDocumentPipe See {@link WritingExerciseDocumentPipe}
+   * @param writingExerciseCache See {@link WritingExerciseCache}
+   */
+  protected WritingExerciseSupport(
+      CommandsConfigurationProperties commandsConfiguration,
+      ITelegramClient telegramClient,
+      CommandCache commandCache,
+      OpenAiClient OpenAiClient,
+      WritingPrompts promptsConfiguration,
+      WritingExerciseDocumentPipe writingExerciseDocumentPipe,
+      WritingExerciseCache writingExerciseCache) {
+    super(commandsConfiguration, telegramClient, commandCache);
+    this.telegramClient = telegramClient;
+    this.OpenAiClient = OpenAiClient;
+    this.promptsConfiguration = promptsConfiguration;
+    this.writingExerciseDocumentPipe = writingExerciseDocumentPipe;
+    this.writingExerciseCache = writingExerciseCache;
+  }
 
-    /**
-     * Extension point to transform the generated writing exercise if required.
-     *
-     * @param writingExercise writing exercise
-     * @return transformed writing exercise
-     */
-    WritingExercise.Output transform(WritingExercise.Output writingExercise) {
-        return writingExercise;
-    }
+  /**
+   * Extension point to transform the generated writing exercise if required.
+   *
+   * @param writingExercise writing exercise
+   * @return transformed writing exercise
+   */
+  WritingExercise.Output transform(WritingExercise.Output writingExercise) {
+    return writingExercise;
+  }
 
-    @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
-        WritingExerciseModel writingExerciseModel = model.map(WritingExerciseModel.class);
-        GenericPromptTemplate createExercisePrompt = new GenericPromptTemplate(promptsConfiguration.writingExample());
-        createExercisePrompt.resolveVariable(TOPIC, writingExerciseModel.getTopic());
-        createExercisePrompt.resolveVariable(LEVEL, writingExerciseModel.getLevel());
+  @Override
+  public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+    WritingExerciseModel writingExerciseModel = model.map(WritingExerciseModel.class);
+    GenericPromptTemplate createExercisePrompt =
+        new GenericPromptTemplate(promptsConfiguration.writingExample());
+    createExercisePrompt.resolveVariable(TOPIC, writingExerciseModel.getTopic());
+    createExercisePrompt.resolveVariable(LEVEL, writingExerciseModel.getLevel());
 
-        telegramClient.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
+    telegramClient.sendPlainMessage(parameters.chatId(), "Creating writing exercise...");
 
-        WritingExercise.Output writingExercise = OpenAiClient.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.Output.class);
+    WritingExercise.Output writingExercise =
+        OpenAiClient.sendRequest(createExercisePrompt.getPrompt(), WritingExercise.Output.class);
 
-        writingExercise = transform(writingExercise);
+    writingExercise = transform(writingExercise);
 
-        telegramClient.sendPlainMessage(parameters.chatId(), "Creating the document...");
+    telegramClient.sendPlainMessage(parameters.chatId(), "Creating the document...");
 
-        ExerciseDocument writingExerciseDocument = writingExerciseDocumentPipe.pipe(writingExercise);
+    ExerciseDocument writingExerciseDocument = writingExerciseDocumentPipe.pipe(writingExercise);
 
-        telegramClient.sendPlainMessage(parameters.chatId(), "Saving in cache...");
+    telegramClient.sendPlainMessage(parameters.chatId(), "Saving in cache...");
 
-        writingExerciseCache.saveWritingExercise(new WritingExercise(writingExercise.topic(), writingExercise.level(), writingExerciseDocument));
+    writingExerciseCache.saveWritingExercise(
+        new WritingExercise(
+            writingExercise.topic(), writingExercise.level(), writingExerciseDocument));
 
-        telegramClient.sendPlainMessage(parameters.chatId(), "Created and saved!");
-    }
+    telegramClient.sendPlainMessage(parameters.chatId(), "Created and saved!");
+  }
 
-    @Override
-    public AbstractCommandModel<?> supportedModelWithMapping() {
-        return new WritingExerciseModel()
-                .init()
-                .addMapping(LEVEL, WritingExerciseModel::setLevel)
-                .addMapping(TOPIC, WritingExerciseModel::setTopic);
-    }
+  @Override
+  public AbstractCommandModel<?> supportedModelWithMapping() {
+    return new WritingExerciseModel()
+        .init()
+        .addMapping(LEVEL, WritingExerciseModel::setLevel)
+        .addMapping(TOPIC, WritingExerciseModel::setTopic);
+  }
 }

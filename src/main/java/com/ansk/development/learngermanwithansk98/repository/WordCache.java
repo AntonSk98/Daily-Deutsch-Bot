@@ -2,13 +2,10 @@ package com.ansk.development.learngermanwithansk98.repository;
 
 import com.ansk.development.learngermanwithansk98.service.impl.command.words.AddNewWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 /**
  * Cache to store {@link Word}s in the service of {@link AddNewWord}.
@@ -17,39 +14,37 @@ import java.util.stream.Collectors;
  */
 @Component
 public class WordCache {
-    List<Word> words = new ArrayList<>();
+  List<Word> words = new ArrayList<>();
 
-    /**
-     * Adds a word into the cache.
-     *
-     * @param word {@link Word}
-     */
-    public void addWord(Word word) {
-        words.add(word);
-    }
+  /**
+   * Adds a word into the cache.
+   *
+   * @param word {@link Word}
+   */
+  public void addWord(Word word) {
+    words.add(word);
+  }
 
-    /**
-     * Gets all cached words.
-     *
-     * @return cached words
-     */
-    public List<Word> getWords() {
-        return Collections.unmodifiableList(words);
-    }
+  /**
+   * Gets all cached words.
+   *
+   * @return cached words
+   */
+  public List<Word> getWords() {
+    return Collections.unmodifiableList(words);
+  }
 
-    /**
-     * Deletes a cached word.
-     *
-     * @param word word to be removed
-     */
-    public void deleteWord(Word word) {
-        words.remove(word);
-    }
+  /**
+   * Deletes a cached word.
+   *
+   * @param word word to be removed
+   */
+  public void deleteWord(Word word) {
+    words.remove(word);
+  }
 
-    /**
-     * Cleans the cached words.
-     */
-    public void cleanCache() {
-        words.clear();
-    }
+  /** Cleans the cached words. */
+  public void cleanCache() {
+    words.clear();
+  }
 }

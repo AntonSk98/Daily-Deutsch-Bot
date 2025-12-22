@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 
-import com.ansk.development.learngermanwithansk98.config.DailyDeutschBotConfiguration;
+import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.output.CorrectedTextDocumentMetadata;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
@@ -15,26 +15,30 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
  * @author Anton Skripin
  */
 @Component
-public class CorrectedTextDocumentPipe extends AbstractObjectToHtmlPipe<CorrectedTextDocumentMetadata> implements IConverterPipe<CorrectedTextDocumentMetadata, ExerciseDocument> {
+public class CorrectedTextDocumentPipe
+    extends AbstractObjectToHtmlPipe<CorrectedTextDocumentMetadata>
+    implements IConverterPipe<CorrectedTextDocumentMetadata, ExerciseDocument> {
 
-    private final HtmlToPdfPipe htmlToPdfPipe;
+  private final HtmlToPdfPipe htmlToPdfPipe;
 
-    /**
-     * Constructor.
-     *
-     * @param configuration        See {@link DailyDeutschBotConfiguration}
-     * @param springTemplateEngine See {@link SpringTemplateEngine}
-     */
-    protected CorrectedTextDocumentPipe(DailyDeutschBotConfiguration configuration,
-                                        SpringTemplateEngine springTemplateEngine) {
-        super(configuration, springTemplateEngine);
-        this.htmlToPdfPipe = new HtmlToPdfPipe(configuration);
-    }
+  /**
+   * Constructor.
+   *
+   * @param configuration See {@link BotConfigurationProperties}
+   * @param springTemplateEngine See {@link SpringTemplateEngine}
+   */
+  protected CorrectedTextDocumentPipe(
+      BotConfigurationProperties configuration, SpringTemplateEngine springTemplateEngine) {
+    super(configuration, springTemplateEngine);
+    this.htmlToPdfPipe = new HtmlToPdfPipe(configuration);
+  }
 
-    @Override
-    public ExerciseDocument pipe(CorrectedTextDocumentMetadata correctedTextDocumentMetadata) {
-        Document html = abstractPipe("writing_correction_template", "writingCorrection", correctedTextDocumentMetadata);
-        PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
-        return new PdfToImagePipe().pipe(pdfDocument);
-    }
+  @Override
+  public ExerciseDocument pipe(CorrectedTextDocumentMetadata correctedTextDocumentMetadata) {
+    Document html =
+        abstractPipe(
+            "writing_correction_template", "writingCorrection", correctedTextDocumentMetadata);
+    PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
+    return new PdfToImagePipe().pipe(pdfDocument);
+  }
 }

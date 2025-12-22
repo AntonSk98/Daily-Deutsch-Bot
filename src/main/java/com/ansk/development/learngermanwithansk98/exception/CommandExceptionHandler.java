@@ -10,24 +10,26 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CommandExceptionHandler {
-    
-    private final ITelegramClient outputGateway;
 
-    /**
-     * Constructor.
-     * @param outputGateway See {@link ITelegramClient}
-     */
-    public CommandExceptionHandler(ITelegramClient outputGateway) {
-        this.outputGateway = outputGateway;
-    }
+  private final ITelegramClient outputGateway;
 
-    /**
-     * Notifies the admin about the error.
-     * @param chatId chat id
-     * @param ex exception
-     */
-    public void handleGlobalException(Long chatId, Exception ex) {
-        outputGateway.sendErrorMessage(chatId, ex.getClass(), ex.getMessage());
-        throw new RuntimeException(ex);
-    }
+  /**
+   * Constructor.
+   *
+   * @param outputGateway See {@link ITelegramClient}
+   */
+  public CommandExceptionHandler(ITelegramClient outputGateway) {
+    this.outputGateway = outputGateway;
+  }
+
+  /**
+   * Notifies the admin about the error.
+   *
+   * @param chatId chat id
+   * @param ex exception
+   */
+  public void handleGlobalException(Long chatId, Exception ex) {
+    outputGateway.sendErrorMessage(chatId, ex.getClass(), ex.getMessage());
+    throw new RuntimeException(ex);
+  }
 }

@@ -6,28 +6,28 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
  * @author Anton Skripin
  */
 public class ToBeDeletedWord extends AbstractCommandModel<ToBeDeletedWord> {
-    private String wordReference;
+  private String wordReference;
 
-    @Override
-    public AbstractCommandModel<ToBeDeletedWord> init() {
-        return new ToBeDeletedWord();
-    }
+  @Override
+  public AbstractCommandModel<ToBeDeletedWord> init() {
+    return new ToBeDeletedWord();
+  }
 
-    /**
-     * Getter for {@link #wordReference}.
-     *
-     * @return {@link #wordReference}
-     */
-    public String getWordReference() {
-        return wordReference;
-    }
+  /**
+   * Getter for {@link #wordReference}.
+   *
+   * @return {@link #wordReference}
+   */
+  public String getWordReference() {
+    return wordReference;
+  }
 
-    /**
-     * Setter for {@link #wordReference}.
-     *
-     * @param wordReference {@link #wordReference}
-     */
-    public void setWordReference(String wordReference) {
-        this.wordReference = wordReference;
-    }
+  /**
+   * Setter for {@link #wordReference}.
+   *
+   * @param wordReference {@link #wordReference}
+   */
+  public void setWordReference(String wordReference) {
+    this.wordReference = wordReference;
+  }
 }

@@ -1,17 +1,16 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
-import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.questionsAndAnswersMessageBlock;
 
+import com.ansk.development.learngermanwithansk98.service.model.output.ReadingExercise;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
-import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.questionsAndAnswersMessageBlock;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * Component to send reading exercises.
@@ -20,80 +19,81 @@ import static com.ansk.development.learngermanwithansk98.integration.telegram.se
  */
 public class ReadingExerciseSender {
 
-    private static final String READING_EXERCISE_TEMPLATE = """
-            ⭐️ #Reading <b> | %s</b>
-            <i>Please read the text and answer the questions below.</i>
-            ➖➖➖
-            
-            📚 <b>%s</b>
-            
-            <i>%s</i>
-            
-            🔹🔹🔹
-            
-            """;
+  private static final String READING_EXERCISE_TEMPLATE =
+      """
+      ⭐️ #Reading <b> | %s</b>
+      <i>Please read the text and answer the questions below.</i>
+      ➖➖➖
 
-    private static final String READING_EXERCISE_DOCUMENT = """
-            📚️ #ReadingExercise
-            
-            ✅ When you're done, feel free to check the answers below ⬇️
-            
-            🔹🔹🔹
-            """;
+      📚 <b>%s</b>
 
-    private final TelegramClient telegramClient;
+      <i>%s</i>
 
-    public ReadingExerciseSender(TelegramClient telegramClient) {
-        this.telegramClient = telegramClient;
+      🔹🔹🔹
+
+      """;
+
+  private static final String READING_EXERCISE_DOCUMENT =
+      """
+      📚️ #ReadingExercise
+
+      ✅ When you're done, feel free to check the answers below ⬇️
+
+      🔹🔹🔹
+      """;
+
+  private final TelegramClient telegramClient;
+
+  public ReadingExerciseSender(TelegramClient telegramClient) {
+    this.telegramClient = telegramClient;
+  }
+
+  /**
+   * Sends a reading exercise.
+   *
+   * @param chatId chat id
+   * @param readingExercise reading exercise
+   */
+  public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
+    TelegramSenderSupport.DocumentRenderingParams documentRenderingParams =
+        documentRenderingParameters();
+    SendMessage readingText = readingText(chatId, readingExercise);
+    SendMessage questionsAndAnswers = questionsAndAnswers(chatId, readingExercise.tasks());
+    Consumer<TelegramClient> readingExerciseDocumentSender =
+        documentSender(chatId, readingExercise.document(), documentRenderingParams);
+    try {
+      telegramClient.execute(readingText);
+      readingExerciseDocumentSender.accept(telegramClient);
+      telegramClient.execute(questionsAndAnswers);
+    } catch (TelegramApiException e) {
+      throw new IllegalStateException("Error occurred while sending reading exercise", e);
     }
+  }
 
-    /**
-     * Sends a reading exercise.
-     *
-     * @param chatId          chat id
-     * @param readingExercise reading exercise
-     */
-    public void sendReadingExercise(Long chatId, ReadingExercise readingExercise) {
-        TelegramSenderSupport.DocumentRenderingParams documentRenderingParams = documentRenderingParameters();
-        SendMessage readingText = readingText(chatId, readingExercise);
-        SendMessage questionsAndAnswers = questionsAndAnswers(chatId, readingExercise.tasks());
-        Consumer<TelegramClient> readingExerciseDocumentSender = documentSender(chatId, readingExercise.document(), documentRenderingParams);
-        try {
-            telegramClient.execute(readingText);
-            readingExerciseDocumentSender.accept(telegramClient);
-            telegramClient.execute(questionsAndAnswers);
-        } catch (TelegramApiException e) {
-            throw new IllegalStateException("Error occurred while sending reading exercise", e);
-        }
-    }
+  private TelegramSenderSupport.DocumentRenderingParams documentRenderingParameters() {
+    var caption = new TelegramSenderSupport.DocumentCaption(READING_EXERCISE_DOCUMENT, "HTML");
+    return new TelegramSenderSupport.DocumentRenderingParams(Optional.of(caption), false);
+  }
 
-    private TelegramSenderSupport.DocumentRenderingParams documentRenderingParameters() {
-        var caption = new TelegramSenderSupport.DocumentCaption(READING_EXERCISE_DOCUMENT, "HTML");
-        return new TelegramSenderSupport.DocumentRenderingParams(Optional.of(caption), false);
-    }
+  private SendMessage readingText(Long chatId, ReadingExercise readingExercise) {
+    final String title = readingExercise.title();
+    final String text = String.join("\n\n", readingExercise.paragraphs().paragraphs());
+    final String readingText =
+        String.format(READING_EXERCISE_TEMPLATE, readingExercise.level(), title, text);
+    return SendMessage.builder().chatId(chatId).text(readingText).parseMode("HTML").build();
+  }
 
-    private SendMessage readingText(Long chatId, ReadingExercise readingExercise) {
-        final String title = readingExercise.title();
-        final String text = String.join("\n\n", readingExercise.paragraphs().paragraphs());
-        final String readingText = String.format(READING_EXERCISE_TEMPLATE, readingExercise.level(), title, text);
-        return SendMessage.builder().chatId(chatId).text(readingText).parseMode("HTML").build();
-
-    }
-
-    private SendMessage questionsAndAnswers(Long chatId, ReadingExercise.ReadingTasks tasks) {
-        String questionsAndAnswers = questionsAndAnswersMessageBlock(tasks
-                .tasks()
-                .stream()
+  private SendMessage questionsAndAnswers(Long chatId, ReadingExercise.ReadingTasks tasks) {
+    String questionsAndAnswers =
+        questionsAndAnswersMessageBlock(
+            tasks.tasks().stream()
                 .collect(
-                        Collectors.toMap(
-                                ReadingExercise.Task::question,
-                                task -> Optional.ofNullable(task.answer()).orElse("-"),
-                                (oldValue, newValue) -> newValue,
-                                LinkedHashMap::new
-                        )
-                )
-        );
+                    Collectors.toMap(
+                        ReadingExercise.Task::question,
+                        task -> Optional.ofNullable(task.answer()).orElse("-"),
+                        (oldValue, newValue) -> newValue,
+                        LinkedHashMap::new)));
 
-        return SendMessage.builder().chatId(chatId).text(questionsAndAnswers).parseMode("HTML").build();
-    }
+    return SendMessage.builder().chatId(chatId).text(questionsAndAnswers).parseMode("HTML").build();
+  }
 }

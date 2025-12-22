@@ -1,12 +1,11 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
+import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
+
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
+import java.util.Optional;
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-
-import java.util.Optional;
-
-import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
 
 /**
  * Component to send a card with words.
@@ -15,41 +14,41 @@ import static com.ansk.development.learngermanwithansk98.integration.telegram.se
  */
 public class WordCardSender {
 
-    private static final String WORD_CARD_TEMPLATE = """
-            ⭐️ #Words
-            
-            📝 Expand your vocabulary with these new words! ⬆️
-            
-            🔹🔹🔹
-            """;
+  private static final String WORD_CARD_TEMPLATE =
+      """
+      ⭐️ #Words
 
-    private final TelegramClient telegramClient;
+      📝 Expand your vocabulary with these new words! ⬆️
 
-    /**
-     * Constructor.
-     *
-     * @param telegramClient See {@link TelegramClient}
-     */
-    public WordCardSender(TelegramClient telegramClient) {
-        this.telegramClient = telegramClient;
+      🔹🔹🔹
+      """;
+
+  private final TelegramClient telegramClient;
+
+  /**
+   * Constructor.
+   *
+   * @param telegramClient See {@link TelegramClient}
+   */
+  public WordCardSender(TelegramClient telegramClient) {
+    this.telegramClient = telegramClient;
+  }
+
+  /**
+   * Sends a word card.
+   *
+   * @param chatId char id
+   * @param exerciseDocument document with words
+   */
+  public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
+    var documentCaption = new TelegramSenderSupport.DocumentCaption(WORD_CARD_TEMPLATE, "HTML");
+    var mediaParameters =
+        new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), false);
+
+    if (CollectionUtils.isEmpty(exerciseDocument.pages())) {
+      throw new IllegalStateException("No exercise document is passed as a parameter!");
     }
 
-    /**
-     * Sends a word card.
-     *
-     * @param chatId           char id
-     * @param exerciseDocument document with words
-     */
-    public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
-        var documentCaption = new TelegramSenderSupport.DocumentCaption(WORD_CARD_TEMPLATE, "HTML");
-        var mediaParameters = new TelegramSenderSupport.DocumentRenderingParams(Optional.of(documentCaption), false);
-
-        if (CollectionUtils.isEmpty(exerciseDocument.pages())) {
-            throw new IllegalStateException("No exercise document is passed as a parameter!");
-        }
-
-        documentSender(chatId, exerciseDocument, mediaParameters).accept(telegramClient);
-    }
-
-
+    documentSender(chatId, exerciseDocument, mediaParameters).accept(telegramClient);
+  }
 }

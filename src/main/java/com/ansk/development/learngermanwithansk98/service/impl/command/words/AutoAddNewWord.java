@@ -1,7 +1,10 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
-import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
-import com.ansk.development.learngermanwithansk98.config.WordCardPromptsConfiguration;
+import static com.ansk.development.learngermanwithansk98.service.model.Command.AI_NEW_WORD;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD;
+
+import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
+import com.ansk.development.learngermanwithansk98.config.FlashcardPrompts;
 import com.ansk.development.learngermanwithansk98.integration.openai.OpenAiClient;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
@@ -15,9 +18,6 @@ import com.ansk.development.learngermanwithansk98.service.model.input.CommandPar
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import org.springframework.stereotype.Service;
 
-import static com.ansk.development.learngermanwithansk98.service.model.Command.AI_NEW_WORD;
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD;
-
 /**
  * Service that adds a new word automatically without the client interaction.
  *
@@ -26,56 +26,56 @@ import static com.ansk.development.learngermanwithansk98.service.model.input.Abs
 @Service
 public class AutoAddNewWord extends AbstractCommandProcessor {
 
-    private final ITelegramClient telegramClient;
-    private final OpenAiClient OpenAiClient;
-    private final WordCardPromptsConfiguration promptsConfiguration;
-    private final WordCache wordCache;
+  private final ITelegramClient telegramClient;
+  private final OpenAiClient OpenAiClient;
+  private final FlashcardPrompts promptsConfiguration;
+  private final WordCache wordCache;
 
-    /**
-     * Constructor.
-     *
-     * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramClient See {@link ITelegramClient}
-     * @param commandCache          See {@link CommandCache}
-     * @param OpenAiClient             See {@link OpenAiClient}
-     * @param promptsConfiguration  See {@link WordCardPromptsConfiguration}
-     * @param wordCache             See {@link WordCache}
-     */
-    protected AutoAddNewWord(CommandsConfiguration commandsConfiguration,
-                             ITelegramClient telegramClient,
-                             CommandCache commandCache,
-                             OpenAiClient OpenAiClient,
-                             WordCardPromptsConfiguration promptsConfiguration,
-                             WordCache wordCache) {
-        super(commandsConfiguration, telegramClient, commandCache);
-        this.telegramClient = telegramClient;
-        this.OpenAiClient = OpenAiClient;
-        this.promptsConfiguration = promptsConfiguration;
-        this.wordCache = wordCache;
-    }
+  /**
+   * Constructor.
+   *
+   * @param commandsConfiguration See {@link CommandsConfigurationProperties}
+   * @param telegramClient See {@link ITelegramClient}
+   * @param commandCache See {@link CommandCache}
+   * @param OpenAiClient See {@link OpenAiClient}
+   * @param promptsConfiguration See {@link FlashcardPrompts}
+   * @param wordCache See {@link WordCache}
+   */
+  protected AutoAddNewWord(
+      CommandsConfigurationProperties commandsConfiguration,
+      ITelegramClient telegramClient,
+      CommandCache commandCache,
+      OpenAiClient OpenAiClient,
+      FlashcardPrompts promptsConfiguration,
+      WordCache wordCache) {
+    super(commandsConfiguration, telegramClient, commandCache);
+    this.telegramClient = telegramClient;
+    this.OpenAiClient = OpenAiClient;
+    this.promptsConfiguration = promptsConfiguration;
+    this.wordCache = wordCache;
+  }
 
-    @Override
-    public Command supportedCommand() {
-        return AI_NEW_WORD;
-    }
+  @Override
+  public Command supportedCommand() {
+    return AI_NEW_WORD;
+  }
 
-    @Override
-    public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
-        AutoWordCompletionModel autoWordCompletionModel = model.map(AutoWordCompletionModel.class);
+  @Override
+  public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+    AutoWordCompletionModel autoWordCompletionModel = model.map(AutoWordCompletionModel.class);
 
-        telegramClient.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
-        GenericPromptTemplate autoDefineWord = new GenericPromptTemplate(promptsConfiguration.autoWordDefinition())
-                .resolveVariable(WORD, autoWordCompletionModel.getWord());
-        var word = OpenAiClient.sendRequest(autoDefineWord.getPrompt(), Word.class);
-        wordCache.addWord(word);
+    telegramClient.sendPlainMessage(parameters.chatId(), "Filling out the word info...");
+    GenericPromptTemplate autoDefineWord =
+        new GenericPromptTemplate(promptsConfiguration.autoWordDefinition())
+            .resolveVariable(WORD, autoWordCompletionModel.getWord());
+    var word = OpenAiClient.sendRequest(autoDefineWord.getPrompt(), Word.class);
+    wordCache.addWord(word);
 
-        telegramClient.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
-    }
+    telegramClient.sendMessageWithPayload(parameters.chatId(), "Word is added to cache!", word);
+  }
 
-    @Override
-    public AbstractCommandModel<?> supportedModelWithMapping() {
-        return new AutoWordCompletionModel()
-                .init()
-                .addMapping(WORD, AutoWordCompletionModel::setWord);
-    }
+  @Override
+  public AbstractCommandModel<?> supportedModelWithMapping() {
+    return new AutoWordCompletionModel().init().addMapping(WORD, AutoWordCompletionModel::setWord);
+  }
 }

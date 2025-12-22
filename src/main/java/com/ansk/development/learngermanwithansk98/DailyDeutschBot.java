@@ -10,8 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ConfigurationPropertiesScan
 public class DailyDeutschBot {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DailyDeutschBot.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(DailyDeutschBot.class, args);
+  }
 }

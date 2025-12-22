@@ -1,94 +1,97 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command;
 
-import com.ansk.development.learngermanwithansk98.config.CommandsConfiguration;
+import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CommandState;
-import com.ansk.development.learngermanwithansk98.service.api.ICommandProcessor;
+import com.ansk.development.learngermanwithansk98.service.api.ICommandHandler;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
-
 import java.util.ListIterator;
 
 /**
- * Abstract implementation of {@link ICommandProcessor}.
- * This is required to handle parameters of a {@link Command} if provided by {@link CommandsConfiguration.CommandDefinition}.
+ * Abstract implementation of {@link ICommandHandler}. This is required to handle parameters of a
+ * {@link Command} if provided by {@link CommandsConfigurationProperties.CommandDefinition}.
  *
  * @author Anton Skripin
  */
-public abstract class AbstractCommandProcessor implements ICommandProcessor {
+public abstract class AbstractCommandProcessor implements ICommandHandler {
 
-    private final CommandsConfiguration commandsConfiguration;
-    private final ITelegramClient telegramClient;
-    private final CommandCache commandCache;
+  private final CommandsConfigurationProperties commandsConfiguration;
+  private final ITelegramClient telegramClient;
+  private final CommandCache commandCache;
 
-    /**
-     * Constructor.
-     *
-     * @param commandsConfiguration See {@link CommandsConfiguration}
-     * @param telegramClient See {@link ITelegramClient}
-     * @param commandCache          See {@link CommandCache}
-     */
-    protected AbstractCommandProcessor(CommandsConfiguration commandsConfiguration,
-                                       ITelegramClient telegramClient,
-                                       CommandCache commandCache) {
-        this.commandsConfiguration = commandsConfiguration;
-        this.telegramClient = telegramClient;
-        this.commandCache = commandCache;
+  /**
+   * Constructor.
+   *
+   * @param commandsConfiguration See {@link CommandsConfigurationProperties}
+   * @param telegramClient See {@link ITelegramClient}
+   * @param commandCache See {@link CommandCache}
+   */
+  protected AbstractCommandProcessor(
+      CommandsConfigurationProperties commandsConfiguration,
+      ITelegramClient telegramClient,
+      CommandCache commandCache) {
+    this.commandsConfiguration = commandsConfiguration;
+    this.telegramClient = telegramClient;
+    this.commandCache = commandCache;
+  }
+
+  @Override
+  public void processCommand(CommandParameters commandParameters) {
+    Command command = supportedCommand();
+    AbstractCommandModel<?> model = supportedModelWithMapping();
+    CommandState commandState = commandCache.getOrInit(command, model);
+
+    if (commandParameters.navigation() != null) {
+      handleNavigation(commandParameters, commandState);
+    } else if (commandState.hasAwaitingKey()) {
+      commandState
+          .getCurrentCommandModel()
+          .append(commandState.getAwaitingKey(), commandParameters.input());
     }
 
-    @Override
-    public void processCommand(CommandParameters commandParameters) {
-        Command command = supportedCommand();
-        AbstractCommandModel<?> model = supportedModelWithMapping();
-        CommandState commandState = commandCache.getOrInit(command, model);
+    if (commandState.getCurrentCommandModel().getParamIterator().hasNext()) {
+      promptNextParameter(command, commandState, commandParameters);
+    } else {
+      finalizeCommand(commandState, commandParameters);
+    }
+  }
 
-        if (commandParameters.navigation() != null) {
-            handleNavigation(commandParameters, commandState);
-        } else if (commandState.hasAwaitingKey()) {
-            commandState.getCurrentCommandModel().append(commandState.getAwaitingKey(), commandParameters.input());
-        }
-
-        if (commandState.getCurrentCommandModel().getParamIterator().hasNext()) {
-            promptNextParameter(command, commandState, commandParameters);
-        } else {
-            finalizeCommand(commandState, commandParameters);
-        }
+  private void handleNavigation(CommandParameters commandParameters, CommandState commandState) {
+    ListIterator<String> modelParamIterator =
+        commandState.getCurrentCommandModel().getParamIterator();
+    if (commandParameters.navigation().isNext() && modelParamIterator.hasNext()) {
+      return;
     }
 
-    private void handleNavigation(CommandParameters commandParameters, CommandState commandState) {
-        ListIterator<String> modelParamIterator = commandState.getCurrentCommandModel().getParamIterator();
-        if (commandParameters.navigation().isNext() && modelParamIterator.hasNext()) {
-            return;
-        }
-
-        if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
-            commandState.setAwaitingKey(modelParamIterator.previous());
-        }
-        if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
-            commandState.setAwaitingKey(modelParamIterator.previous());
-        }
+    if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
+      commandState.setAwaitingKey(modelParamIterator.previous());
     }
-
-    private void promptNextParameter(Command command, CommandState commandState, CommandParameters commandParameters) {
-        String key = commandState.getCurrentCommandModel().getParamIterator().next();
-        var currentParameter = commandsConfiguration.findParameter(command.getPath(), key);
-        String prompt = currentParameter.prompt();
-        commandState.setAwaitingKey(key);
-        if (currentParameter.dynamicPrompt()) {
-            provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
-        }
-        if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
-            telegramClient.sendMessageWithNavigation(commandParameters.chatId(), prompt);
-            return;
-        }
-        telegramClient.sendPlainMessage(commandParameters.chatId(), prompt);
-
+    if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
+      commandState.setAwaitingKey(modelParamIterator.previous());
     }
+  }
 
-    private void finalizeCommand(CommandState commandState, CommandParameters commandParameters) {
-        applyCommandModel(commandState.getCurrentCommandModel(), commandParameters);
-        commandCache.clear();
+  private void promptNextParameter(
+      Command command, CommandState commandState, CommandParameters commandParameters) {
+    String key = commandState.getCurrentCommandModel().getParamIterator().next();
+    var currentParameter = commandsConfiguration.findParameter(command.getPath(), key);
+    String prompt = currentParameter.prompt();
+    commandState.setAwaitingKey(key);
+    if (currentParameter.dynamicPrompt()) {
+      provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
     }
+    if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
+      telegramClient.sendMessageWithNavigation(commandParameters.chatId(), prompt);
+      return;
+    }
+    telegramClient.sendPlainMessage(commandParameters.chatId(), prompt);
+  }
+
+  private void finalizeCommand(CommandState commandState, CommandParameters commandParameters) {
+    applyCommandModel(commandState.getCurrentCommandModel(), commandParameters);
+    commandCache.clear();
+  }
 }

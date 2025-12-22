@@ -7,10 +7,10 @@ package com.ansk.development.learngermanwithansk98.service.filter;
  */
 public interface IFilter {
 
-    /**
-     * Filters the command by passed {@link FilterParameters}.
-     *
-     * @param parameters parameters
-     */
-    void filter(FilterParameters parameters);
+  /**
+   * Filters the command by passed {@link FilterParameters}.
+   *
+   * @param parameters parameters
+   */
+  void filter(FilterParameters parameters);
 }
