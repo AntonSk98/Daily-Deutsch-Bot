@@ -4,12 +4,12 @@ import com.ansk.development.learngermanwithansk98.config.BotConfigurationPropert
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.itextpdf.html2pdf.resolver.font.DefaultFontProvider;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.font.FontProvider;
 import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
+import com.itextpdf.styledxmlparser.resolver.font.BasicFontProvider;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class HtmlToPdfPipe implements IConverterPipe<Document, PDDocument> {
       pdfDocument.setDefaultPageSize(PageSize.A4);
 
       // Set up font resolver to use Helvetica
-      FontProvider fontProvider = new DefaultFontProvider(false, false, false);
+      FontProvider fontProvider = new BasicFontProvider(false, false, false);
       fontProvider.addDirectory(fontsFolder);
 
       HtmlConverter.convertToPdf(

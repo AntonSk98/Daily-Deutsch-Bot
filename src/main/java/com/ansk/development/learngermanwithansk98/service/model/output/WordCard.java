@@ -27,7 +27,7 @@ public class WordCard {
    * @param words the list of {@link Word} objects to associate with the word card
    */
   public WordCard(String title, List<Word> words) {
-    this.id = RandomStringUtils.randomAlphabetic(10);
+    this.id = RandomStringUtils.secure().nextAlphabetic(10);
     this.title = title;
     this.words = words;
   }
