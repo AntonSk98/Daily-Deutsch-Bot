@@ -4,6 +4,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,8 +39,8 @@ public class WordCache {
    *
    * @param word word to be removed
    */
-  public void deleteWord(Word word) {
-    words.remove(word);
+  public void deleteWord(Word toBeDeletedWord) {
+    words.removeIf(word -> StringUtils.equalsIgnoreCase(word.getWord(), toBeDeletedWord.getWord()));
   }
 
   /** Cleans the cached words. */
