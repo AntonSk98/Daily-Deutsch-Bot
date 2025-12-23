@@ -45,12 +45,10 @@ commands:
         - key: word
           prompt: please provide a word and AI will fill out the word definition
     - path: /writing_with_example
-      with-navigation: true
       parameters:
         - key: level
           prompt: please provide the level of writing exercise
         - key: topic
-          required: true
           prompt: please provide the topic for writing exercise
     - path: /correct_text
       parameters:

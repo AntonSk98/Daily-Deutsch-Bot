@@ -17,7 +17,7 @@ public record CommandsConfigurationProperties(List<CommandDefinition> commandDef
    *
    * @param path the path of the command to search for.
    * @param key the key of the parameter to search for.
-   * @return the found {@link CommandDefinition.Parameter}.
+   * @return the found parameter.
    */
   public CommandDefinition.Parameter findParameter(String path, String key) {
     return findCommand(path).parameters().stream()
@@ -46,7 +46,7 @@ public record CommandsConfigurationProperties(List<CommandDefinition> commandDef
    * @param withNavigation whether the command includes navigation.
    * @param parameters the list of parameters associated with the command.
    */
-  public record CommandDefinition(String path, boolean withNavigation, List<Parameter> parameters) {
+  public record CommandDefinition(String path, List<Parameter> parameters) {
 
     /**
      * Represents a parameter of a command.
@@ -54,8 +54,7 @@ public record CommandsConfigurationProperties(List<CommandDefinition> commandDef
      * @param key the key that identifies the parameter.
      * @param prompt the prompt text for the parameter.
      * @param dynamicPrompt whether a dynamic prompt should be provided
-     * @param required whether the parameter is mandatory.
      */
-    public record Parameter(String key, String prompt, boolean dynamicPrompt, boolean required) {}
+    public record Parameter(String key, String prompt, boolean dynamicPrompt) {}
   }
 }

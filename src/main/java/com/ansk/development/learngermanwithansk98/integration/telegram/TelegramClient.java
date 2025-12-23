@@ -51,11 +51,6 @@ public class TelegramClient implements ITelegramClient {
   }
 
   @Override
-  public void sendMessageWithNavigation(Long chatId, String message) {
-    messageSender.sendMessageWithNavigation(chatId, message);
-  }
-
-  @Override
   public void sendErrorMessage(Long chatId, Class<?> clazz, String message) {
     messageSender.sendErrorMessage(chatId, clazz, message);
   }

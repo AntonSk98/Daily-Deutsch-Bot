@@ -28,14 +28,6 @@ public interface ITelegramClient {
   void sendPlainMessage(Long chatId, String message);
 
   /**
-   * Sends a message with navigation buttons to the specified chat.
-   *
-   * @param chatId the ID of the chat
-   * @param message the message content
-   */
-  void sendMessageWithNavigation(Long chatId, String message);
-
-  /**
    * Sends an error message.
    *
    * @param chatId chat id

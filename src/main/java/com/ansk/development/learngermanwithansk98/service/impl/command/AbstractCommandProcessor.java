@@ -83,10 +83,6 @@ public abstract class AbstractCommandProcessor implements ICommandHandler {
     if (currentParameter.dynamicPrompt()) {
       provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
     }
-    if (commandsConfiguration.findCommand(command.getPath()).withNavigation()) {
-      telegramClient.sendMessageWithNavigation(commandParameters.chatId(), prompt);
-      return;
-    }
     telegramClient.sendPlainMessage(commandParameters.chatId(), prompt);
   }
 

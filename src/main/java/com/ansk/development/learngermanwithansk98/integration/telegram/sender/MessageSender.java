@@ -1,17 +1,11 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 
-import static com.ansk.development.learngermanwithansk98.service.model.Navigation.NEXT;
-import static com.ansk.development.learngermanwithansk98.service.model.Navigation.PREVIOUS;
-
 import com.ansk.development.learngermanwithansk98.service.model.output.InformationPostModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -48,36 +42,6 @@ public class MessageSender {
     } catch (TelegramApiException e) {
       throw new IllegalStateException(
           "Unexpected error occurred while sending a message to Telegram", e);
-    }
-  }
-
-  /**
-   * Sends a message with navigation buttons.
-   *
-   * @param chatId chat id
-   * @param message message
-   */
-  public void sendMessageWithNavigation(Long chatId, String message) {
-    InlineKeyboardMarkup keyboardMarkup =
-        InlineKeyboardMarkup.builder()
-            .keyboardRow(
-                new InlineKeyboardRow(
-                    InlineKeyboardButton.builder()
-                        .text(PREVIOUS.getText())
-                        .callbackData(PREVIOUS.getCommand())
-                        .build(),
-                    InlineKeyboardButton.builder()
-                        .text(NEXT.getText())
-                        .callbackData(NEXT.getCommand())
-                        .build()))
-            .build();
-
-    try {
-      this.telegramClient.execute(
-          SendMessage.builder().chatId(chatId).text(message).replyMarkup(keyboardMarkup).build());
-    } catch (TelegramApiException e) {
-      throw new IllegalStateException(
-          "Unexpected error occurred while sending a message with navigation to telegram", e);
     }
   }
 

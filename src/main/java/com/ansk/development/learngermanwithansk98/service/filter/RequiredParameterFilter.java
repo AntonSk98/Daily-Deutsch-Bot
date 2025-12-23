@@ -57,13 +57,6 @@ public class RequiredParameterFilter implements IFilter {
       return;
     }
 
-    if (!commandsConfiguration
-        .findParameter(
-            commandCache.getCurrentCommand().getPath(), currentCommandState.get().getAwaitingKey())
-        .required()) {
-      return;
-    }
-
     throw new RequiredParameterException(
         "Parameter '" + currentCommandState.get().getAwaitingKey() + " ' is a required parameter");
   }
