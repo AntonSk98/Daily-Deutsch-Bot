@@ -6,25 +6,6 @@ commands:
         ✅ Type '+' to approve
         ❌ Type any other symbol to decline
   command-definition:
-    - path: /new_word
-      with-navigation: true
-      parameters:
-        - key: word
-          required: true
-          prompt: write a new word
-        - key: translation
-          required: true
-          prompt: write a translation
-        - key: meaning
-          prompt: what does this word mean?
-        - key: forms
-          prompt: write any forms of this word separated by . without spaces
-        - key: frequency
-          prompt: how frequent is this word
-        - key: example
-          prompt: give me an example
-        - key: example_translation
-          prompt: write translation for the example
     - path: /cached_words
     - path: /clear_word_card
     - path: /delete_word

@@ -23,9 +23,6 @@
 ## 1. 🧠 Word Cards
 Kickstart your learning with custom **vocab cards** in two styles:
 
-- 🔹 **Manual Mode**  
-  Use `/new_word` — fill in word, translation, examples, and more.
-
 - 🤖 **AI-Assist Mode**  
   Use `/ai_new_word` — just send a German word and let the bot do the rest.
 

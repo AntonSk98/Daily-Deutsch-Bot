@@ -1,6 +1,5 @@
 package com.ansk.development.learngermanwithansk98.repository;
 
-import com.ansk.development.learngermanwithansk98.service.impl.command.words.AddNewWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import java.util.ArrayList;
 import java.util.Collections;
