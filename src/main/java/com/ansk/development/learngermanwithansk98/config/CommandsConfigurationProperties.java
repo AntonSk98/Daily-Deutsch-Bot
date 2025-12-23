@@ -40,10 +40,9 @@ public record CommandsConfigurationProperties(List<CommandDefinition> commandDef
   }
 
   /**
-   * Represents a definition of a command with its path, navigation option, and parameters.
+   * Represents a definition of a command with its path and parameters.
    *
    * @param path the path of the command.
-   * @param withNavigation whether the command includes navigation.
    * @param parameters the list of parameters associated with the command.
    */
   public record CommandDefinition(String path, List<Parameter> parameters) {

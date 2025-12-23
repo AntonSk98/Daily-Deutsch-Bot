@@ -8,7 +8,6 @@ import com.ansk.development.learngermanwithansk98.service.api.ICommandHandler;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
-import java.util.ListIterator;
 
 /**
  * Abstract implementation of {@link ICommandHandler}. This is required to handle parameters of a
@@ -44,9 +43,7 @@ public abstract class AbstractCommandProcessor implements ICommandHandler {
     AbstractCommandModel<?> model = supportedModelWithMapping();
     CommandState commandState = commandCache.getOrInit(command, model);
 
-    if (commandParameters.navigation() != null) {
-      handleNavigation(commandParameters, commandState);
-    } else if (commandState.hasAwaitingKey()) {
+    if (commandState.hasAwaitingKey()) {
       commandState
           .getCurrentCommandModel()
           .append(commandState.getAwaitingKey(), commandParameters.input());
@@ -56,21 +53,6 @@ public abstract class AbstractCommandProcessor implements ICommandHandler {
       promptNextParameter(command, commandState, commandParameters);
     } else {
       finalizeCommand(commandState, commandParameters);
-    }
-  }
-
-  private void handleNavigation(CommandParameters commandParameters, CommandState commandState) {
-    ListIterator<String> modelParamIterator =
-        commandState.getCurrentCommandModel().getParamIterator();
-    if (commandParameters.navigation().isNext() && modelParamIterator.hasNext()) {
-      return;
-    }
-
-    if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
-      commandState.setAwaitingKey(modelParamIterator.previous());
-    }
-    if (commandParameters.navigation().isPrevious() && modelParamIterator.hasPrevious()) {
-      commandState.setAwaitingKey(modelParamIterator.previous());
     }
   }
 

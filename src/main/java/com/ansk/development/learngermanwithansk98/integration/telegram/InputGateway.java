@@ -2,7 +2,6 @@ package com.ansk.development.learngermanwithansk98.integration.telegram;
 
 import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMessageExtractor.chatId;
 import static com.ansk.development.learngermanwithansk98.integration.telegram.TelegramMessageExtractor.input;
-import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 
 import com.ansk.development.learngermanwithansk98.exception.CommandExceptionHandler;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
@@ -69,10 +68,6 @@ public class InputGateway {
         .filter(handler -> handler.supportedCommand().equals(command))
         .findFirst()
         .orElseThrow()
-        .processCommand(
-            CommandParameters.create()
-                .withChatId(chatId)
-                .withInput(input)
-                .addNavigation(map(update)));
+        .processCommand(new CommandParameters(input, chatId));
   }
 }

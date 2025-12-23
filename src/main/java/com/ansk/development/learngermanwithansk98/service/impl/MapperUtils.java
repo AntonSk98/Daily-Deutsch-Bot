@@ -1,9 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.impl;
 
-import static com.ansk.development.learngermanwithansk98.service.model.Navigation.NEXT;
-import static com.ansk.development.learngermanwithansk98.service.model.Navigation.PREVIOUS;
-
-import com.ansk.development.learngermanwithansk98.service.model.Navigation;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import java.time.LocalDate;
@@ -15,10 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Mapping utility class.
@@ -26,29 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * @author Anton Skripin
  */
 public class MapperUtils {
-
-  /**
-   * Maps an update message to navigation parameters.
-   *
-   * @param update telegram message
-   * @return navigation
-   */
-  public static Navigation map(Update update) {
-    return Optional.ofNullable(update.getCallbackQuery())
-        .map(CallbackQuery::getData)
-        .map(
-            data -> {
-              if (data.equals(PREVIOUS.getCommand())) {
-                return Navigation.previous();
-              }
-              if (data.equals(NEXT.getCommand())) {
-                return Navigation.next();
-              }
-
-              return null;
-            })
-        .orElse(null);
-  }
 
   /**
    * Maps a collection of {@link Word} objects to a map where the key is a corresponding {@link
