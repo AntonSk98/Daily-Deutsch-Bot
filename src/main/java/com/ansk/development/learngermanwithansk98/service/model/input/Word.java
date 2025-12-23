@@ -1,7 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Implementation of {@link AbstractCommandModel} for a word.
  *
@@ -11,24 +9,9 @@ public class Word extends AbstractCommandModel<Word> {
   private String word;
   private String translation;
   private String meaning;
-  private String forms;
   private int frequency;
   private String example;
   private String exampleTranslation;
-
-  /**
-   * Creates a new {@link Word}.
-   *
-   * @param word word
-   * @param translation translation
-   * @return new {@link Word}
-   */
-  public static Word of(String word, String translation) {
-    Word w = new Word();
-    w.setWord(word);
-    w.setTranslation(translation);
-    return w;
-  }
 
   /**
    * Getter for {@link #word}.
@@ -55,15 +38,6 @@ public class Word extends AbstractCommandModel<Word> {
    */
   public String getMeaning() {
     return meaning;
-  }
-
-  /**
-   * Getter for {@link #forms}.
-   *
-   * @return {@link #forms}
-   */
-  public String getForms() {
-    return forms;
   }
 
   /**
@@ -118,15 +92,6 @@ public class Word extends AbstractCommandModel<Word> {
    */
   public void setMeaning(String meaning) {
     this.meaning = meaning;
-  }
-
-  /**
-   * Setter for {@link #forms}.
-   *
-   * @param forms {@link #forms}
-   */
-  public void setForms(String forms) {
-    this.forms = StringUtils.join(forms.split("\\."), " | ");
   }
 
   /**

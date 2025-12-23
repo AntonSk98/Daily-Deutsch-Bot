@@ -1,105 +1,103 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Wortschatz</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="${resources} + '/css/vocab_template.css'"/>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="${resources} + '/css/common.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="${resources} + '/css/vocab_template.css'" />
+    <link rel="stylesheet" type="text/css" th:href="${resources} + '/css/common.css'" />
 </head>
+
 <body>
-<div class="outer-container">
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <img th:src="${resources} + '/img/logo.png'"/>
+    <div class="outer-container">
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <img th:src="${resources} + '/img/logo.png'" />
+                </div>
             </div>
-        </div>
 
-        <section th:if="${wordCard.title} != null"
-                 class="title">
-            <span th:text="${wordCard.title}"></span>
-        </section>
+            <section th:if="${wordCard.title} != null" class="title">
+                <span th:text="${wordCard.title}"></span>
+            </section>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Wort</th>
-                        <th>Übersetzung</th>
-                        <th>Bedeutung</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <section th:each="word : ${wordCard.words}">
-
-                        <tr class="first-row">
-                            <td th:text="${word.word}"></td>
-                            <td th:text="${word.translation}"></td>
-                            <td th:if="${word.meaning != null && !word.meaning.isEmpty()}" th:text="${word.meaning}"></td>
-                            <td th:if="${word.meaning == null || word.meaning.isEmpty()}" class="info-lack">&ndash;</td>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Wort</th>
+                            <th>Übersetzung</th>
+                            <th>Bedeutung</th>
                         </tr>
+                    </thead>
 
-                        <tr class="second-row" th:if="${(word.forms != null && !word.forms.isEmpty()) || word.frequency > 0}">
-                            <td colspan="2"
-                                th:if="${word.forms != null && !word.forms.isEmpty()}"
-                                th:text="'Forms: ' + ${word.forms}">
-                            </td>
+                    <tbody>
+                        <section th:each="word : ${wordCard.words}">
 
-                            <td colspan="1">
-                                <div class="frequency-container">
-                                    <span>Worthäufigkeit:</span>
-                                    <div class="word-frequency">
-                                        <div th:if="${word.frequency > 0}"
-                                                th:each="i : ${#numbers.sequence(1, 5)}">
-                                            <img th:src="${word.frequency >= i ? resources + '/img/filled-star.png' : resources + '/img/star.png'}" />
+                            <tr class="first-row">
+                                <td th:text="${word.word}"></td>
+                                <td th:text="${word.translation}"></td>
+                                <td th:if="${word.meaning != null && !word.meaning.isEmpty()}"
+                                    th:text="${word.meaning}"></td>
+                                <td th:if="${word.meaning == null || word.meaning.isEmpty()}" class="info-lack">&ndash;
+                                </td>
+                            </tr>
+
+                            <tr class="second-row" th:if="${word.frequency > 0}">
+
+
+                                <td colspan="1">
+                                    <div class="frequency-container">
+                                        <span>Worthäufigkeit:</span>
+                                        <div class="word-frequency">
+                                            <div th:if="${word.frequency > 0}" th:each="i : ${#numbers.sequence(1, 5)}">
+                                                <img
+                                                    th:src="${word.frequency >= i ? resources + '/img/filled-star.png' : resources + '/img/star.png'}" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td colspan="3"
-                                th:classappend="${word.exampleTranslation == null || word.exampleTranslation.isEmpty()} ? 'border-bottom' : ''"
-                                class="example-top-separator">
+                            <tr>
+                                <td colspan="3"
+                                    th:classappend="${word.exampleTranslation == null || word.exampleTranslation.isEmpty()} ? 'border-bottom' : ''"
+                                    class="example-top-separator">
 
-                                <div class="example">
-                                    <img th:src="${resources} + '/img/circle.png'">
-                                    <span th:text="${word.example}"></span>
-                                </div>
+                                    <div class="example">
+                                        <img th:src="${resources} + '/img/circle.png'">
+                                        <span th:text="${word.example}"></span>
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
 
-                        <tr th:if="${word.exampleTranslation != null && !word.exampleTranslation.isEmpty()}"
-                            class="example-translation-row">
-                            <td colspan="3" class="border-bottom">
-                                <div class="example-translation">
-                                    <img th:src="${resources} + '/img/circle-secondary.png'">
-                                    <span th:text="${word.exampleTranslation}"></span>
-                                </div>
-                            </td>
-                        </tr>
-                </section>
-                </tbody>
-            </table>
+                            <tr th:if="${word.exampleTranslation != null && !word.exampleTranslation.isEmpty()}"
+                                class="example-translation-row">
+                                <td colspan="3" class="border-bottom">
+                                    <div class="example-translation">
+                                        <img th:src="${resources} + '/img/circle-secondary.png'">
+                                        <span th:text="${word.exampleTranslation}"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </section>
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="metadata">
+                <div class="metadata-container">
+                    <span>Card number: </span>
+                    <span th:text="${wordCard.id}"></span>
+                </div>
+                <div class="follow_me">
+                    <span>Bleib am Ball – abonniere <span class="channel">@daily_deutsch_group</span> auf
+                        Telegram!</span>
+                </div>
+            </footer>
         </div>
-
-        <footer class="metadata">
-            <div class="metadata-container">
-                <span>Card number: </span>
-                <span th:text="${wordCard.id}"></span>
-            </div>
-            <div class="follow_me">
-                <span>Bleib am Ball – abonniere <span class="channel">@daily_deutsch_group</span> auf Telegram!</span>
-            </div>
-        </footer>
     </div>
-</div>
 </body>
+
 </html>
