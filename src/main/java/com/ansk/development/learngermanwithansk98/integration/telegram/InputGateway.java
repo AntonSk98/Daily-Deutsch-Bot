@@ -49,7 +49,21 @@ public class InputGateway {
     final long chatId = chatId(update);
     final String input = input(update);
 
-    Command command = commandCache.getCurrentCommand();
+    Command command =
+        Command.find(input)
+            .map(
+                newCommand -> {
+                  commandCache.clear();
+                  commandCache.setCurrentCommand(newCommand);
+                  return newCommand;
+                })
+            .orElseGet(
+                () ->
+                    commandCache
+                        .getCurrentCommand()
+                        .orElseThrow(
+                            () ->
+                                new IllegalStateException("Could not map to any known commands!")));
 
     commandHandlers.stream()
         .filter(handler -> handler.supportedCommand().equals(command))

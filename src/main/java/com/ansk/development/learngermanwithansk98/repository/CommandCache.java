@@ -53,10 +53,10 @@ public class CommandCache {
   /**
    * Retrieves the currently active {@link Command}.
    *
-   * @return the current {@link Command}, or {@code null} if no command is active
+   * @return optional of the cached {@link Command}
    */
-  public Command getCurrentCommand() {
-    return currentCommand;
+  public Optional<Command> getCurrentCommand() {
+    return Optional.ofNullable(currentCommand);
   }
 
   /**
