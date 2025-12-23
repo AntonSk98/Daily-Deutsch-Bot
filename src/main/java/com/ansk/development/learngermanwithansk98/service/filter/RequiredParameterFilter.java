@@ -1,6 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.filter;
 
-import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.exception.RequiredParameterException;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
 import com.ansk.development.learngermanwithansk98.repository.CommandState;
@@ -20,18 +19,14 @@ import org.springframework.stereotype.Component;
 public class RequiredParameterFilter implements IFilter {
 
   private final CommandCache commandCache;
-  private final CommandsConfigurationProperties commandsConfiguration;
 
   /**
    * Constructor.
    *
    * @param commandCache See {@link CommandCache}
-   * @param commandsConfiguration See {@link CommandsConfigurationProperties}
    */
-  public RequiredParameterFilter(
-      CommandCache commandCache, CommandsConfigurationProperties commandsConfiguration) {
+  public RequiredParameterFilter(CommandCache commandCache) {
     this.commandCache = commandCache;
-    this.commandsConfiguration = commandsConfiguration;
   }
 
   @Override
