@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.AUDIO;
+
 /**
  * A model representing a listening exercise input.
  *
@@ -28,6 +30,6 @@ public class ListeningExerciseModel extends AbstractCommandModel<ListeningExerci
 
   @Override
   public AbstractCommandModel<ListeningExerciseModel> defineMapping() {
-    return new ListeningExerciseModel();
+    return this.addMapping(AUDIO, ListeningExerciseModel::setAudio);
   }
 }

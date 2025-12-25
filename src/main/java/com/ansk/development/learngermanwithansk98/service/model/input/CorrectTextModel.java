@@ -1,6 +1,10 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.APPROVE_PROMPT;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.CORRECTED_TEXT;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WITH_AUDIO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -72,7 +76,10 @@ public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel>
 
   @Override
   public AbstractCommandModel<CorrectTextModel> defineMapping() {
-    return new CorrectTextModel();
+    return this.addMapping(TOPIC, CorrectTextModel::setTopic)
+        .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
+        .addMapping(SHOULD_DO, CorrectTextModel::parseValue)
+        .addMapping(WITH_AUDIO, CorrectTextModel::withAudio);
   }
 
   @Override

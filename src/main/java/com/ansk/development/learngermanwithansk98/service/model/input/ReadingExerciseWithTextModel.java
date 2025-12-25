@@ -1,5 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
+
 /**
  * Model to provide necessary parameters for creating a reading exercise from the given text.
  *
@@ -30,7 +33,8 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
 
   @Override
   public AbstractCommandModel<ReadingExerciseWithTextModel> defineMapping() {
-    return new ReadingExerciseWithTextModel();
+    return this.addMapping(TEXT, ReadingExerciseWithTextModel::setText)
+        .addMapping(SHOULD_DO, ReadingExerciseWithTextModel::parseValue);
   }
 
   @Override

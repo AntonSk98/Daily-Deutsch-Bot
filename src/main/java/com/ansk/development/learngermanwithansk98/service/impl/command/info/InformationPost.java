@@ -1,7 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.info;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LANGUAGE;
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
 
 import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
@@ -100,10 +99,6 @@ public class InformationPost extends AbstractPublishExerciseSupport {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new DynamicInfoModel()
-        .defineMapping()
-        .addMapping(TOPIC, DynamicInfoModel::setTopic)
-        .addMapping(LANGUAGE, DynamicInfoModel::setLanguage)
-        .addMapping(SHOULD_DO, DynamicInfoModel::parseValue);
+    return new DynamicInfoModel().defineMapping();
   }
 }

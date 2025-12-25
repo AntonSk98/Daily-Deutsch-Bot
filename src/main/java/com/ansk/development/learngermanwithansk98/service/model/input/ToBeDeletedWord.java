@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD_REFERENCE;
+
 /**
  * Model for a word that is to be deleted from cache.
  *
@@ -10,7 +12,7 @@ public class ToBeDeletedWord extends AbstractCommandModel<ToBeDeletedWord> {
 
   @Override
   public AbstractCommandModel<ToBeDeletedWord> defineMapping() {
-    return new ToBeDeletedWord();
+    return this.addMapping(WORD_REFERENCE, ToBeDeletedWord::setWordReference);
   }
 
   /**

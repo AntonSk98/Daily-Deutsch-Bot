@@ -2,7 +2,6 @@ package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
 import static com.ansk.development.learngermanwithansk98.service.impl.MapperUtils.map;
 import static com.ansk.development.learngermanwithansk98.service.model.Command.DELETE_WORD;
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD_REFERENCE;
 import static java.lang.String.format;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
@@ -73,8 +72,6 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new ToBeDeletedWord()
-        .defineMapping()
-        .addMapping(WORD_REFERENCE, ToBeDeletedWord::setWordReference);
+    return new ToBeDeletedWord().defineMapping();
   }
 }

@@ -1,7 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.writing;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.*;
-
 import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.integration.openai.OpenAiClient;
@@ -167,10 +165,6 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new CorrectTextModel()
-        .addMapping(TOPIC, CorrectTextModel::setTopic)
-        .addMapping(CORRECTED_TEXT, CorrectTextModel::setTextWithCorrections)
-        .addMapping(SHOULD_DO, CorrectTextModel::parseValue)
-        .addMapping(WITH_AUDIO, CorrectTextModel::withAudio);
+    return new CorrectTextModel().defineMapping();
   }
 }

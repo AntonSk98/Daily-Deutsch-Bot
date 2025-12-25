@@ -1,6 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.listening;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.AUDIO;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TEXT;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
@@ -131,8 +130,6 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new ListeningExerciseModel()
-        .defineMapping()
-        .addMapping(AUDIO, ListeningExerciseModel::setAudio);
+    return new ListeningExerciseModel().defineMapping();
   }
 }

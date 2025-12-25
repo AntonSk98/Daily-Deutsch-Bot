@@ -1,7 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.listening;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TRANSCRIPTION;
-
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
 import com.ansk.development.learngermanwithansk98.repository.CommandCache;
@@ -93,8 +91,7 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new EditListeningExerciseModel()
-        .addMapping(TRANSCRIPTION, EditListeningExerciseModel::setEditedTranscription);
+    return new EditListeningExerciseModel().defineMapping();
   }
 
   @Override

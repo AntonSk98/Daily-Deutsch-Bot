@@ -1,5 +1,8 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LEVEL;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
+
 /**
  * Model for generating a writing exercise.
  *
@@ -47,6 +50,7 @@ public class WritingExerciseModel extends AbstractCommandModel<WritingExerciseMo
 
   @Override
   public AbstractCommandModel<WritingExerciseModel> defineMapping() {
-    return new WritingExerciseModel();
+    return this.addMapping(LEVEL, WritingExerciseModel::setLevel)
+        .addMapping(TOPIC, WritingExerciseModel::setTopic);
   }
 }

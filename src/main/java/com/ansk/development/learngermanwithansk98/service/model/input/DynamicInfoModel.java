@@ -1,5 +1,9 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.LANGUAGE;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TOPIC;
+
 /**
  * Input model for information posts.
  *
@@ -49,7 +53,9 @@ public class DynamicInfoModel extends AbstractCommandModel<DynamicInfoModel>
 
   @Override
   public AbstractCommandModel<DynamicInfoModel> defineMapping() {
-    return new DynamicInfoModel();
+    return this.addMapping(TOPIC, DynamicInfoModel::setTopic)
+        .addMapping(LANGUAGE, DynamicInfoModel::setLanguage)
+        .addMapping(SHOULD_DO, DynamicInfoModel::parseValue);
   }
 
   @Override

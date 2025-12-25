@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.TRANSCRIPTION;
+
 /**
  * Model to edit listening exercise.
  *
@@ -29,6 +31,6 @@ public class EditListeningExerciseModel extends AbstractCommandModel<EditListeni
 
   @Override
   public AbstractCommandModel<EditListeningExerciseModel> defineMapping() {
-    return new EditListeningExerciseModel();
+    return this.addMapping(TRANSCRIPTION, EditListeningExerciseModel::setEditedTranscription);
   }
 }
