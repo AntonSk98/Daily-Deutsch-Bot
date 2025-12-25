@@ -1,7 +1,5 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command;
 
-import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
-
 import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.integration.telegram.ITelegramClient;
@@ -96,9 +94,7 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new CommandConfirmationModel()
-        .defineMapping()
-        .addMapping(SHOULD_DO, CommandConfirmationModel::parseValue);
+    return new CommandConfirmationModel().defineMapping();
   }
 
   /**

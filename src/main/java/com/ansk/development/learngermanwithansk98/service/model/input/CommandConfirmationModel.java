@@ -1,6 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.APPROVE_PROMPT;
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.SHOULD_DO;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,6 +26,6 @@ public class CommandConfirmationModel extends AbstractCommandModel<CommandConfir
 
   @Override
   public AbstractCommandModel<CommandConfirmationModel> defineMapping() {
-    return this;
+    return this.addMapping(SHOULD_DO, CommandConfirmationModel::parseValue);
   }
 }
