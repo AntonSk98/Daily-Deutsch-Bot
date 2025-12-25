@@ -57,7 +57,7 @@ public abstract class AbstractCommandModel<T> {
    *
    * @return the initialized instance of the concrete command model
    */
-  public abstract AbstractCommandModel<T> init();
+  public abstract AbstractCommandModel<T> defineMapping();
 
   /**
    * Adds a new key-to-action mapping for the command model.

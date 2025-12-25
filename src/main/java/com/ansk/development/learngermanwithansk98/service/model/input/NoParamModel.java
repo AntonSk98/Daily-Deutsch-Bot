@@ -8,7 +8,7 @@ package com.ansk.development.learngermanwithansk98.service.model.input;
 public class NoParamModel extends AbstractCommandModel<NoParamModel> {
 
   @Override
-  public AbstractCommandModel<NoParamModel> init() {
+  public AbstractCommandModel<NoParamModel> defineMapping() {
     return new NoParamModel();
   }
 }

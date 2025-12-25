@@ -97,7 +97,7 @@ public abstract class AbstractPublishExerciseSupport extends AbstractCommandProc
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
     return new CommandConfirmationModel()
-        .init()
+        .defineMapping()
         .addMapping(SHOULD_DO, CommandConfirmationModel::parseValue);
   }
 

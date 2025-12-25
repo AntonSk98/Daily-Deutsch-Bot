@@ -46,7 +46,7 @@ public class ReadingExerciseModel extends AbstractCommandModel<ReadingExerciseMo
   }
 
   @Override
-  public AbstractCommandModel<ReadingExerciseModel> init() {
+  public AbstractCommandModel<ReadingExerciseModel> defineMapping() {
     return new ReadingExerciseModel();
   }
 }

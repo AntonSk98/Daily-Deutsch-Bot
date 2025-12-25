@@ -24,7 +24,7 @@ public class CommandConfirmationModel extends AbstractCommandModel<CommandConfir
   }
 
   @Override
-  public AbstractCommandModel<CommandConfirmationModel> init() {
+  public AbstractCommandModel<CommandConfirmationModel> defineMapping() {
     return this;
   }
 }

@@ -9,7 +9,7 @@ public class ToBeDeletedWord extends AbstractCommandModel<ToBeDeletedWord> {
   private String wordReference;
 
   @Override
-  public AbstractCommandModel<ToBeDeletedWord> init() {
+  public AbstractCommandModel<ToBeDeletedWord> defineMapping() {
     return new ToBeDeletedWord();
   }
 

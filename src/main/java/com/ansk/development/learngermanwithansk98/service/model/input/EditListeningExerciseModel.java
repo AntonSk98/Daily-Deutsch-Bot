@@ -28,7 +28,7 @@ public class EditListeningExerciseModel extends AbstractCommandModel<EditListeni
   }
 
   @Override
-  public AbstractCommandModel<EditListeningExerciseModel> init() {
+  public AbstractCommandModel<EditListeningExerciseModel> defineMapping() {
     return new EditListeningExerciseModel();
   }
 }

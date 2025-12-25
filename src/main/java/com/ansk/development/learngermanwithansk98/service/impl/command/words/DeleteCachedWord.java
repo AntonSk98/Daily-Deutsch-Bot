@@ -74,7 +74,7 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
     return new ToBeDeletedWord()
-        .init()
+        .defineMapping()
         .addMapping(WORD_REFERENCE, ToBeDeletedWord::setWordReference);
   }
 }

@@ -101,7 +101,7 @@ public class InformationPost extends AbstractPublishExerciseSupport {
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
     return new DynamicInfoModel()
-        .init()
+        .defineMapping()
         .addMapping(TOPIC, DynamicInfoModel::setTopic)
         .addMapping(LANGUAGE, DynamicInfoModel::setLanguage)
         .addMapping(SHOULD_DO, DynamicInfoModel::parseValue);

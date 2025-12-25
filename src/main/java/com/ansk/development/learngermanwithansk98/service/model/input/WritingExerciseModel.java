@@ -46,7 +46,7 @@ public class WritingExerciseModel extends AbstractCommandModel<WritingExerciseMo
   }
 
   @Override
-  public AbstractCommandModel<WritingExerciseModel> init() {
+  public AbstractCommandModel<WritingExerciseModel> defineMapping() {
     return new WritingExerciseModel();
   }
 }

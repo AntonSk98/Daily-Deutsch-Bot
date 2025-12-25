@@ -122,7 +122,7 @@ public class Word extends AbstractCommandModel<Word> {
   }
 
   @Override
-  public AbstractCommandModel<Word> init() {
+  public AbstractCommandModel<Word> defineMapping() {
     return new Word();
   }
 }

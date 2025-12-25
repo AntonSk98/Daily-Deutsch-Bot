@@ -71,7 +71,7 @@ public class CorrectTextModel extends AbstractCommandModel<CorrectTextModel>
   }
 
   @Override
-  public AbstractCommandModel<CorrectTextModel> init() {
+  public AbstractCommandModel<CorrectTextModel> defineMapping() {
     return new CorrectTextModel();
   }
 

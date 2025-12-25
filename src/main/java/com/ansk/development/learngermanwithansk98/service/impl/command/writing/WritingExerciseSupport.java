@@ -99,7 +99,7 @@ public abstract class WritingExerciseSupport extends AbstractCommandProcessor {
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
     return new WritingExerciseModel()
-        .init()
+        .defineMapping()
         .addMapping(LEVEL, WritingExerciseModel::setLevel)
         .addMapping(TOPIC, WritingExerciseModel::setTopic);
   }

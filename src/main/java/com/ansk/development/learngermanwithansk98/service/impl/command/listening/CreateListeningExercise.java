@@ -131,6 +131,8 @@ public class CreateListeningExercise extends AbstractCommandProcessor {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new ListeningExerciseModel().init().addMapping(AUDIO, ListeningExerciseModel::setAudio);
+    return new ListeningExerciseModel()
+        .defineMapping()
+        .addMapping(AUDIO, ListeningExerciseModel::setAudio);
   }
 }

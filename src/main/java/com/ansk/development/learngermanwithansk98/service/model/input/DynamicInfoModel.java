@@ -48,7 +48,7 @@ public class DynamicInfoModel extends AbstractCommandModel<DynamicInfoModel>
   }
 
   @Override
-  public AbstractCommandModel<DynamicInfoModel> init() {
+  public AbstractCommandModel<DynamicInfoModel> defineMapping() {
     return new DynamicInfoModel();
   }
 

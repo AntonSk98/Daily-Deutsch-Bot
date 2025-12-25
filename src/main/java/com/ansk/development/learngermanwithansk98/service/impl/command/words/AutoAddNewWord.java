@@ -76,6 +76,6 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
 
   @Override
   public AbstractCommandModel<?> supportedModelWithMapping() {
-    return new AutoWordCompletionModel().init().addMapping(WORD, AutoWordCompletionModel::setWord);
+    return new AutoWordCompletionModel().defineMapping();
   }
 }

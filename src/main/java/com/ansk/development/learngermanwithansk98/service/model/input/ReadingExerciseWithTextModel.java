@@ -29,7 +29,7 @@ public class ReadingExerciseWithTextModel extends AbstractCommandModel<ReadingEx
   }
 
   @Override
-  public AbstractCommandModel<ReadingExerciseWithTextModel> init() {
+  public AbstractCommandModel<ReadingExerciseWithTextModel> defineMapping() {
     return new ReadingExerciseWithTextModel();
   }
 

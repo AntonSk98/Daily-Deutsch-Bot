@@ -1,5 +1,7 @@
 package com.ansk.development.learngermanwithansk98.service.model.input;
 
+import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD;
+
 /**
  * The {@code AutoWordCompletionModel} is a model class designed to facilitate automatic completion
  * of word-related data for learning purposes. This class is used as an input model where the user
@@ -31,7 +33,7 @@ public class AutoWordCompletionModel extends AbstractCommandModel<AutoWordComple
   }
 
   @Override
-  public AbstractCommandModel<AutoWordCompletionModel> init() {
-    return new AutoWordCompletionModel();
+  public AbstractCommandModel<AutoWordCompletionModel> defineMapping() {
+    return this.addMapping(WORD, AutoWordCompletionModel::setWord);
   }
 }
