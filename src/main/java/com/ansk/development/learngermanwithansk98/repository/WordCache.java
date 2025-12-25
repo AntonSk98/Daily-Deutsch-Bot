@@ -47,4 +47,13 @@ public class WordCache {
   public void cleanCache() {
     words.clear();
   }
+
+  /**
+   * Checks if the cache is empty.
+   *
+   * @return true if the cache is empty, false otherwise
+   */
+  public boolean isEmpty() {
+    return words.isEmpty();
+  }
 }

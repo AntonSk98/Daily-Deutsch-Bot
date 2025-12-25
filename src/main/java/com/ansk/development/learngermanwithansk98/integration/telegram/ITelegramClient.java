@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.integration.telegram;
 
-import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExerciseContext;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.InformationPostModel;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
@@ -47,12 +47,12 @@ public interface ITelegramClient {
   <T> void sendMessageWithPayload(Long chatId, String message, T payload);
 
   /**
-   * Sends a word card exercise to the specified chat.
+   * Sends a flashcard to the specified chat.
    *
    * @param chatId the ID of the chat
    * @param exerciseDocument the exercise document
    */
-  void sendWordCard(Long chatId, ExerciseDocument exerciseDocument);
+  void sendFlashcard(Long chatId, ExerciseDocument exerciseDocument);
 
   /**
    * Sends a reading exercise to the specified chat.
@@ -104,12 +104,12 @@ public interface ITelegramClient {
   }
 
   /**
-   * Sends dynamic prompt to edit a listening exercise.
+   * Sends dynamic context to edit a listening exercise.
    *
    * @param chatId chat id
-   * @param dynamicPrompt dynamic prompt
+   * @param dynamicContext dynamic context
    */
-  void sendPromptToEditListeningExercise(Long chatId, EditListeningExercisePrompt dynamicPrompt);
+  void sendPromptToEditListeningExercise(Long chatId, EditListeningExerciseContext dynamicContext);
 
   /**
    * Sends a document with the original text and its corrected version.

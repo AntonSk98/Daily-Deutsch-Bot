@@ -62,8 +62,8 @@ public abstract class AbstractCommandProcessor implements ICommandHandler {
     var currentParameter = commandsConfiguration.findParameter(command.getPath(), key);
     String prompt = currentParameter.prompt();
     commandState.setAwaitingKey(key);
-    if (currentParameter.dynamicPrompt()) {
-      provideDynamicPrompt(commandState.getCurrentCommandModel(), commandParameters);
+    if (currentParameter.withContext()) {
+      providePromptContext(commandState.getCurrentCommandModel(), commandParameters);
     }
     telegramClient.sendPlainMessage(commandParameters.chatId(), prompt);
   }

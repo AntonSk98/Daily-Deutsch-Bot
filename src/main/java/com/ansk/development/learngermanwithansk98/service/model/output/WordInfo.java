@@ -37,6 +37,16 @@ public record WordInfo(Long index, String word, String translation) {
   }
 
   /**
+   * Generates a reference string for the word. If the index is present, the reference is in the
+   * format "index#word". If the index is absent, the reference is simply the word itself.
+   *
+   * @return the reference string for the word
+   */
+  public String reference() {
+    return Objects.isNull(index) ? word : index + SEPARATOR + word;
+  }
+
+  /**
    * Provides a formatted string representation of the word and its translation. If the word has an
    * index, it is included in the output. If the translation is null, a question mark is used as a
    * placeholder.

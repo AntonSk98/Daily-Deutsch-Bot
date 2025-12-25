@@ -9,7 +9,7 @@ import java.util.Optional;
  * @author Anton Skripin
  */
 public enum Command {
-  AI_NEW_WORD("/ai_new_word"),
+  ADD_NEW_WORD("/new_word"),
   GET_WORDS("/cached_words"),
   DELETE_WORD("/delete_word"),
   CLEAR_WORD_CACHE("/clear_word_card"),
@@ -17,7 +17,6 @@ public enum Command {
   PUBLISH_WORD_CARD("/publish_word_card"),
 
   READING_EXERCISE_GENERATE("/generate_reading_exercise"),
-  READING_EXERCISE_CREATE("/create_reading_exercise"),
   READING_EXERCISE_PREVIEW("/cached_reading_exercise"),
   READING_EXERCISE_PUBLISH("/publish_reading_exercise"),
 

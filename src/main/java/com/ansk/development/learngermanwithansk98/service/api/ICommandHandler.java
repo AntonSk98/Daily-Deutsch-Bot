@@ -42,17 +42,15 @@ public interface ICommandHandler {
   AbstractCommandModel<?> supportedModelWithMapping();
 
   /**
-   * Provides the dynamic prompt required for a command parameter if it is set to be dynamic.
+   * Provides context for the current prompt if the parameter requires dynamic context.
    *
    * @param currentModelState current state of a model. Since the command is not yet complete the
    *     state is not complete as well
    * @param parameters parameters
-   * @throws UnsupportedOperationException if the dynamic prompt is missing for the model even
-   *     though the dynamic prompt is required
+   * @throws UnsupportedOperationException if the configured context is missing for the command key
    */
-  default void provideDynamicPrompt(
+  default void providePromptContext(
       AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
-    throw new UnsupportedOperationException(
-        "Parameter must provide a dynamic prompt but it is missing for the model!");
+    throw new UnsupportedOperationException("Parameter must provide the context for the prompt!");
   }
 }

@@ -7,7 +7,7 @@
 ---
 
 ## 📚 Table of Contents
-1. [🧠 Word Cards](#1--word-cards)
+1. [🧠 Flashcards](#1--flashcards)
 2. [📖 Reading Exercise](#2--reading-exercise)
 3. [✍️ Writing Exercise](#3--writing-exercise)
 4. [🛠 Writing Correction](#4--writing-correction)
@@ -20,11 +20,11 @@
 
 ---
 
-## 1. 🧠 Word Cards
+## 1. 🧠 Flashcards
 Kickstart your learning with custom **vocab cards** in two styles:
 
 - 🤖 **AI-Assist Mode**  
-  Use `/ai_new_word` — just send a German word and let the bot do the rest.
+  Use `/new_word` — just send a German word and let the bot do the rest.
 
 - 🗃 **View Drafts**  
   List your unpublished cards with `/cached_words`.
@@ -39,9 +39,6 @@ Build your comprehension skills with:
 
 - ⚙️ **Auto-Generated Exercises**  
   `/generate_reading_exercise` — choose your CEFR level and topic. You'll get a unique reading text, questions, and answers — all in one PDF!
-
-- ✍️ **Custom Input Mode**  
-  `/create_reading_exercise` — provide your own text, and the bot creates the questions + answer key.
 
 ---
 
@@ -99,14 +96,12 @@ Straßenführung fühlen – daher das Bild des Navigationssystems (Navi).
 
 ## 7. 🧾 API Summary
 
-| 💬 Command                        | 🔍 Description                                                  |
-|----------------------------------|------------------------------------------------------------------|
-| `/new_word`                      | Add a new vocab card manually                                   |
-| `/ai_new_word`                   | Add a vocab card using AI assistance                            |
-| `/cached_words`                  | View all unpublished word cards                                 |
+| 💬 Command                        | 🔍 Description                                                 |
+|----------------------------------|-----------------------------------------------------------------|
+| `/new_word`                   | Add a vocab card using AI assistance                               |
+| `/cached_words`                  | View unpublished wordcard                                       |
 | `/publish_word_card`             | Export vocab cards as a formatted PDF                           |
 | `/generate_reading_exercise`     | Auto-generate a reading text with questions                     |
-| `/create_reading_exercise`       | Create a reading quiz from your own text                        |
 | `/writing_with_example`          | Get a writing prompt + sample response                          |
 | `/correct_text`                  | Submit a written text for manual correction                     |
 | `/listening_exercise`            | Create listening questions from uploaded audio                  |

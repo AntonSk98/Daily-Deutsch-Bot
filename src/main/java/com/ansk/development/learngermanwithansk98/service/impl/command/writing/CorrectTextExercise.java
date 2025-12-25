@@ -106,7 +106,7 @@ public class CorrectTextExercise extends AbstractPublishExerciseSupport {
   }
 
   @Override
-  public void provideDynamicPrompt(
+  public void providePromptContext(
       AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
     final String paragraphSeparator = "\n\n";
 

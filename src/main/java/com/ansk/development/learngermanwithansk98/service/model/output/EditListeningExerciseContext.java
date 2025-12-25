@@ -7,4 +7,4 @@ package com.ansk.development.learngermanwithansk98.service.model.output;
  * @param transcription transcription that is to be edited
  * @author Anton Skripin
  */
-public record EditListeningExercisePrompt(String audio, String transcription) {}
+public record EditListeningExerciseContext(String audio, String transcription) {}

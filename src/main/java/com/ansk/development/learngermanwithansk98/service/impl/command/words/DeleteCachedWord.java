@@ -14,6 +14,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCo
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.ToBeDeletedWord;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
+import com.ansk.development.learngermanwithansk98.service.model.output.WordInfo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,6 +53,10 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
 
   @Override
   public void applyCommandModel(AbstractCommandModel<?> model, CommandParameters parameters) {
+    if (wordCache.isEmpty()) {
+      telegramClient.sendPlainMessage(parameters.chatId(), "No words in cache yet.");
+      return;
+    }
     final String wordReference = model.map(ToBeDeletedWord.class).getWordReference();
     map(wordCache.getWords()).entrySet().stream()
         .filter(word -> word.getKey().findByReference(wordReference).isPresent())
@@ -68,6 +73,24 @@ public class DeleteCachedWord extends AbstractCommandProcessor {
                   parameters.chatId(),
                   format(message, model.map(ToBeDeletedWord.class).getWordReference()));
             });
+  }
+
+  @Override
+  public void providePromptContext(
+      AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
+    if (wordCache.isEmpty()) {
+      return;
+    }
+
+    var wordReferences =
+        map(wordCache.getWords()).keySet().stream().map(WordInfo::reference).toList();
+
+    telegramClient.sendPlainMessage(
+        parameters.chatId(),
+        new StringBuilder("Flashcard:")
+            .append("\n")
+            .append(String.join("\n", wordReferences))
+            .toString());
   }
 
   @Override

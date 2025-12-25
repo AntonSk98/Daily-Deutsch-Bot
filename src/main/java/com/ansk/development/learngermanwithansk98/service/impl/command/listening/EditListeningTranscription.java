@@ -10,7 +10,7 @@ import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.CommandParameters;
 import com.ansk.development.learngermanwithansk98.service.model.input.EditListeningExerciseModel;
-import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExerciseContext;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import java.util.Arrays;
 import java.util.List;
@@ -95,7 +95,7 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
   }
 
   @Override
-  public void provideDynamicPrompt(
+  public void providePromptContext(
       AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
     if (listeningExerciseCache.cachedListeningExercise().isEmpty()) {
       throw new IllegalStateException("No listening exercise stored in cache...");
@@ -108,6 +108,6 @@ public class EditListeningTranscription extends AbstractCommandProcessor {
             SEPARATOR, listeningExerciseCache.cachedListeningExercise().get().transcription());
 
     outputGateway.sendPromptToEditListeningExercise(
-        parameters.chatId(), new EditListeningExercisePrompt(audio, transcription));
+        parameters.chatId(), new EditListeningExerciseContext(audio, transcription));
   }
 }

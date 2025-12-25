@@ -79,7 +79,7 @@ public class InformationPost extends AbstractPublishExerciseSupport {
   }
 
   @Override
-  public void provideDynamicPrompt(
+  public void providePromptContext(
       AbstractCommandModel<?> currentModelState, CommandParameters parameters) {
     DynamicInfoModel dynamicInfoModel = currentModelState.map(DynamicInfoModel.class);
     GenericPromptTemplate genericPromptTemplate =

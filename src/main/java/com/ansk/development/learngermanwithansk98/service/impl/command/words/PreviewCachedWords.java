@@ -12,7 +12,7 @@ import com.ansk.development.learngermanwithansk98.service.model.input.CommandPar
 import com.ansk.development.learngermanwithansk98.service.model.input.NoParamModel;
 import com.ansk.development.learngermanwithansk98.service.model.input.Word;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
-import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
+import com.ansk.development.learngermanwithansk98.service.model.output.Flashcard;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -64,14 +64,14 @@ public class PreviewCachedWords extends AbstractCommandProcessor {
       return;
     }
 
-    WordCard previewWordCard = new WordCard("preview", wordsInCache);
+    Flashcard previewWordCard = new Flashcard("preview", wordsInCache);
 
     telegramClient.sendPlainMessage(
         parameters.chatId(), "Please wait...I am preparing the preview...");
 
     ExerciseDocument exerciseDocument = converterPipe.pipe(previewWordCard);
 
-    telegramClient.sendWordCard(parameters.chatId(), exerciseDocument);
+    telegramClient.sendFlashcard(parameters.chatId(), exerciseDocument);
   }
 
   @Override

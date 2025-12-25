@@ -3,7 +3,7 @@ package com.ansk.development.learngermanwithansk98.service.impl.pipe;
 import com.ansk.development.learngermanwithansk98.config.BotConfigurationProperties;
 import com.ansk.development.learngermanwithansk98.service.api.IConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
-import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
+import com.ansk.development.learngermanwithansk98.service.model.output.Flashcard;
 import com.itextpdf.styledxmlparser.jsoup.nodes.Document;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Service;
@@ -11,13 +11,13 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 /**
  * Defines what {@link IConverterPipe}s and in which order must be applied to transform a {@link
- * WordCard} to {@link ExerciseDocument}.
+ * Flashcard} to {@link ExerciseDocument}.
  *
  * @author Anton Skripin
  */
 @Service
-public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard>
-    implements IConverterPipe<WordCard, ExerciseDocument> {
+public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<Flashcard>
+    implements IConverterPipe<Flashcard, ExerciseDocument> {
 
   private final HtmlToPdfPipe htmlToPdfPipe;
 
@@ -34,7 +34,7 @@ public class CardToImagesConverterPipe extends AbstractObjectToHtmlPipe<WordCard
   }
 
   @Override
-  public ExerciseDocument pipe(WordCard wordCard) {
+  public ExerciseDocument pipe(Flashcard wordCard) {
     Document html = abstractPipe("vocab_template", "wordCard", wordCard);
     PDDocument pdfDocument = htmlToPdfPipe.pipe(html);
     return new PdfToImagePipe().pipe(pdfDocument);

@@ -52,8 +52,8 @@ public record CommandsConfigurationProperties(List<CommandDefinition> commandDef
      *
      * @param key the key that identifies the parameter.
      * @param prompt the prompt text for the parameter.
-     * @param dynamicPrompt whether a dynamic prompt should be provided
+     * @param withContext whether dynamic context will be delivered together with the prompt.
      */
-    public record Parameter(String key, String prompt, boolean dynamicPrompt) {}
+    public record Parameter(String key, String prompt, boolean withContext) {}
   }
 }

@@ -6,7 +6,7 @@ import com.ansk.development.learngermanwithansk98.integration.telegram.sender.Me
 import com.ansk.development.learngermanwithansk98.integration.telegram.sender.ReadingExerciseSender;
 import com.ansk.development.learngermanwithansk98.integration.telegram.sender.WordCardSender;
 import com.ansk.development.learngermanwithansk98.integration.telegram.sender.WritingExerciseSender;
-import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExerciseContext;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
 import com.ansk.development.learngermanwithansk98.service.model.output.InformationPostModel;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
@@ -61,7 +61,7 @@ public class TelegramClient implements ITelegramClient {
   }
 
   @Override
-  public void sendWordCard(Long chatId, ExerciseDocument exerciseDocument) {
+  public void sendFlashcard(Long chatId, ExerciseDocument exerciseDocument) {
     wordCardSender.sendWordCard(chatId, exerciseDocument);
   }
 
@@ -86,9 +86,8 @@ public class TelegramClient implements ITelegramClient {
   }
 
   @Override
-  public void sendPromptToEditListeningExercise(
-      Long chatId, EditListeningExercisePrompt dynamicPrompt) {
-    audioExerciseSender.sendPromptToEditListeningExercise(chatId, dynamicPrompt);
+  public void sendPromptToEditListeningExercise(Long chatId, EditListeningExerciseContext context) {
+    audioExerciseSender.sendPromptToEditListeningExercise(chatId, context);
   }
 
   @Override

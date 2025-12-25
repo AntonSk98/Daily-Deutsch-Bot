@@ -1,17 +1,20 @@
 commands:
   confirmation:
     key: should_do
-    prompt: |
-      Would you like to perform this action?
-        ✅ Type '+' to approve
-        ❌ Type any other symbol to decline
+    prompt: Type + to approve; any other symbol to decline.
   command-definition:
+    - path: /new_word
+      parameters:
+        - key: word
+          prompt: ...waiting for a new word
     - path: /cached_words
     - path: /clear_word_card
     - path: /delete_word
       parameters:
+        - key: 
         - key: word_reference
-          prompt: please provide a unique word reference
+          prompt: ...waiting for a word to be deleted from cache
+          with-context: true
     - path: /preview_word_card
     - path: /publish_word_card
       parameters:
@@ -23,15 +26,6 @@ commands:
           prompt: please enter the level of the text based on the CEFR level
         - key: topic
           prompt: please provide the topic of the text
-    - path: /create_reading_exercise
-      parameters:
-        - key: text
-          prompt: please provide a text to create reading exercise for
-        - key: ${commands.confirmation.key}
-          prompt: |
-            Text is gonna be rephrased.
-            
-            ${commands.confirmation.prompt}
     - path: /cached_reading_exercise
     - path: /publish_reading_exercise
       parameters:
@@ -40,10 +34,6 @@ commands:
             Reading exercise is gonna be published.
             
             ${commands.confirmation.prompt}
-    - path: /ai_new_word
-      parameters:
-        - key: word
-          prompt: please provide a word and AI will fill out the word definition
     - path: /writing_with_example
       parameters:
         - key: level
@@ -65,7 +55,7 @@ commands:
             The following exercise is gonna be published...
             
             ${commands.confirmation.prompt}
-          dynamic-prompt: true
+          with-context: true
         - key: with_audio
           prompt: |
             Voiceover of the text is gonna be generated...
@@ -85,7 +75,7 @@ commands:
       parameters:
         - key: transcription
           prompt: feel free to edit the transcription of the audio
-          dynamic-prompt: true
+          with-context: true
     - path: /publish_listening_exercise
       parameters:
         - key: ${commands.confirmation.key}
@@ -101,4 +91,4 @@ commands:
             The following post is about to be published.
             
             ${commands.confirmation.prompt}
-          dynamic-prompt: true
+          with-context: true

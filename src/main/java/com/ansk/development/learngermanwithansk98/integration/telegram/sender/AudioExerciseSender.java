@@ -3,7 +3,7 @@ package com.ansk.development.learngermanwithansk98.integration.telegram.sender;
 import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.documentSender;
 import static com.ansk.development.learngermanwithansk98.integration.telegram.sender.TelegramSenderSupport.questionsAndAnswersMessageBlock;
 
-import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExercisePrompt;
+import com.ansk.development.learngermanwithansk98.service.model.output.EditListeningExerciseContext;
 import com.ansk.development.learngermanwithansk98.service.model.output.ListeningExercise;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,13 +120,13 @@ public class AudioExerciseSender {
   }
 
   /**
-   * Sends a dynamic prompt to edit listening exercise.
+   * Sends a prompt to edit listening exercise.
    *
    * @param chatId chat id
-   * @param editListeningExercisePrompt {@link EditListeningExercisePrompt}
+   * @param editListeningExercisePrompt {@link EditListeningExerciseContext}
    */
   public void sendPromptToEditListeningExercise(
-      Long chatId, EditListeningExercisePrompt editListeningExercisePrompt) {
+      Long chatId, EditListeningExerciseContext editListeningExercisePrompt) {
     SendAudio sendAudio =
         SendAudio.builder()
             .chatId(chatId)

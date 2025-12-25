@@ -11,7 +11,7 @@ import com.ansk.development.learngermanwithansk98.service.impl.command.AbstractP
 import com.ansk.development.learngermanwithansk98.service.impl.pipe.CardToImagesConverterPipe;
 import com.ansk.development.learngermanwithansk98.service.model.Command;
 import com.ansk.development.learngermanwithansk98.service.model.output.ExerciseDocument;
-import com.ansk.development.learngermanwithansk98.service.model.output.WordCard;
+import com.ansk.development.learngermanwithansk98.service.model.output.Flashcard;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -63,10 +63,10 @@ public class PublishWordCard extends AbstractPublishExerciseSupport {
   @Override
   public Consumer<Long> publish() {
     return groupId -> {
-      WordCard previewWordCard =
-          new WordCard(mapToDateGermanFormat(LocalDate.now()), wordCache.getWords());
+      Flashcard previewWordCard =
+          new Flashcard(mapToDateGermanFormat(LocalDate.now()), wordCache.getWords());
       ExerciseDocument wordCardDocumentToPublish = converterPipe.pipe(previewWordCard);
-      telegramClient.sendWordCard(groupId, wordCardDocumentToPublish);
+      telegramClient.sendFlashcard(groupId, wordCardDocumentToPublish);
     };
   }
 

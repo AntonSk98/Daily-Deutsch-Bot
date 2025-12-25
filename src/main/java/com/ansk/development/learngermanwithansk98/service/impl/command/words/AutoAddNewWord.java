@@ -1,6 +1,6 @@
 package com.ansk.development.learngermanwithansk98.service.impl.command.words;
 
-import static com.ansk.development.learngermanwithansk98.service.model.Command.AI_NEW_WORD;
+import static com.ansk.development.learngermanwithansk98.service.model.Command.ADD_NEW_WORD;
 import static com.ansk.development.learngermanwithansk98.service.model.input.AbstractCommandModel.Properties.WORD;
 
 import com.ansk.development.learngermanwithansk98.config.CommandsConfigurationProperties;
@@ -57,7 +57,7 @@ public class AutoAddNewWord extends AbstractCommandProcessor {
 
   @Override
   public Command supportedCommand() {
-    return AI_NEW_WORD;
+    return ADD_NEW_WORD;
   }
 
   @Override
