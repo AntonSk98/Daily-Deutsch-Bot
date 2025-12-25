@@ -46,7 +46,7 @@ public abstract class AbstractCommandProcessor implements ICommandHandler {
     if (commandState.hasAwaitingKey()) {
       commandState
           .getCurrentCommandModel()
-          .append(commandState.getAwaitingKey(), commandParameters.input());
+          .setKeyValue(commandState.getAwaitingKey(), commandParameters.input());
     }
 
     if (commandState.getCurrentCommandModel().getParamIterator().hasNext()) {
